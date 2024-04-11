@@ -1,14 +1,14 @@
 import { useRouteError } from 'react-router-dom';
+import { StyledErrorPage } from '../styles/ErrorPage.styled';
 
 function ErrorPage() {
   const error = useRouteError();
 
   return (
-    <div>
-      <h1>{error.status}</h1>
-      <h1>{error.statusText}</h1>
-      <h1>{error.data || error.message}</h1>
-    </div>
+    <StyledErrorPage>
+      <h2>{error.status || 500}</h2>
+      <h1>{error.statusText || 'Error'}</h1>
+    </StyledErrorPage>
   );
 }
 
