@@ -10,18 +10,14 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: ${(props) => props.theme.colours.backgroundPrimary};
     color: ${(props) => props.theme.colours.primary};
     font-family: ${(props) => props.theme.fonts.primary};
-  }
-
-  *:focus-visible {
-    outline: 3px solid ${(props) => props.theme.colours.primary};
   }
 
   body {
     display: flex;
     justify-content: center;
+    background-color: ${(props) => props.theme.colours.bgPrimary};
   }
 
   #root {

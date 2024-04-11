@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 
 const darkTheme = {
   colours: {
-    backgroundPrimary: '#ff7f3f',
-    backgroundSecondary: '#ffff9b',
-    backgroundTertiary: '#e7e783',
+    bgPrimary: '#ff7f3f',
+    bgSecondary: '#ffff9b',
+    bgTertiary: '#e7e783',
     primary: '#000000',
+    topBar: '#0153e4',
   },
   fontSizes: {
     small: '0.8rem',
