@@ -31,7 +31,7 @@ function LoginPage() {
         <button type="submit">Log In</button>
       </form>
       <Link to="/register">
-        <button>Register</button>
+        <button>Register Page</button>
       </Link>
     </StyledLoginPage>
   );

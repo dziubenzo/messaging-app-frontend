@@ -20,6 +20,7 @@ const darkTheme = {
     primary: '"Microsoft Sans Serif", sans-serif',
     secondary: '"Fugaz One", sans-serif',
   },
+  mobile: '768px',
 };
 
 export default function Theme({ children }) {

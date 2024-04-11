@@ -7,6 +7,7 @@ export const StyledHeader = styled.header`
     font-family: ${(props) => props.theme.fonts.secondary};
     font-size: 3em;
     font-weight: 400;
+    text-align: center;
   }
 `;
 
@@ -15,6 +16,7 @@ export const StyledFooter = styled.footer`
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  text-align: center;
 
   .dev-name {
     font-weight: 600;

@@ -10,7 +10,7 @@ export const StyledLoginPage = styled.main`
     background-color: ${(props) => props.theme.colours.topBar};
     border-bottom: 2px solid ${(props) => props.theme.colours.primary};
     margin-bottom: 2em;
-    
+
     p {
       color: white;
       font-weight: 700;
@@ -28,12 +28,14 @@ export const StyledLoginPage = styled.main`
     place-items: center;
 
     label {
+      justify-self: left;
       cursor: pointer;
     }
 
     input {
       font-size: ${(props) => props.theme.fontSizes.standard};
       padding: 0.2em;
+      width: 100%;
     }
 
     button {
@@ -46,16 +48,22 @@ export const StyledLoginPage = styled.main`
 
   a {
     position: absolute;
-    right: -1px;
-    bottom: -20%;
+    right: 50%;
+    transform: translateX(50%);
+    bottom: -75px;
 
     button {
       padding: 0.5em;
     }
-
   }
 
   button {
     cursor: pointer;
+  }
+
+  @media (width <= ${(props) => props.theme.mobile}) {
+    form {
+      gap: 16px;
+    }
   }
 `;
