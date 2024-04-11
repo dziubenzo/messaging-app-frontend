@@ -1,12 +1,36 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: Microsoft Sans Serif;
+    src: url("/MSS.ttf");
+  }
+
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: ${(props) => props.theme.colours.background};
+    background-color: ${(props) => props.theme.colours.backgroundPrimary};
     color: ${(props) => props.theme.colours.primary};
+    font-family: ${(props) => props.theme.fonts.primary};
+  }
+
+  *:focus-visible {
+    outline: 3px solid ${(props) => props.theme.colours.primary};
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+  }
+
+  #root {
+    display: grid;
+    grid-template-rows: min-content auto min-content;
+    place-items: center;
+    min-height: 100svh;
+    max-width: 800px;
+    padding: 1em;
   }
 `;
 
