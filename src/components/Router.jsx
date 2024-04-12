@@ -3,6 +3,7 @@ import App from './App';
 import LoginPage from '../pages/LoginPage';
 import ErrorPage from '../pages/ErrorPage';
 import RegisterPage from '../pages/RegisterPage';
+import HomePage from '../pages/HomePage';
 
 function Router() {
   const router = createBrowserRouter([
@@ -16,12 +17,16 @@ function Router() {
       ),
       children: [
         {
-          path: '/',
+          path: '/login',
           element: <LoginPage />,
         },
         {
           path: '/register',
           element: <RegisterPage />,
+        },
+        {
+          path: '/home',
+          element: <HomePage />,
         },
       ],
     },

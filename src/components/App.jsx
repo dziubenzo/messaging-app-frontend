@@ -5,13 +5,18 @@ import Header from './Header';
 
 import Theme from './Theme';
 import GlobalStyle from '../styles/GlobalStyle';
+import { useCheckAuth } from '../helpers';
+import { useState } from 'react';
 
 function App({ children }) {
+  const [userId, setUserId] = useState('');
+  useCheckAuth(setUserId);
+
   return (
     <Theme>
       <GlobalStyle />
       <Header />
-      <Outlet />
+      <Outlet context={{ userId, setUserId }} />
       {children}
       <Footer />
     </Theme>
