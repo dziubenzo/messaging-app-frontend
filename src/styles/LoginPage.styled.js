@@ -42,7 +42,7 @@ export const StyledLoginPage = styled.main`
       grid-column: 1 / 3;
       width: 50%;
       padding: 0.3em;
-      margin-top: 2em;
+      margin-top: 3em;
     }
   }
 
@@ -59,6 +59,14 @@ export const StyledLoginPage = styled.main`
 
   button {
     cursor: pointer;
+  }
+
+  .error-message {
+    position: absolute;
+    bottom: 24%;
+    text-align: center;
+    width: 100%;
+    color: red;
   }
 
   @media (width <= ${(props) => props.theme.mobile}) {
