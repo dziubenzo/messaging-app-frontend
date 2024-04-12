@@ -1,6 +1,10 @@
 import { StyledFooter } from '../styles/App.styled';
 import { DiGithubBadge } from 'react-icons/di';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { Zoom } from 'react-toastify';
+
 function Footer() {
   return (
     <StyledFooter>
@@ -15,6 +19,15 @@ function Footer() {
       >
         <DiGithubBadge className="github-logo" />
       </a>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        closeButton={false}
+        hideProgressBar={true}
+        theme="light"
+        closeOnClick
+        transition={Zoom}
+      />
     </StyledFooter>
   );
 }

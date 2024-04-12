@@ -28,6 +28,11 @@ const GlobalStyle = createGlobalStyle`
     max-width: 800px;
     padding: 1em;
   }
+
+  // Toast background colour
+  :root {
+    --toastify-color-light: ${(props) => props.theme.colours.bgSecondary};
+  }
 `;
 
 export default GlobalStyle;
