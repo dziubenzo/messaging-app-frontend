@@ -5,6 +5,7 @@ import ErrorPage from '../pages/ErrorPage';
 import RegisterPage from '../pages/RegisterPage';
 import HomePage from '../pages/HomePage';
 import LoadingPage from '../pages/LoadingPage';
+import { homePageLoader } from '../loaders';
 
 function Router() {
   const router = createBrowserRouter([
@@ -32,6 +33,7 @@ function Router() {
         {
           path: '/home',
           element: <HomePage />,
+          loader: homePageLoader,
         },
       ],
     },

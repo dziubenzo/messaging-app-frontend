@@ -57,3 +57,11 @@ export const useCheckAuth = (userId, setUserId) => {
     checkAuth();
   }, []);
 };
+
+// Class for API errors
+export class ApiError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.status = statusCode;
+  }
+}
