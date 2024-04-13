@@ -4,6 +4,7 @@ import LoginPage from '../pages/LoginPage';
 import ErrorPage from '../pages/ErrorPage';
 import RegisterPage from '../pages/RegisterPage';
 import HomePage from '../pages/HomePage';
+import LoadingPage from '../pages/LoadingPage';
 
 function Router() {
   const router = createBrowserRouter([
@@ -16,6 +17,10 @@ function Router() {
         </App>
       ),
       children: [
+        {
+          path: '/',
+          element: <LoadingPage />,
+        },
         {
           path: '/login',
           element: <LoginPage />,
