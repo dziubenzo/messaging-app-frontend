@@ -4,8 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 // Check if the user is authenticated when they visit '/'
 // If they are not, redirect to Login page
-// Otherwise, set their id and redirect to Home page
-export const useCheckRootAuth = (setUserId) => {
+// Otherwise, populate user object and redirect to Home page
+export const useCheckRootAuth = (setUser) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -21,8 +21,8 @@ export const useCheckRootAuth = (setUserId) => {
       if (!res.ok) {
         return navigate('/login');
       }
-      const userId = await res.json();
-      setUserId(userId);
+      const user = await res.json();
+      setUser(user);
       return navigate('/home');
     }
     if (pathname === '/') {
@@ -33,8 +33,8 @@ export const useCheckRootAuth = (setUserId) => {
 
 // Check if the user is authenticated
 // If they are not, redirect to Login page
-// Otherwise, populate userId if it is empty (e.g. after browser refresh)
-export const useCheckAuth = (userId, setUserId) => {
+// Otherwise, populate user object if it is empty (e.g. after browser refresh)
+export const useCheckAuth = (user, setUser) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,9 +49,9 @@ export const useCheckAuth = (userId, setUserId) => {
       if (!res.ok) {
         return navigate('/login');
       }
-      const retrievedUserId = await res.json();
-      if (!userId) {
-        setUserId(retrievedUserId);
+      const retrievedUser = await res.json();
+      if (!user.length) {
+        setUser(retrievedUser);
       }
     }
     checkAuth();

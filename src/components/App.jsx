@@ -9,14 +9,14 @@ import { useCheckRootAuth } from '../helpers';
 import { useState } from 'react';
 
 function App({ children }) {
-  const [userId, setUserId] = useState('');
-  useCheckRootAuth(setUserId);
+  const [user, setUser] = useState({});
+  useCheckRootAuth(setUser);
 
   return (
     <Theme>
       <GlobalStyle />
       <Header />
-      <Outlet context={{ userId, setUserId }} />
+      <Outlet context={{ user, setUser }} />
       {children}
       <Footer />
     </Theme>

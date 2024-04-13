@@ -5,10 +5,10 @@ import API_URL from '../API';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setUserId } = useOutletContext();
+  const { setUser } = useOutletContext();
   const [error, setError] = useState('');
 
-  // Log in user, set userId and redirect to the Home page on successful login
+  // Log in user, set user and redirect to the Home page on successful login
   // Otherwise show error message
   async function logIn(event) {
     event.preventDefault();
@@ -28,8 +28,8 @@ function LoginPage() {
     if (!res.ok) {
       return setError('Incorrect username or password');
     }
-    const userId = await res.json();
-    setUserId(userId);
+    const retrievedUser = await res.json();
+    setUser(retrievedUser);
     return navigate('/home');
   }
 
