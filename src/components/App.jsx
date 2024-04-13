@@ -5,12 +5,12 @@ import Header from './Header';
 
 import Theme from './Theme';
 import GlobalStyle from '../styles/GlobalStyle';
-import { useCheckAuth } from '../helpers';
+import { useCheckRootAuth } from '../helpers';
 import { useState } from 'react';
 
 function App({ children }) {
   const [userId, setUserId] = useState('');
-  useCheckAuth(setUserId);
+  useCheckRootAuth(setUserId);
 
   return (
     <Theme>

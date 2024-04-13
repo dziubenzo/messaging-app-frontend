@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 // Check if the user is authenticated when they visit '/'
 // If they are not, redirect to Login page
 // Otherwise, set their id and redirect to Home page
-export const useCheckAuth = (setUserId) => {
+export const useCheckRootAuth = (setUserId) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -29,4 +29,31 @@ export const useCheckAuth = (setUserId) => {
       checkAuth();
     }
   }, [pathname]);
+};
+
+// Check if the user is authenticated
+// If they are not, redirect to Login page
+// Otherwise, populate userId if it is empty (e.g. after browser refresh)
+export const useCheckAuth = (userId, setUserId) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function checkAuth() {
+      const res = await fetch(`${API_URL}/users/auth`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        return navigate('/login');
+      }
+      const retrievedUserId = await res.json();
+      if (!userId) {
+        setUserId(retrievedUserId);
+      }
+    }
+    checkAuth();
+  }, []);
 };
