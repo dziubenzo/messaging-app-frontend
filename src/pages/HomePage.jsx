@@ -41,9 +41,6 @@ function HomePage() {
     event.preventDefault();
     const res = await fetch(`${API_URL}/users/logout`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       credentials: 'include',
     });
     if (!res.ok) {
