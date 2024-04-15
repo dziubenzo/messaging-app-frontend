@@ -45,8 +45,27 @@ function Contact({
     return toast.success(`User ${username} has been added to your contacts`);
   }
 
+  // Remove a contact from logged in user's contacts
+  // Show toast if operation successful or unsuccessful and update user state if the former is true
   async function removeContact() {
-    return;
+    const res = await fetch(`${API_URL}/users/${user_id}/remove-contact`, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        contact_id: _id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    if (!res.ok) {
+      return toast.error('There was an error. Please try again');
+    }
+    const updatedUser = await res.json();
+    setUser(updatedUser);
+    return toast.success(
+      `User ${username} has been removed from your contacts`,
+    );
   }
 
   // Set bottom bar fields to match hovered over user
