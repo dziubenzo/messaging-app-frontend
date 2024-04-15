@@ -104,6 +104,20 @@ export const StyledContact = styled.div`
     height: 20px;
     cursor: pointer;
   }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: ${(props) => props.theme.colours.bgSelected};
+
+      p {
+        color: white;
+      }
+
+      svg {
+        stroke: white;
+      }
+    }
+  }
 `;
 
 export const BottomBar = styled.div`

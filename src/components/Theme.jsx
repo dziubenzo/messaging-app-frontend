@@ -7,6 +7,7 @@ const darkTheme = {
     bgSecondary: '#ffff9b',
     bgTertiary: '#e7e783',
     bgQuaternary: '#ffffe1',
+    bgSelected: '#0a246a',
     primary: '#000000',
     topBar: '#0153e4',
   },
