@@ -4,7 +4,13 @@ import { StyledContact } from '../styles/HomePage.styled';
 import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 
-function Contact({ loggedInUser, user, setUser, showContacts }) {
+function Contact({
+  loggedInUser,
+  user,
+  setUser,
+  showContacts,
+  setBottomBarText,
+}) {
   const { username, status_icon, _id } = user;
   const { user_id, contacts } = loggedInUser;
 
@@ -43,8 +49,24 @@ function Contact({ loggedInUser, user, setUser, showContacts }) {
     return;
   }
 
+  // Set bottom bar fields to match hovered over user
+  function handleUserMouseEnter() {
+    setBottomBarText({ id: user.user_id, status: user.status_text });
+  }
+
+  // Reset bottom bar fields to logged in user if no user is hovered over
+  function handleUserMouseLeave() {
+    setBottomBarText({
+      id: loggedInUser.user_id,
+      status: loggedInUser.status_text,
+    });
+  }
+
   return (
-    <StyledContact>
+    <StyledContact
+      onMouseEnter={handleUserMouseEnter}
+      onMouseLeave={handleUserMouseLeave}
+    >
       <img src={status_icon} alt={`Status Icon - ${username}`} />
       <div className="user-info">
         <p className="username">{username}</p>
@@ -65,6 +87,7 @@ Contact.propTypes = {
   user: PropTypes.object,
   setUser: PropTypes.func,
   showContacts: PropTypes.bool,
+  setBottomBarText: PropTypes.func,
 };
 
 export default Contact;

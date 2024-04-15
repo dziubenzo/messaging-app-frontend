@@ -27,6 +27,11 @@ function HomePage() {
   );
   // State for toggling All Users/Contacts tabs
   const [showContacts, setShowContacts] = useState(false);
+  // State for managing Bottom Bar text
+  const [bottomBarText, setBottomBarText] = useState({
+    id: user.user_id,
+    status: user.status_text,
+  });
 
   return (
     <StyledHomePage>
@@ -42,7 +47,7 @@ function HomePage() {
           onClick={() => setShowContacts(false)}
         >
           <LiaUsersSolid />
-          <p className={!showContacts && 'active'}>All Users</p>
+          <p className={!showContacts ? 'active' : undefined}>All Users</p>
         </div>
         <div
           className="contacts"
@@ -50,7 +55,7 @@ function HomePage() {
           onClick={() => setShowContacts(true)}
         >
           <LiaUserFriendsSolid />
-          <p className={showContacts && 'active'}>Contacts</p>
+          <p className={showContacts ? 'active' : undefined}>Contacts</p>
         </div>
       </ContactsBar>
       <UsersList>
@@ -63,6 +68,7 @@ function HomePage() {
                   user={contact}
                   setUser={setUser}
                   showContacts={showContacts}
+                  setBottomBarText={setBottomBarText}
                 />
               );
             })
@@ -74,15 +80,14 @@ function HomePage() {
                   user={filteredUser}
                   setUser={setUser}
                   showContacts={showContacts}
+                  setBottomBarText={setBottomBarText}
                 />
               );
             })}
       </UsersList>
       <BottomBar>
-        <p>ID {user.user_id}</p>
-        <p className="text-status">
-          {user.status_text || 'Some placeholder status'}
-        </p>
+        <p>ID {bottomBarText.id}</p>
+        <p className="text-status">{bottomBarText.status}</p>
       </BottomBar>
       <StatusBar>
         <img src={user.status_icon} alt="Status Icon" />

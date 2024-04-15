@@ -126,6 +126,7 @@ export const BottomBar = styled.div`
   border-top: 2px solid ${(props) => props.theme.colours.primary};
   border-bottom: 2px solid ${(props) => props.theme.colours.primary};
   padding: 0.2em;
+  height: 50px;
 
   .text-status {
     margin-top: 1em;

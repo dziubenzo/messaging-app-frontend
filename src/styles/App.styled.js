@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const StyledHeader = styled.header`
   transform: rotate(-4deg);
+  margin-bottom: 2em;
 
   .app-name {
     font-family: ${(props) => props.theme.fonts.secondary};
@@ -17,6 +18,7 @@ export const StyledFooter = styled.footer`
   align-items: center;
   gap: 2px;
   text-align: center;
+  margin-top: 2em;
 
   .dev-name {
     font-weight: 600;
