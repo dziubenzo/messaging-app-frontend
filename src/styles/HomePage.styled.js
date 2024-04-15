@@ -52,6 +52,7 @@ export const ContactsBar = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
 
     svg {
       height: 32px;
@@ -61,12 +62,17 @@ export const ContactsBar = styled.div`
     p {
       font-size: ${(props) => props.theme.fontSizes.extraSmall};
     }
+
+    p.active {
+      font-weight: 900;
+    }
   }
 `;
 
 export const UsersList = styled.div`
   display: flex;
   flex-direction: column;
+  height: 500px;
 `;
 
 export const StyledContact = styled.div`

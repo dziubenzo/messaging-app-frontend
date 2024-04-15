@@ -19,11 +19,14 @@ function HomePage() {
   useCheckAuth(user, setUser);
 
   const allUsers = useLoaderData();
+  const { contacts } = user;
 
   // State for storing all users except for logged in user
   const [allUsersFiltered, setAllUsersFiltered] = useState(
     allUsers.filter((dbUser) => dbUser.user_id !== user.user_id),
   );
+  // State for toggling All Users/Contacts tabs
+  const [showContacts, setShowContacts] = useState(false);
 
   return (
     <StyledHomePage>
@@ -33,26 +36,47 @@ function HomePage() {
         <AiOutlineLogout title="Log Out" />
       </TopBar>
       <ContactsBar>
-        <div className="all-users">
+        <div
+          className="all-users"
+          aria-label="All Users Button"
+          onClick={() => setShowContacts(false)}
+        >
           <LiaUsersSolid />
-          <p>All Users</p>
+          <p className={!showContacts && 'active'}>All Users</p>
         </div>
-        <div className="contacts">
+        <div
+          className="contacts"
+          aria-label="Contacts Button"
+          onClick={() => setShowContacts(true)}
+        >
           <LiaUserFriendsSolid />
-          <p>Contacts</p>
+          <p className={showContacts && 'active'}>Contacts</p>
         </div>
       </ContactsBar>
       <UsersList>
-        {allUsersFiltered.map((filteredUser) => {
-          return (
-            <Contact
-              key={filteredUser.user_id}
-              loggedInUser={user}
-              user={filteredUser}
-              setUser={setUser}
-            />
-          );
-        })}
+        {showContacts
+          ? contacts.map((contact) => {
+              return (
+                <Contact
+                  key={contact.user_id}
+                  loggedInUser={user}
+                  user={contact}
+                  setUser={setUser}
+                  showContacts={showContacts}
+                />
+              );
+            })
+          : allUsersFiltered.map((filteredUser) => {
+              return (
+                <Contact
+                  key={filteredUser.user_id}
+                  loggedInUser={user}
+                  user={filteredUser}
+                  setUser={setUser}
+                  showContacts={showContacts}
+                />
+              );
+            })}
       </UsersList>
       <BottomBar>
         <p>ID {user.user_id}</p>
