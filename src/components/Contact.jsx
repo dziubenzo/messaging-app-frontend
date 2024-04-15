@@ -4,6 +4,7 @@ import { StyledContact } from '../styles/HomePage.styled';
 import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { statusIcons } from '../helpers';
 
 function Contact({
   loggedInUser,
@@ -100,7 +101,14 @@ function Contact({
       onMouseEnter={handleUserMouseEnter}
       onMouseLeave={handleUserMouseLeave}
     >
-      <img src={status_icon} alt={`Status Icon - ${username}`} />
+      <img
+        src={
+          status_icon === statusIcons.invisible
+            ? statusIcons.unavailable
+            : status_icon
+        }
+        alt={`Status Icon - ${username}`}
+      />
       <div className="user-info">
         <p className="username">{username}</p>
         <p className="text-status">Some future status</p>
