@@ -20,6 +20,7 @@ function HomePage() {
 
   const allUsers = useLoaderData();
 
+  // State for storing all users except for logged in user
   const [allUsersFiltered, setAllUsersFiltered] = useState(
     allUsers.filter((dbUser) => dbUser.user_id !== user.user_id),
   );
@@ -42,8 +43,15 @@ function HomePage() {
         </div>
       </ContactsBar>
       <UsersList>
-        {allUsersFiltered.map((user) => {
-          return <Contact key={user.user_id} user={user} />;
+        {allUsersFiltered.map((filteredUser) => {
+          return (
+            <Contact
+              key={filteredUser.user_id}
+              loggedInUser={user}
+              user={filteredUser}
+              setUser={setUser}
+            />
+          );
         })}
       </UsersList>
       <BottomBar>

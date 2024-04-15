@@ -90,6 +90,14 @@ export const StyledContact = styled.div`
       font-size: ${(props) => props.theme.fontSizes.small};
     }
   }
+
+  svg {
+    margin-left: auto;
+    margin-right: 0.3em;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
 `;
 
 export const BottomBar = styled.div`
