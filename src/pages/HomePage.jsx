@@ -1,17 +1,16 @@
 import API_URL from '../API';
 import { useLoaderData, useNavigate, useOutletContext } from 'react-router-dom';
-import { useCheckAuth, statusIcons } from '../helpers';
+import { useCheckAuth } from '../helpers';
 import Contact from '../components/Contact';
+import StatusBar from '../components/StatusBar';
 import {
   StyledHomePage,
   TopBar,
   ContactsBar,
   UsersList,
   BottomBar,
-  StatusBar,
 } from '../styles/HomePage.styled';
 import { LiaUsersSolid, LiaUserFriendsSolid } from 'react-icons/lia';
-import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -110,27 +109,7 @@ function HomePage() {
         <p>ID {bottomBarText.id}</p>
         <p className="text-status">{bottomBarText.status}</p>
       </BottomBar>
-      <StatusBar>
-        <div className="status">
-          <img src={user.status_icon} alt="Status Icon" />
-          <p>My status</p>
-          <div className="statuses-drop-down">
-            <div>
-              <img src={statusIcons.available} alt="Status Icon - Available" />
-              <p>Available</p>
-            </div>
-            <div>
-              <img src={statusIcons.brb} alt="Status Icon - Be Right Back" />
-              <p>Be Right Back</p>
-            </div>
-            <div>
-              <img src={statusIcons.invisible} alt="Status Icon - Invisible" />
-              <p>Invisible</p>
-            </div>
-          </div>
-        </div>
-        <PiDotsThreeOutlineFill title="Options" />
-      </StatusBar>
+      <StatusBar user={user} setUser={setUser} />
     </StyledHomePage>
   );
 }

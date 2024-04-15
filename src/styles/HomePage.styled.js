@@ -134,7 +134,7 @@ export const BottomBar = styled.div`
   }
 `;
 
-export const StatusBar = styled.div`
+export const StyledStatusBar = styled.div`
   display: flex;
   background-color: ${(props) => props.theme.colours.bgPrimary};
   font-size: ${(props) => props.theme.fontSizes.small};
