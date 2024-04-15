@@ -1,4 +1,5 @@
-import { useLoaderData, useOutletContext } from 'react-router-dom';
+import API_URL from '../API';
+import { useLoaderData, useNavigate, useOutletContext } from 'react-router-dom';
 import { useCheckAuth } from '../helpers';
 import Contact from '../components/Contact';
 import {
@@ -13,8 +14,11 @@ import { LiaUsersSolid, LiaUserFriendsSolid } from 'react-icons/lia';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 function HomePage() {
+  const navigate = useNavigate();
+
   const { user, setUser } = useOutletContext();
   useCheckAuth(user, setUser);
 
@@ -33,12 +37,29 @@ function HomePage() {
     status: user.status_text,
   });
 
+  // Logout user, show toast and redirect to the Login page
+  async function logOut(event) {
+    event.preventDefault();
+    const res = await fetch(`${API_URL}/users/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    if (!res.ok) {
+      return toast.error('There was an error. Please try again');
+    }
+    toast.success('You have been logged out successfully');
+    return navigate('/login');
+  }
+
   return (
     <StyledHomePage>
       <TopBar>
         <img src={user.status_icon} alt="Status Icon" />
         <p>Me ({user.user_id})</p>
-        <AiOutlineLogout title="Log Out" />
+        <AiOutlineLogout title="Log Out" onClick={logOut} />
       </TopBar>
       <ContactsBar>
         <div
