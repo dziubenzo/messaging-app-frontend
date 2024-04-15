@@ -1,6 +1,6 @@
 import API_URL from '../API';
 import { useLoaderData, useNavigate, useOutletContext } from 'react-router-dom';
-import { useCheckAuth } from '../helpers';
+import { useCheckAuth, statusIcons } from '../helpers';
 import Contact from '../components/Contact';
 import {
   StyledHomePage,
@@ -111,8 +111,24 @@ function HomePage() {
         <p className="text-status">{bottomBarText.status}</p>
       </BottomBar>
       <StatusBar>
-        <img src={user.status_icon} alt="Status Icon" />
-        <p>My status</p>
+        <div className="status">
+          <img src={user.status_icon} alt="Status Icon" />
+          <p>My status</p>
+          <div className="statuses-drop-down">
+            <div>
+              <img src={statusIcons.available} alt="Status Icon - Available" />
+              <p>Available</p>
+            </div>
+            <div>
+              <img src={statusIcons.brb} alt="Status Icon - Be Right Back" />
+              <p>Be Right Back</p>
+            </div>
+            <div>
+              <img src={statusIcons.invisible} alt="Status Icon - Invisible" />
+              <p>Invisible</p>
+            </div>
+          </div>
+        </div>
         <PiDotsThreeOutlineFill title="Options" />
       </StatusBar>
     </StyledHomePage>

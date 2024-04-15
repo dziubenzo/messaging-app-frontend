@@ -136,11 +136,51 @@ export const BottomBar = styled.div`
 
 export const StatusBar = styled.div`
   display: flex;
-  gap: 4px;
-  align-items: center;
   background-color: ${(props) => props.theme.colours.bgPrimary};
   font-size: ${(props) => props.theme.fontSizes.small};
   padding: 0.2em;
+
+  .status {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      .statuses-drop-down {
+        transform: translateY(100%) scaleY(1);
+      }
+    }
+  }
+
+  .statuses-drop-down {
+    position: absolute;
+    bottom: 0;
+    left: -4px;
+    background-color: ${(props) => props.theme.colours.bgPrimary};
+    border: 2px solid ${(props) => props.theme.colours.primary};
+    transform-origin: top;
+    transform: translateY(100%) scaleY(0);
+    transition: transform 0.2s ease-in;
+
+    div {
+      display: flex;
+      width: 125px;
+      gap: 4px;
+      align-items: center;
+      padding: 0.5em 0.2em;
+      cursor: pointer;
+
+      &:hover {
+        background-color: ${(props) => props.theme.colours.bgSelected};
+
+        p {
+          color: white;
+        }
+      }
+    }
+  }
 
   img {
     width: 18px;
