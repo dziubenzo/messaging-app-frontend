@@ -3,6 +3,7 @@ import API_URL from '../API';
 import { StyledContact } from '../styles/HomePage.styled';
 import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 function Contact({
   loggedInUser,
@@ -13,6 +14,9 @@ function Contact({
 }) {
   const { username, status_icon, _id } = user;
   const { user_id, contacts } = loggedInUser;
+
+  // State for preventing multiple fetches from being executed
+  const [inProgress, setInProgress] = useState(false);
 
   // Do not show add contact icon if user is already logged in user's contact
   function isUserInContacts() {
@@ -27,6 +31,10 @@ function Contact({
   // Add a contact to logged in user's contacts
   // Show toast if operation successful or unsuccessful and update user state if the former is true
   async function addContact() {
+    if (inProgress) {
+      return;
+    }
+    setInProgress(true);
     const res = await fetch(`${API_URL}/users/${user_id}/add-contact`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -42,12 +50,17 @@ function Contact({
     }
     const updatedUser = await res.json();
     setUser(updatedUser);
+    setInProgress(false);
     return toast.success(`User ${username} has been added to your contacts`);
   }
 
   // Remove a contact from logged in user's contacts
   // Show toast if operation successful or unsuccessful and update user state if the former is true
   async function removeContact() {
+    if (inProgress) {
+      return;
+    }
+    setInProgress(true);
     const res = await fetch(`${API_URL}/users/${user_id}/remove-contact`, {
       method: 'DELETE',
       body: JSON.stringify({
@@ -63,6 +76,7 @@ function Contact({
     }
     const updatedUser = await res.json();
     setUser(updatedUser);
+    setInProgress(false);
     return toast.success(
       `User ${username} has been removed from your contacts`,
     );
