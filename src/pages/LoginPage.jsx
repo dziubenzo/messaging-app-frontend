@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { StyledLoginPage } from '../styles/LoginPage.styled';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import API_URL from '../API';
+import { changeStatusIcon, statusIcons } from '../helpers';
 
 function LoginPage() {
   const navigate = useNavigate();
   const { setUser } = useOutletContext();
   const [error, setError] = useState('');
 
-  // Log in user, set user and redirect to the Home page on successful login
+  // Log in user, set user, change their status icon to available and redirect to the Home page on successful login
   // Otherwise show error message
   async function logIn(event) {
     event.preventDefault();
@@ -30,6 +31,11 @@ function LoginPage() {
     }
     const retrievedUser = await res.json();
     setUser(retrievedUser);
+    changeStatusIcon(
+      retrievedUser.user_id,
+      retrievedUser.status_icon,
+      statusIcons.available,
+    );
     return navigate('/home');
   }
 
