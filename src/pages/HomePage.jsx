@@ -1,6 +1,6 @@
 import API_URL from '../API';
 import { useLoaderData, useNavigate, useOutletContext } from 'react-router-dom';
-import { useCheckAuth } from '../helpers';
+import { changeStatusIcon, statusIcons, useCheckAuth } from '../helpers';
 import Contact from '../components/Contact';
 import StatusBar from '../components/StatusBar';
 import {
@@ -37,13 +37,16 @@ function HomePage() {
   });
 
   // Logout user, show toast and redirect to the Login page
+  // Change status icon to unavailable
   async function logOut(event) {
     event.preventDefault();
+    changeStatusIcon(user.user_id, user.status_icon, statusIcons.unavailable);
     const res = await fetch(`${API_URL}/users/logout`, {
       method: 'POST',
       credentials: 'include',
     });
     if (!res.ok) {
+      changeStatusIcon(user.user_id, user.status_icon, statusIcons.available);
       return toast.error('There was an error. Please try again');
     }
     toast.success('You have been logged out successfully');
