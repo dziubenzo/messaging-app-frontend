@@ -76,3 +76,37 @@ export const statusIcons = {
   unavailable:
     'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/eegejkm8yz0f8qko0x1q.png',
 };
+
+// Change status icon when logged in user goes offline or online
+// Do not change it if their status icon is already the right one
+export const changeStatusIcon = async (userId, currentStatusIcon, imageURL) => {
+  if (currentStatusIcon === imageURL) {
+    return;
+  }
+  await fetch(`${API_URL}/users/${userId}/change-status-icon`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      image_url: imageURL,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
+};
+
+// Hook for changing logged in user's status icon
+export const useChangeStatusIcon = (event, user, imageURL) => {
+  useEffect(() => {
+    function changeIcon() {
+      // Make sure user object is populated
+      if (Object.keys(user).length) {
+        changeStatusIcon(user.user_id, user.status_icon, imageURL);
+      }
+    }
+    window.addEventListener(event, changeIcon);
+    return () => {
+      window.removeEventListener(event, changeIcon);
+    };
+  }, [user]);
+};

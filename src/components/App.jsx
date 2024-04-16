@@ -5,12 +5,15 @@ import Header from './Header';
 
 import Theme from './Theme';
 import GlobalStyle from '../styles/GlobalStyle';
-import { useCheckRootAuth } from '../helpers';
+import { useCheckRootAuth, useChangeStatusIcon, statusIcons } from '../helpers';
 import { useState } from 'react';
 
 function App({ children }) {
   const [user, setUser] = useState({});
   useCheckRootAuth(setUser);
+
+  // Change user's status icon to unavailable on unload
+  useChangeStatusIcon('beforeunload', user, statusIcons.unavailable);
 
   return (
     <Theme>
