@@ -15,6 +15,8 @@ import { AiOutlineLogout } from 'react-icons/ai';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { socket } from '../socket';
+
 function HomePage() {
   const navigate = useNavigate();
 
