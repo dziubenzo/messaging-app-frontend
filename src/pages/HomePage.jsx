@@ -38,9 +38,14 @@ function HomePage() {
 
   // Logout user, show toast and redirect to the Login page
   // Change status icon to unavailable
+  // Wait for status icon change to finish before logging out
   async function logOut(event) {
     event.preventDefault();
-    changeStatusIcon(user.user_id, user.status_icon, statusIcons.unavailable);
+    await changeStatusIcon(
+      user.user_id,
+      user.status_icon,
+      statusIcons.unavailable,
+    );
     const res = await fetch(`${API_URL}/users/logout`, {
       method: 'POST',
       credentials: 'include',
