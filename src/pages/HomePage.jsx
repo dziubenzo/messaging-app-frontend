@@ -1,6 +1,12 @@
 import API_URL from '../API';
 import { useLoaderData, useNavigate, useOutletContext } from 'react-router-dom';
-import { changeStatusIcon, statusIcons, useCheckAuth } from '../helpers';
+import {
+  changeStatusIcon,
+  statusIcons,
+  useChangeToAvailable,
+  useChangeToUnavailable,
+  useCheckAuth,
+} from '../helpers';
 import Contact from '../components/Contact';
 import StatusBar from '../components/StatusBar';
 import {
@@ -12,7 +18,8 @@ import {
 } from '../styles/HomePage.styled';
 import { LiaUsersSolid, LiaUserFriendsSolid } from 'react-icons/lia';
 import { AiOutlineLogout } from 'react-icons/ai';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
 
 import { socket } from '../socket';
@@ -26,8 +33,8 @@ function HomePage() {
   const allUsers = useLoaderData();
   const { contacts } = user;
 
-  // State for storing all users except for logged in user
-  const [allUsersFiltered, setAllUsersFiltered] = useState(
+  // Immer state for storing all users except for logged in user
+  const [allUsersFiltered, setAllUsersFiltered] = useImmer(
     allUsers.filter((dbUser) => dbUser.user_id !== user.user_id),
   );
   // State for toggling All Users/Contacts tabs
@@ -43,22 +50,38 @@ function HomePage() {
   // Wait for status icon change to finish before logging out
   async function logOut(event) {
     event.preventDefault();
-    await changeStatusIcon(
-      user.user_id,
-      user.status_icon,
-      statusIcons.unavailable,
-    );
+    toast('Logging out...');
+    socket.emit('change status icon', user.user_id, statusIcons.unavailable);
+    await changeStatusIcon(user, setUser, statusIcons.unavailable);
     const res = await fetch(`${API_URL}/users/logout`, {
       method: 'POST',
       credentials: 'include',
     });
     if (!res.ok) {
-      changeStatusIcon(user.user_id, user.status_icon, statusIcons.available);
+      socket.emit('change status icon', user.user_id, statusIcons.available);
+      changeStatusIcon(user, setUser, statusIcons.available);
       return toast.error('There was an error. Please try again');
     }
     toast.success('You have been logged out successfully');
+    setUser({});
     return navigate('/login');
   }
+
+  // Change logged in user's status icon to available on component load
+  useChangeToAvailable(user, setUser);
+
+  // Change logged in user's status icon to unavailable on unload
+  useChangeToUnavailable(user, setUser);
+
+  // Manage events emitted by the server
+  useEffect(() => {
+    socket.on('update status icon', (userId, imageURL) => {
+      setAllUsersFiltered((draft) => {
+        const user = draft.find((user) => user.user_id === userId);
+        user.status_icon = imageURL;
+      });
+    });
+  }, []);
 
   return (
     <StyledHomePage>

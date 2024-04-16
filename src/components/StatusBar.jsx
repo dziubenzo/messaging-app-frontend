@@ -5,6 +5,7 @@ import { statusIcons } from '../helpers';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { socket } from '../socket';
 
 function StatusBar({ user, setUser }) {
   // State for preventing multiple fetches from being executed
@@ -35,6 +36,7 @@ function StatusBar({ user, setUser }) {
     const updatedUser = await res.json();
     setUser(updatedUser);
     setInProgress(false);
+    socket.emit('change status icon', user_id, imageURL);
     return toast.success(`Status icon has been changed successfully`);
   }
 

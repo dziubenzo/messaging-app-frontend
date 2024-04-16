@@ -3,13 +3,16 @@ import { StyledLoginPage } from '../styles/LoginPage.styled';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import API_URL from '../API';
 import { changeStatusIcon, statusIcons } from '../helpers';
+import { socket } from '../socket';
+import { toast } from 'react-toastify';
 
 function LoginPage() {
   const navigate = useNavigate();
   const { setUser } = useOutletContext();
   const [error, setError] = useState('');
 
-  // Log in user, set user, change their status icon to available and redirect to the Home page on successful login
+  // Log in user, change their status icon to available, set user state and navigate to the Home page on successful login
+  // Make sure icon is changes and user state is set before navigating to the Home page
   // Otherwise show error message
   async function logIn(event) {
     event.preventDefault();
@@ -18,6 +21,7 @@ function LoginPage() {
       username: formData.get('username'),
       password: formData.get('password'),
     };
+    toast('Logging in...');
     const res = await fetch(`${API_URL}/users/login`, {
       method: 'POST',
       body: JSON.stringify(user),
@@ -29,13 +33,13 @@ function LoginPage() {
     if (!res.ok) {
       return setError('Incorrect username or password');
     }
-    const retrievedUser = await res.json();
-    setUser(retrievedUser);
-    changeStatusIcon(
-      retrievedUser.user_id,
-      retrievedUser.status_icon,
-      statusIcons.available,
+    const loggedInUser = await res.json();
+    socket.emit(
+      'change status icon',
+      loggedInUser.user_id,
+      statusIcons.unavailable,
     );
+    await changeStatusIcon(loggedInUser, setUser, statusIcons.available);
     return navigate('/home');
   }
 
