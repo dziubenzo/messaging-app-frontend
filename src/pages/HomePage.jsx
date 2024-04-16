@@ -19,7 +19,7 @@ function HomePage() {
   const navigate = useNavigate();
 
   const { user, setUser } = useOutletContext();
-  useCheckAuth(user, setUser);
+  useCheckAuth(setUser);
 
   const allUsers = useLoaderData();
   const { contacts } = user;

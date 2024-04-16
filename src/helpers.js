@@ -33,8 +33,8 @@ export const useCheckRootAuth = (setUser) => {
 
 // Check if the user is authenticated
 // If they are not, redirect to Login page
-// Otherwise, populate user object if it is empty (e.g. after browser refresh)
-export const useCheckAuth = (user, setUser) => {
+// Otherwise, populate user object
+export const useCheckAuth = (setUser) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,9 +50,7 @@ export const useCheckAuth = (user, setUser) => {
         return navigate('/login');
       }
       const retrievedUser = await res.json();
-      if (!user.length) {
-        setUser(retrievedUser);
-      }
+      setUser(retrievedUser);
     }
     checkAuth();
   }, []);
@@ -95,18 +93,32 @@ export const changeStatusIcon = async (userId, currentStatusIcon, imageURL) => {
   });
 };
 
-// Hook for changing logged in user's status icon
-export const useChangeStatusIcon = (event, user, imageURL) => {
+// Hook for changing logged in user's status icon to unavailable on unload
+export const useChangeToUnavailable = (user) => {
   useEffect(() => {
     function changeIcon() {
       // Make sure user object is populated
       if (Object.keys(user).length) {
-        changeStatusIcon(user.user_id, user.status_icon, imageURL);
+        changeStatusIcon(
+          user.user_id,
+          user.status_icon,
+          statusIcons.unavailable,
+        );
       }
     }
-    window.addEventListener(event, changeIcon);
+    window.addEventListener('beforeunload', changeIcon);
     return () => {
-      window.removeEventListener(event, changeIcon);
+      window.removeEventListener('beforeunload', changeIcon);
     };
+  }, [user]);
+};
+
+// Hook for changing logged in user's status icon to available on load
+export const useChangeToAvailable = (user) => {
+  useEffect(() => {
+    // Make sure user object is populated
+    if (Object.keys(user).length) {
+      changeStatusIcon(user.user_id, user.status_icon, statusIcons.available);
+    }
   }, [user]);
 };
