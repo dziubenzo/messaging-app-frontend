@@ -13,7 +13,7 @@ function Contact({
   showContacts,
   setBottomBarText,
 }) {
-  const { username, status_icon, _id } = user;
+  const { username, status_icon, status_text, _id } = user;
   const { user_id, contacts } = loggedInUser;
 
   // State for preventing multiple fetches from being executed
@@ -111,7 +111,9 @@ function Contact({
       />
       <div className="user-info">
         <p className="username">{username}</p>
-        <p className="text-status">Some future status</p>
+        <p className="text-status">
+          {status_text}
+        </p>
       </div>
       {showContacts ? (
         <IoPersonRemoveOutline title="Remove Contact" onClick={removeContact} />

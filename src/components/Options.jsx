@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { StyledOptions } from '../styles/HomePage.styled';
 import { useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { socket } from '../socket';
 
 const STATUS_CHARACTER_LIMIT = 70;
 
@@ -54,6 +55,12 @@ function Options({ showOptions, setShowOptions, setBottomBarText }) {
       id: updatedUser.user_id,
       status: updatedUser.status_text,
     });
+    socket.emit(
+      'change username/text status',
+      updatedUser.user_id,
+      updatedUser.username,
+      updatedUser.status_text,
+    );
     return toast.success(`Changes made successfully!`);
   }
 

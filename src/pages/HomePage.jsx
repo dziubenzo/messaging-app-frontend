@@ -93,6 +93,23 @@ function HomePage() {
         }
       });
     });
+    // Update username and text status in both tabs
+    socket.on('update username/text status', (userId, username, textStatus) => {
+      setAllUsersFiltered((draft) => {
+        const user = draft.find((user) => user.user_id === userId);
+        user.username = username;
+        user.status_text = textStatus;
+      });
+      setUser((draft) => {
+        const user = draft.contacts.find(
+          (contact) => contact.user_id === userId,
+        );
+        if (user) {
+          user.username = username;
+          user.status_text = textStatus;
+        }
+      });
+    });
   }, []);
 
   return (
