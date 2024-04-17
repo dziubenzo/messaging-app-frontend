@@ -6,10 +6,10 @@ import Header from './Header';
 import Theme from './Theme';
 import GlobalStyle from '../styles/GlobalStyle';
 import { useCheckRootAuth } from '../helpers';
-import { useState } from 'react';
+import { useImmer } from 'use-immer';
 
 function App({ children }) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useImmer({});
   useCheckRootAuth(setUser);
 
   return (

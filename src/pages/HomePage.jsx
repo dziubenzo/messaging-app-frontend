@@ -75,10 +75,19 @@ function HomePage() {
 
   // Manage events emitted by the server
   useEffect(() => {
+    // Update status icon in both tabs
     socket.on('update status icon', (userId, imageURL) => {
       setAllUsersFiltered((draft) => {
         const user = draft.find((user) => user.user_id === userId);
         user.status_icon = imageURL;
+      });
+      setUser((draft) => {
+        const user = draft.contacts.find(
+          (contact) => contact.user_id === userId,
+        );
+        if (user) {
+          user.status_icon = imageURL;
+        }
       });
     });
   }, []);
