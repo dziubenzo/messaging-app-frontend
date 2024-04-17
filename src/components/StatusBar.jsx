@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
 
-function StatusBar({ user, setUser }) {
+function StatusBar({ user, setUser, showOptions, setShowOptions }) {
   // State for preventing multiple fetches from being executed
   const [inProgress, setInProgress] = useState(false);
   const { user_id, status_icon } = user;
@@ -60,7 +60,10 @@ function StatusBar({ user, setUser }) {
           </div>
         </div>
       </div>
-      <PiDotsThreeOutlineFill title="Options" />
+      <PiDotsThreeOutlineFill
+        title="Options"
+        onClick={() => setShowOptions(!showOptions)}
+      />
     </StyledStatusBar>
   );
 }
@@ -68,6 +71,8 @@ function StatusBar({ user, setUser }) {
 StatusBar.propTypes = {
   user: PropTypes.object,
   setUser: PropTypes.func,
+  showOptions: PropTypes.bool,
+  setShowOptions: PropTypes.func,
 };
 
 export default StatusBar;

@@ -23,6 +23,7 @@ import { useImmer } from 'use-immer';
 import { toast } from 'react-toastify';
 
 import { socket } from '../socket';
+import Options from '../components/Options';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -44,6 +45,8 @@ function HomePage() {
     id: user.user_id,
     status: user.status_text,
   });
+  // State for showing Options
+  const [showOptions, setShowOptions] = useState(false);
 
   // Logout user, show toast and redirect to the Login page
   // Change status icon to unavailable
@@ -117,38 +120,47 @@ function HomePage() {
           <p className={showContacts ? 'active' : undefined}>Contacts</p>
         </div>
       </ContactsBar>
-      <UsersList>
-        {showContacts
-          ? contacts.map((contact) => {
-              return (
-                <Contact
-                  key={contact.user_id}
-                  loggedInUser={user}
-                  user={contact}
-                  setUser={setUser}
-                  showContacts={showContacts}
-                  setBottomBarText={setBottomBarText}
-                />
-              );
-            })
-          : allUsersFiltered.map((filteredUser) => {
-              return (
-                <Contact
-                  key={filteredUser.user_id}
-                  loggedInUser={user}
-                  user={filteredUser}
-                  setUser={setUser}
-                  showContacts={showContacts}
-                  setBottomBarText={setBottomBarText}
-                />
-              );
-            })}
-      </UsersList>
+      {showOptions ? (
+        <Options showOptions={showOptions} setShowOptions={setShowOptions} />
+      ) : (
+        <UsersList>
+          {showContacts
+            ? contacts.map((contact) => {
+                return (
+                  <Contact
+                    key={contact.user_id}
+                    loggedInUser={user}
+                    user={contact}
+                    setUser={setUser}
+                    showContacts={showContacts}
+                    setBottomBarText={setBottomBarText}
+                  />
+                );
+              })
+            : allUsersFiltered.map((filteredUser) => {
+                return (
+                  <Contact
+                    key={filteredUser.user_id}
+                    loggedInUser={user}
+                    user={filteredUser}
+                    setUser={setUser}
+                    showContacts={showContacts}
+                    setBottomBarText={setBottomBarText}
+                  />
+                );
+              })}
+        </UsersList>
+      )}
       <BottomBar>
         <p>ID {bottomBarText.id}</p>
         <p className="text-status">{bottomBarText.status}</p>
       </BottomBar>
-      <StatusBar user={user} setUser={setUser} />
+      <StatusBar
+        user={user}
+        setUser={setUser}
+        showOptions={showOptions}
+        setShowOptions={setShowOptions}
+      />
     </StyledHomePage>
   );
 }

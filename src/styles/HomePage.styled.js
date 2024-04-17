@@ -6,7 +6,7 @@ export const StyledHomePage = styled.main`
   border: 2px solid ${(props) => props.theme.colours.primary};
 
   @media (width <= ${(props) => props.theme.mobile}) {
-    width: 100%;
+    width: 90vw;
   }
 `;
 
@@ -192,5 +192,56 @@ export const StyledStatusBar = styled.div`
     width: 24px;
     height: 24px;
     cursor: pointer;
+  }
+`;
+
+export const StyledOptions = styled(UsersList)`
+  position: relative;
+  padding: 0.5em;
+  justify-content: center;
+  gap: 16px;
+
+  form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    label {
+      text-align: center;
+      cursor: pointer;
+    }
+
+    input,
+    textarea {
+      font-size: ${(props) => props.theme.fontSizes.standard};
+      padding: 0.2em;
+      width: 100%;
+      resize: none;
+    }
+
+    .characters-left {
+      position: absolute;
+      text-align: center;
+      width: 3ch;
+      bottom: 0.3em;
+      right: 0.3em;
+      padding: 0.2em;
+      font-size: ${(props) => props.theme.fontSizes.small};
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+
+    button {
+      align-self: center;
+      font-size: ${(props) => props.theme.fontSizes.standard};
+      padding: 0.3em 0.5em;
+      cursor: pointer;
+    }
   }
 `;

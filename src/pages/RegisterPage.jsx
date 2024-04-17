@@ -46,6 +46,7 @@ function RegisterPage() {
           type="text"
           name="username"
           id="username"
+          minLength={3}
           maxLength={16}
           required
         />
