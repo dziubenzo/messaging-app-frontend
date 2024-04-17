@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
+import API_URL from '../API';
 import { useState } from 'react';
 import { StyledOptions } from '../styles/HomePage.styled';
 import { useOutletContext } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-function Options({ showOptions, setShowOptions }) {
-  const STATUS_CHARACTER_LIMIT = 70;
+const STATUS_CHARACTER_LIMIT = 70;
 
+function Options({ showOptions, setShowOptions, setBottomBarText }) {
   const { user, setUser } = useOutletContext();
 
   const [username, setUsername] = useState(user.username);
@@ -13,10 +15,51 @@ function Options({ showOptions, setShowOptions }) {
   const [charactersLeft, setCharactersLeft] = useState(
     STATUS_CHARACTER_LIMIT - user.status_text.length,
   );
+  const [inProgress, setInProgress] = useState(false);
+
+  // Update logged in user's username and/or text status
+  async function updateUser(event) {
+    event.preventDefault();
+    if (
+      inProgress ||
+      (username === user.username && status === user.status_text)
+    ) {
+      return;
+    }
+    setInProgress(true);
+    toast.info('Making changes...');
+    const formData = new FormData(event.target);
+    const updates = {
+      current_username: user.username,
+      username: formData.get('username'),
+      status_text: formData.get('status_text'),
+    };
+    const res = await fetch(`${API_URL}/users/${user.user_id}/update`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    if (!res.ok) {
+      const error = await res.json();
+      setInProgress(false);
+      return toast.error(error);
+    }
+    const updatedUser = await res.json();
+    setUser(updatedUser);
+    setShowOptions(!showOptions);
+    setBottomBarText({
+      id: updatedUser.user_id,
+      status: updatedUser.status_text,
+    });
+    return toast.success(`Changes made successfully!`);
+  }
 
   return (
     <StyledOptions>
-      <form id="options-form" method="post">
+      <form id="options-form" method="post" onSubmit={updateUser}>
         <label htmlFor="username">Username:</label>
         <input
           type="text"
@@ -57,6 +100,7 @@ function Options({ showOptions, setShowOptions }) {
 Options.propTypes = {
   showOptions: PropTypes.bool,
   setShowOptions: PropTypes.func,
+  setBottomBarText: PropTypes.func,
 };
 
 export default Options;

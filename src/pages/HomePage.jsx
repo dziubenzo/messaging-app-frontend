@@ -53,7 +53,7 @@ function HomePage() {
   // Wait for status icon change to finish before logging out
   async function logOut(event) {
     event.preventDefault();
-    toast('Logging out...');
+    toast.info('Logging out...');
     socket.emit('change status icon', user.user_id, statusIcons.unavailable);
     await changeStatusIcon(user, setUser, statusIcons.unavailable);
     const res = await fetch(`${API_URL}/users/logout`, {
@@ -121,7 +121,11 @@ function HomePage() {
         </div>
       </ContactsBar>
       {showOptions ? (
-        <Options showOptions={showOptions} setShowOptions={setShowOptions} />
+        <Options
+          showOptions={showOptions}
+          setShowOptions={setShowOptions}
+          setBottomBarText={setBottomBarText}
+        />
       ) : (
         <UsersList>
           {showContacts

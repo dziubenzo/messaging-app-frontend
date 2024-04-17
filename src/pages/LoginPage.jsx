@@ -21,7 +21,7 @@ function LoginPage() {
       username: formData.get('username'),
       password: formData.get('password'),
     };
-    toast('Logging in...');
+    toast.info('Logging in...');
     const res = await fetch(`${API_URL}/users/login`, {
       method: 'POST',
       body: JSON.stringify(user),

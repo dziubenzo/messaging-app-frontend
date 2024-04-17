@@ -31,6 +31,7 @@ function StatusBar({ user, setUser, showOptions, setShowOptions }) {
       credentials: 'include',
     });
     if (!res.ok) {
+      setInProgress(false);
       return toast.error('There was an error. Please try again');
     }
     const updatedUser = await res.json();
