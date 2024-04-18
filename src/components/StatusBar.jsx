@@ -19,6 +19,7 @@ function StatusBar({ user, setUser, showOptions, setShowOptions }) {
     if (inProgress || status_icon === imageURL) {
       return;
     }
+    toast.info('Changing status icon...');
     setInProgress(true);
     const res = await fetch(`${API_URL}/users/${user_id}/change-status-icon`, {
       method: 'PUT',

@@ -11,9 +11,9 @@ import ContactsBar from '../components/ContactsBar';
 import BottomBar from '../components/BottomBar';
 import Options from '../components/Options';
 import { StyledHomePage, UsersList } from '../styles/HomePage.styled';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useImmer } from 'use-immer';
-import { socket } from '../socket';
+import { useManageEvents } from '../socket';
 
 function HomePage() {
   const { user, setUser } = useOutletContext();
@@ -43,40 +43,7 @@ function HomePage() {
   useChangeToUnavailable(user, setUser);
 
   // Manage events emitted by the server
-  useEffect(() => {
-    // Update status icon in both tabs
-    socket.on('update status icon', (userId, imageURL) => {
-      setAllUsersFiltered((draft) => {
-        const user = draft.find((user) => user.user_id === userId);
-        user.status_icon = imageURL;
-      });
-      setUser((draft) => {
-        const user = draft.contacts.find(
-          (contact) => contact.user_id === userId,
-        );
-        if (user) {
-          user.status_icon = imageURL;
-        }
-      });
-    });
-    // Update username and text status in both tabs
-    socket.on('update username/text status', (userId, username, textStatus) => {
-      setAllUsersFiltered((draft) => {
-        const user = draft.find((user) => user.user_id === userId);
-        user.username = username;
-        user.status_text = textStatus;
-      });
-      setUser((draft) => {
-        const user = draft.contacts.find(
-          (contact) => contact.user_id === userId,
-        );
-        if (user) {
-          user.username = username;
-          user.status_text = textStatus;
-        }
-      });
-    });
-  }, []);
+  useManageEvents(setAllUsersFiltered, setUser);
 
   return (
     <StyledHomePage>
