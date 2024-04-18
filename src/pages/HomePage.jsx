@@ -1,33 +1,21 @@
-import API_URL from '../API';
-import { useLoaderData, useNavigate, useOutletContext } from 'react-router-dom';
+import { useLoaderData, useOutletContext } from 'react-router-dom';
 import {
-  changeStatusIcon,
-  statusIcons,
   useChangeToAvailable,
   useChangeToUnavailable,
   useCheckAuth,
 } from '../helpers';
 import Contact from '../components/Contact';
 import StatusBar from '../components/StatusBar';
-import {
-  StyledHomePage,
-  TopBar,
-  ContactsBar,
-  UsersList,
-  BottomBar,
-} from '../styles/HomePage.styled';
-import { LiaUsersSolid, LiaUserFriendsSolid } from 'react-icons/lia';
-import { AiOutlineLogout } from 'react-icons/ai';
+import TopBar from '../components/TopBar';
+import ContactsBar from '../components/ContactsBar';
+import BottomBar from '../components/BottomBar';
+import Options from '../components/Options';
+import { StyledHomePage, UsersList } from '../styles/HomePage.styled';
 import { useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
-import { toast } from 'react-toastify';
-
 import { socket } from '../socket';
-import Options from '../components/Options';
 
 function HomePage() {
-  const navigate = useNavigate();
-
   const { user, setUser } = useOutletContext();
   useCheckAuth(setUser);
 
@@ -38,37 +26,15 @@ function HomePage() {
   const [allUsersFiltered, setAllUsersFiltered] = useImmer(
     allUsers.filter((dbUser) => dbUser.user_id !== user.user_id),
   );
-  // State for toggling All Users/Contacts tabs
-  const [showContacts, setShowContacts] = useState(false);
   // State for managing Bottom Bar text
   const [bottomBarText, setBottomBarText] = useState({
     id: user.user_id,
     status: user.status_text,
   });
-  // State for showing Options
+  // State for toggling All Users/Contacts tabs
+  const [showContacts, setShowContacts] = useState(false);
+  // State for showing options
   const [showOptions, setShowOptions] = useState(false);
-
-  // Logout user, show toast and redirect to the Login page
-  // Change status icon to unavailable
-  // Wait for status icon change to finish before logging out
-  async function logOut(event) {
-    event.preventDefault();
-    toast.info('Logging out...');
-    socket.emit('change status icon', user.user_id, statusIcons.unavailable);
-    await changeStatusIcon(user, setUser, statusIcons.unavailable);
-    const res = await fetch(`${API_URL}/users/logout`, {
-      method: 'POST',
-      credentials: 'include',
-    });
-    if (!res.ok) {
-      socket.emit('change status icon', user.user_id, statusIcons.available);
-      changeStatusIcon(user, setUser, statusIcons.available);
-      return toast.error('There was an error. Please try again');
-    }
-    toast.success('You have been logged out successfully');
-    setUser({});
-    return navigate('/login');
-  }
 
   // Change logged in user's status icon to available on component load
   useChangeToAvailable(user, setUser);
@@ -114,29 +80,11 @@ function HomePage() {
 
   return (
     <StyledHomePage>
-      <TopBar>
-        <img src={user.status_icon} alt="Status Icon" />
-        <p>Me ({user.user_id})</p>
-        <AiOutlineLogout title="Log Out" onClick={logOut} />
-      </TopBar>
-      <ContactsBar>
-        <div
-          className="all-users"
-          aria-label="All Users Button"
-          onClick={() => setShowContacts(false)}
-        >
-          <LiaUsersSolid />
-          <p className={!showContacts ? 'active' : undefined}>All Users</p>
-        </div>
-        <div
-          className="contacts"
-          aria-label="Contacts Button"
-          onClick={() => setShowContacts(true)}
-        >
-          <LiaUserFriendsSolid />
-          <p className={showContacts ? 'active' : undefined}>Contacts</p>
-        </div>
-      </ContactsBar>
+      <TopBar />
+      <ContactsBar
+        showContacts={showContacts}
+        setShowContacts={setShowContacts}
+      />
       {showOptions ? (
         <Options
           showOptions={showOptions}
@@ -172,10 +120,7 @@ function HomePage() {
               })}
         </UsersList>
       )}
-      <BottomBar>
-        <p>ID {bottomBarText.id}</p>
-        <p className="text-status">{bottomBarText.status}</p>
-      </BottomBar>
+      <BottomBar bottomBarText={bottomBarText} />
       <StatusBar
         user={user}
         setUser={setUser}

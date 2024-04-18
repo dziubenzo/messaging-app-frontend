@@ -10,7 +10,7 @@ export const StyledHomePage = styled.main`
   }
 `;
 
-export const TopBar = styled.div`
+export const StyledTopBar = styled.div`
   display: flex;
   align-items: center;
   background-color: ${(props) => props.theme.colours.topBar};
@@ -40,7 +40,7 @@ export const TopBar = styled.div`
   }
 `;
 
-export const ContactsBar = styled.div`
+export const StyledContactsBar = styled.div`
   display: flex;
   justify-content: start;
   gap: 16px;
@@ -120,7 +120,7 @@ export const StyledContact = styled.div`
   }
 `;
 
-export const BottomBar = styled.div`
+export const StyledBottomBar = styled.div`
   background-color: ${(props) => props.theme.colours.bgQuaternary};
   font-size: ${(props) => props.theme.fontSizes.small};
   border-top: 2px solid ${(props) => props.theme.colours.primary};
