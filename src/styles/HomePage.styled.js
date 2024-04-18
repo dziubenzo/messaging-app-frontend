@@ -73,12 +73,14 @@ export const UsersList = styled.div`
   display: flex;
   flex-direction: column;
   height: 500px;
+  overflow-y: scroll;
 `;
 
 export const StyledContact = styled.div`
   display: flex;
   align-items: center;
   padding: 0.2em;
+  cursor: pointer;
 
   img {
     width: 20px;
