@@ -60,6 +60,36 @@ export const StyledToolbar = styled.div`
     width: 16px;
     cursor: pointer;
   }
+
+  .emoticons-wrapper {
+    position: relative;
+  }
+`;
+
+export const StyledEmoticons = styled.div`
+  position: absolute;
+  top: -125px;
+  left: 16px;
+  width: 200px;
+  background-color: ${(props) => props.theme.colours.bgPrimary};
+  border: 2px solid ${(props) => props.theme.colours.primary};
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  img {
+    margin: 0.2em;
+    cursor: pointer;
+  }
+
+  @media (hover: hover) {
+    img {
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
 `;
 
 export const StyledInputField = styled.div`
