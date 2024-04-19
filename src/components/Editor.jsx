@@ -16,6 +16,8 @@ function Editor({ senderID, recipientID, setMessages }) {
 
   // State for grabbing user chat message from input field
   const [text, setText] = useState('');
+  // State for preventing multiple messages from being sent
+  const [inProgress, setInProgress] = useState(false);
 
   // Clear input field and focus on it
   function clearInputField() {
@@ -24,18 +26,22 @@ function Editor({ senderID, recipientID, setMessages }) {
     inputFieldRef.current.focus();
   }
 
-  // Make Enter do nothing
-  // This prevents sending messages containing <br> only
-  function disableEnter(event) {
-    return event.key === 'Enter' && event.preventDefault();
+  // Make Enter send message
+  // This also prevents sending messages containing <br> only
+  function sendMessageOnEnter(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      sendMessage();
+    }
   }
 
   // Send message if it is not empty and if it doesn't contain <br>, which gets created after using formatting options and then clearing input field manually
   // Clear input fields if operation successful
   async function sendMessage() {
-    if (text === '<br>' || !text) {
+    if (text === '<br>' || !text || inProgress) {
       return;
     }
+    setInProgress(true);
     toast.info('Sending message...');
     const message = {
       sender: senderID,
@@ -51,6 +57,7 @@ function Editor({ senderID, recipientID, setMessages }) {
       credentials: 'include',
     });
     if (!res.ok) {
+      setInProgress(false);
       toast.error('Sending message failed');
       return;
     }
@@ -59,6 +66,7 @@ function Editor({ senderID, recipientID, setMessages }) {
       draft.push(newMessage);
     });
     clearInputField();
+    setInProgress(false);
     return toast.success('Message sent!');
   }
 
@@ -69,7 +77,7 @@ function Editor({ senderID, recipientID, setMessages }) {
         ref={inputFieldRef}
         contentEditable
         onInput={(event) => setText(event.currentTarget.innerHTML)}
-        onKeyDown={disableEnter}
+        onKeyDown={sendMessageOnEnter}
       ></StyledInputField>
       <StyledInputButtons>
         <button onClick={sendMessage}>Send</button>
