@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import API_URL from './API';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { socket } from './socket';
@@ -74,6 +74,8 @@ export const statusIcons = {
     'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/nm9jy0qklrrsmabibu75.png',
   unavailable:
     'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/eegejkm8yz0f8qko0x1q.png',
+  message:
+    'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/u21cswfqngpmklkfr3uh.png',
 };
 
 // Change status icon when logged in user goes offline or online
@@ -119,4 +121,44 @@ export const useChangeToAvailable = (user, setUser) => {
     changeStatusIcon(user, setUser, statusIcons.available);
     socket.emit('change status icon', user.user_id, statusIcons.available);
   }, []);
+};
+
+// Hook for fetching data
+export const useFetch = (endpoint) => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData(endpoint) {
+      try {
+        const res = await fetch(`${API_URL}${endpoint}`, {
+          credentials: 'include',
+        });
+        if (!res.ok) {
+          throw new Error('Server error');
+        }
+        const data = await res.json();
+        setData(data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData(endpoint);
+  }, [endpoint]);
+
+  return { data, error, loading };
+};
+
+// Hook for scrolling to the bottom of messages if they change
+export const useScrollToBottom = (messagesRef, messages) => {
+  useEffect(() => {
+    messagesRef.current.scrollTo({
+      top: messagesRef.current.scrollHeight,
+      left: 0,
+      behavior: 'smooth',
+    });
+  }, [messagesRef, messages]);
 };
