@@ -9,7 +9,7 @@ function Message({ message, sender, recipient }) {
     <StyledMessage sender={isSender}>
       <p className="sender">
         {isSender ? 'Me' : recipient.username}
-        <span className="date" title={format(message.date, 'd MMMM Y')}>
+        <span className="date" title={format(message.date, 'd MMMM y')}>
           {' (' + format(message.date, 'HH:mm') + ')'}
         </span>
       </p>

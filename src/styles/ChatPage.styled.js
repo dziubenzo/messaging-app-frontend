@@ -44,3 +44,43 @@ export const StyledMessage = styled.div`
     padding-top: 0.05em;
   }
 `;
+
+export const StyledEditor = styled.div``;
+
+export const StyledToolbar = styled.div`
+  display: flex;
+  gap: 12px;
+  background-color: ${(props) => props.theme.colours.bgPrimary};
+  border-top: 2px solid ${(props) => props.theme.colours.primary};
+  border-bottom: 2px solid ${(props) => props.theme.colours.primary};
+  padding: 0.4em 0.2em;
+
+  svg {
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+  }
+`;
+
+export const StyledInputField = styled.div`
+  height: 150px;
+  padding: 0.2em;
+  overflow-y: scroll;
+
+  &:focus-visible {
+    outline: none;
+  }
+`;
+
+export const StyledInputButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: ${(props) => props.theme.colours.bgPrimary};
+  border-top: 2px solid ${(props) => props.theme.colours.primary};
+  padding: 0.2em;
+
+  button {
+    padding: 0.3em 1.5em;
+    cursor: pointer;
+  }
+`;

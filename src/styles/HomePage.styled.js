@@ -89,6 +89,8 @@ export const StyledContact = styled.div`
   }
 
   .user-info {
+    max-width: 80%;
+
     .username {
       font-size: ${(props) => props.theme.fontSizes.standard};
       font-weight: 800;
