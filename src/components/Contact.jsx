@@ -5,6 +5,7 @@ import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { statusIcons } from '../helpers';
+import { useNavigate } from 'react-router-dom';
 
 function Contact({
   loggedInUser,
@@ -13,6 +14,8 @@ function Contact({
   showContacts,
   setBottomBarText,
 }) {
+  const navigate = useNavigate();
+
   const { username, status_icon, status_text, _id } = user;
   const { user_id, contacts } = loggedInUser;
 
@@ -31,10 +34,11 @@ function Contact({
 
   // Add a contact to logged in user's contacts
   // Show toast if operation successful or unsuccessful and update user state if the former is true
-  async function addContact() {
+  async function addContact(event) {
     if (inProgress) {
       return;
     }
+    event.stopPropagation();
     setInProgress(true);
     const res = await fetch(`${API_URL}/users/${user_id}/add-contact`, {
       method: 'PUT',
@@ -57,10 +61,11 @@ function Contact({
 
   // Remove a contact from logged in user's contacts
   // Show toast if operation successful or unsuccessful and update user state if the former is true
-  async function removeContact() {
+  async function removeContact(event) {
     if (inProgress) {
       return;
     }
+    event.stopPropagation();
     setInProgress(true);
     const res = await fetch(`${API_URL}/users/${user_id}/remove-contact`, {
       method: 'DELETE',
@@ -100,6 +105,10 @@ function Contact({
     <StyledContact
       onMouseEnter={handleUserMouseEnter}
       onMouseLeave={handleUserMouseLeave}
+      onClick={() =>
+        navigate(`/chat/${user.user_id}`, { state: { recipient: user } })
+      }
+      title={`Click to chat with ${username}`}
     >
       <img
         src={
@@ -111,9 +120,7 @@ function Contact({
       />
       <div className="user-info">
         <p className="username">{username}</p>
-        <p className="text-status">
-          {status_text}
-        </p>
+        <p className="text-status">{status_text}</p>
       </div>
       {showContacts ? (
         <IoPersonRemoveOutline title="Remove Contact" onClick={removeContact} />

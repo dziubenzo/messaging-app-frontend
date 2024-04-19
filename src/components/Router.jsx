@@ -5,6 +5,7 @@ import ErrorPage from '../pages/ErrorPage';
 import RegisterPage from '../pages/RegisterPage';
 import HomePage from '../pages/HomePage';
 import LoadingPage from '../pages/LoadingPage';
+import ChatPage from '../pages/ChatPage';
 import { homePageLoader } from '../loaders';
 
 function Router() {
@@ -34,6 +35,10 @@ function Router() {
           path: '/home',
           element: <HomePage />,
           loader: homePageLoader,
+        },
+        {
+          path: '/chat/:userId',
+          element: <ChatPage />,
         },
       ],
     },
