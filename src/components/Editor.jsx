@@ -12,21 +12,37 @@ import { useState } from 'react';
 function Editor(props) {
   const [text, setText] = useState('');
 
+  // Bold, italicise or underline selected text in input field
+  function changeSelection(action) {
+    document.execCommand(action, false, null);
+  }
+
   return (
     <StyledEditor>
       <StyledToolbar>
-        <FaBold title="Bold Selection" />
-        <FaItalic title="Italicise Selection" />
-        <FaUnderline title="Underline Selection" />
+        <FaBold
+          title="Bold Selection"
+          onMouseDown={() => changeSelection('bold')}
+        />
+        <FaItalic
+          title="Italicise Selection"
+          onMouseDown={() => changeSelection('italic')}
+        />
+        <FaUnderline
+          title="Underline Selection"
+          onMouseDown={() => changeSelection('underline')}
+        />
       </StyledToolbar>
       <StyledInputField
         contentEditable
-        onInput={(event) => setText(event.currentTarget.textContent)}
+        onInput={(event) => {
+          setText(event.currentTarget.innerHTML);
+        }}
       ></StyledInputField>
       <StyledInputButtons>
-        <button type="text">Send</button>
-        <button type="text">Clear</button>
-        <button type="text" className='close-btn'>Close</button>
+        <button>Send</button>
+        <button>Clear</button>
+        <button>Close</button>
       </StyledInputButtons>
     </StyledEditor>
   );
