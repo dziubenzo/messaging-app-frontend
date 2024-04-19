@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { StyledMessage } from '../styles/ChatPage.styled';
 import { format } from 'date-fns';
+import parse from 'html-react-parser';
 
 function Message({ message, sender, recipient }) {
   const isSender = message.sender === sender._id;
@@ -13,7 +14,7 @@ function Message({ message, sender, recipient }) {
           {' (' + format(message.date, 'HH:mm') + ')'}
         </span>
       </p>
-      <p className="message">{message.text}</p>
+      <p className="message">{parse(message.text)}</p>
     </StyledMessage>
   );
 }

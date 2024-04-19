@@ -9,6 +9,7 @@ export const StyledChatPage = styled(StyledHomePage)`
 `;
 
 export const StyledMessages = styled.div`
+  position: relative;
   display: flex;
   height: 300px;
   overflow-y: scroll;
