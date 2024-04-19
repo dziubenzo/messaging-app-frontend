@@ -13,7 +13,7 @@ import Options from '../components/Options';
 import { StyledHomePage, UsersList } from '../styles/HomePage.styled';
 import { useState } from 'react';
 import { useImmer } from 'use-immer';
-import { useManageEvents } from '../socket';
+import { useEventsHomePage } from '../socket';
 
 function HomePage() {
   const { user, setUser } = useOutletContext();
@@ -43,7 +43,7 @@ function HomePage() {
   useChangeToUnavailable(user, setUser);
 
   // Manage events emitted by the server
-  useManageEvents(setAllUsersFiltered, setUser);
+  useEventsHomePage(setAllUsersFiltered, setUser);
 
   return (
     <StyledHomePage>

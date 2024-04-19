@@ -6,11 +6,11 @@ import { useEffect } from 'react';
 // Establish Socket.IO connection
 export const socket = io(API_URL);
 
-// Manage events emitted by the server
-export const useManageEvents = (setAllUsersFiltered, setUser) => {
+// Manage events emitted by the server (Home page)
+export const useEventsHomePage = (setAllUsersFiltered, setUser) => {
   useEffect(() => {
     // Update status icon in both tabs
-    socket.on('update status icon', (userId, imageURL) => {
+    const updateStatusIcon = (userId, imageURL) => {
       setAllUsersFiltered((draft) => {
         const user = draft.find((user) => user.user_id === userId);
         user.status_icon = imageURL;
@@ -23,9 +23,10 @@ export const useManageEvents = (setAllUsersFiltered, setUser) => {
           user.status_icon = imageURL;
         }
       });
-    });
+    };
+
     // Update username and text status in both tabs
-    socket.on('update username/text status', (userId, username, textStatus) => {
+    const updateUsernameOrTextStatus = (userId, username, textStatus) => {
       setAllUsersFiltered((draft) => {
         const user = draft.find((user) => user.user_id === userId);
         user.username = username;
@@ -40,6 +41,46 @@ export const useManageEvents = (setAllUsersFiltered, setUser) => {
           user.status_text = textStatus;
         }
       });
-    });
+    };
+
+    socket.on('update status icon', updateStatusIcon);
+    socket.on('update username/text status', updateUsernameOrTextStatus);
+
+    return () => {
+      socket.off('update status icon', updateStatusIcon);
+      socket.off('update username/text status', updateUsernameOrTextStatus);
+    };
+  }, []);
+};
+
+// Manage events emitted by the server (Chat page)
+export const useEventsChatPage = (recipient, setRecipient, setMessages) => {
+  useEffect(() => {
+    // Update messages if its sender is the recipient
+    const receiveMessage = (senderId, message) => {
+      if (senderId === recipient.user_id) {
+        setMessages((draft) => {
+          draft.push(message);
+        });
+      }
+    };
+
+    // Update username and text status in the top bar if the sender matches the recipient
+    const updateUsernameOrTextStatus = (senderId, username, textStatus) => {
+      if (senderId === recipient.user_id) {
+        setRecipient((draft) => {
+          draft.username = username;
+          draft.status_text = textStatus;
+        });
+      }
+    };
+
+    socket.on('receive message', receiveMessage);
+    socket.on('update username/text status', updateUsernameOrTextStatus);
+
+    return () => {
+      socket.off('receive message', receiveMessage);
+      socket.off('update username/text status', updateUsernameOrTextStatus);
+    };
   }, []);
 };

@@ -9,8 +9,9 @@ import { useRef, useState } from 'react';
 import Toolbar from './Toolbar';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { socket } from '../socket';
 
-function Editor({ senderID, recipientID, setMessages }) {
+function Editor({ sender, recipient, setMessages }) {
   const navigate = useNavigate();
   const inputFieldRef = useRef(null);
 
@@ -44,8 +45,8 @@ function Editor({ senderID, recipientID, setMessages }) {
     setInProgress(true);
     toast.info('Sending message...');
     const message = {
-      sender: senderID,
-      recipient: recipientID,
+      sender: sender._id,
+      recipient: recipient._id,
       text,
     };
     const res = await fetch(`${API_URL}/messages`, {
@@ -65,6 +66,7 @@ function Editor({ senderID, recipientID, setMessages }) {
     setMessages((draft) => {
       draft.push(newMessage);
     });
+    socket.emit('send message', sender.user_id, newMessage);
     clearInputField();
     setInProgress(false);
     return toast.success('Message sent!');
@@ -89,8 +91,8 @@ function Editor({ senderID, recipientID, setMessages }) {
 }
 
 Editor.propTypes = {
-  senderID: PropTypes.string,
-  recipientID: PropTypes.string,
+  sender: PropTypes.object,
+  recipient: PropTypes.object,
   setMessages: PropTypes.func,
 };
 
