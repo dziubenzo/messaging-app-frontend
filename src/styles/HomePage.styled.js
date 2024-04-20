@@ -48,7 +48,8 @@ export const StyledContactsBar = styled.div`
   border-bottom: 2px solid ${(props) => props.theme.colours.primary};
 
   .all-users,
-  .contacts {
+  .contacts,
+  .group-chats {
     display: flex;
     flex-direction: column;
     align-items: center;

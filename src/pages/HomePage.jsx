@@ -10,6 +10,7 @@ import TopBar from '../components/TopBar';
 import ContactsBar from '../components/ContactsBar';
 import BottomBar from '../components/BottomBar';
 import Options from '../components/Options';
+import GroupChats from '../components/GroupChats';
 import { StyledHomePage, UsersList } from '../styles/HomePage.styled';
 import { useState } from 'react';
 import { useImmer } from 'use-immer';
@@ -31,8 +32,8 @@ function HomePage() {
     id: user.user_id,
     status: user.status_text,
   });
-  // State for toggling All Users/Contacts tabs
-  const [showContacts, setShowContacts] = useState(false);
+  // State for toggling between All Users/Contacts/Group Chats tabs
+  const [showTab, setShowTab] = useState([true, false, false]);
   // State for showing options
   const [showOptions, setShowOptions] = useState(false);
 
@@ -48,10 +49,7 @@ function HomePage() {
   return (
     <StyledHomePage>
       <TopBar />
-      <ContactsBar
-        showContacts={showContacts}
-        setShowContacts={setShowContacts}
-      />
+      <ContactsBar showTab={showTab} setShowTab={setShowTab} />
       {showOptions ? (
         <Options
           showOptions={showOptions}
@@ -60,31 +58,35 @@ function HomePage() {
         />
       ) : (
         <UsersList>
-          {showContacts
-            ? contacts.map((contact) => {
-                return (
-                  <Contact
-                    key={contact.user_id}
-                    loggedInUser={user}
-                    user={contact}
-                    setUser={setUser}
-                    showContacts={showContacts}
-                    setBottomBarText={setBottomBarText}
-                  />
-                );
-              })
-            : allUsersFiltered.map((filteredUser) => {
-                return (
-                  <Contact
-                    key={filteredUser.user_id}
-                    loggedInUser={user}
-                    user={filteredUser}
-                    setUser={setUser}
-                    showContacts={showContacts}
-                    setBottomBarText={setBottomBarText}
-                  />
-                );
-              })}
+          {showTab[0] ? (
+            allUsersFiltered.map((filteredUser) => {
+              return (
+                <Contact
+                  key={filteredUser.user_id}
+                  loggedInUser={user}
+                  user={filteredUser}
+                  setUser={setUser}
+                  showTab={showTab}
+                  setBottomBarText={setBottomBarText}
+                />
+              );
+            })
+          ) : showTab[1] ? (
+            contacts.map((contact) => {
+              return (
+                <Contact
+                  key={contact.user_id}
+                  loggedInUser={user}
+                  user={contact}
+                  setUser={setUser}
+                  showTab={showTab}
+                  setBottomBarText={setBottomBarText}
+                />
+              );
+            })
+          ) : (
+            <GroupChats />
+          )}
         </UsersList>
       )}
       <BottomBar bottomBarText={bottomBarText} />

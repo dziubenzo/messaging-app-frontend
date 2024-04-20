@@ -7,13 +7,7 @@ import { useState } from 'react';
 import { statusIcons } from '../helpers';
 import { useNavigate } from 'react-router-dom';
 
-function Contact({
-  loggedInUser,
-  user,
-  setUser,
-  showContacts,
-  setBottomBarText,
-}) {
+function Contact({ loggedInUser, user, setUser, showTab, setBottomBarText }) {
   const navigate = useNavigate();
 
   const { username, status_icon, status_text, _id } = user;
@@ -122,7 +116,7 @@ function Contact({
         <p className="username">{username}</p>
         <p className="text-status">{status_text}</p>
       </div>
-      {showContacts ? (
+      {showTab[1] ? (
         <IoPersonRemoveOutline title="Remove Contact" onClick={removeContact} />
       ) : (
         !isUserInContacts() && (
@@ -136,7 +130,7 @@ Contact.propTypes = {
   loggedInUser: PropTypes.object,
   user: PropTypes.object,
   setUser: PropTypes.func,
-  showContacts: PropTypes.bool,
+  showTab: PropTypes.array,
   setBottomBarText: PropTypes.func,
 };
 
