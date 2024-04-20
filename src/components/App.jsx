@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigation } from 'react-router-dom';
 import Footer from './Footer';
 import Header from './Header';
+import LoadingPage from '../pages/LoadingPage';
 
 import Theme from './Theme';
 import GlobalStyle from '../styles/GlobalStyle';
@@ -9,6 +10,9 @@ import { useCheckRootAuth } from '../helpers';
 import { useImmer } from 'use-immer';
 
 function App({ children }) {
+  const navigation = useNavigation();
+  const isLoading = navigation.state === 'loading';
+
   const [user, setUser] = useImmer({});
   useCheckRootAuth(setUser);
 
@@ -16,7 +20,7 @@ function App({ children }) {
     <Theme>
       <GlobalStyle />
       <Header />
-      <Outlet context={{ user, setUser }} />
+      {isLoading ? <LoadingPage /> : <Outlet context={{ user, setUser }} />}
       {children}
       <Footer />
     </Theme>
