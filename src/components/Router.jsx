@@ -4,6 +4,10 @@ import LoginPage from '../pages/LoginPage';
 import ErrorPage from '../pages/ErrorPage';
 import RegisterPage from '../pages/RegisterPage';
 import HomePage from '../pages/HomePage';
+import AllUsersTab from '../pages/AllUsersTab';
+import ContactsTab from '../pages/ContactsTab';
+import GroupChatsTab from '../pages/GroupChatsTab';
+import OptionsTab from '../pages/OptionsTab';
 import LoadingPage from '../pages/LoadingPage';
 import ChatPage from '../pages/ChatPage';
 import { homePageLoader } from '../loaders';
@@ -20,21 +24,39 @@ function Router() {
       ),
       children: [
         {
-          path: '/',
+          path: '',
           element: <LoadingPage />,
         },
         {
-          path: '/login',
+          path: 'login',
           element: <LoginPage />,
         },
         {
-          path: '/register',
+          path: 'register',
           element: <RegisterPage />,
         },
         {
-          path: '/home',
+          path: 'home',
           element: <HomePage />,
           loader: homePageLoader,
+          children: [
+            {
+              path: '',
+              element: <AllUsersTab />,
+            },
+            {
+              path: 'contacts',
+              element: <ContactsTab />,
+            },
+            {
+              path: 'group-chats',
+              element: <GroupChatsTab />,
+            },
+            {
+              path: 'options',
+              element: <OptionsTab />,
+            },
+          ],
         },
         {
           path: '/chat/:userId',

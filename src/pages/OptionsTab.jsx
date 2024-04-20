@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { StyledOptions } from '../styles/HomePage.styled';
-import { useOutletContext } from 'react-router-dom';
-import { clearTextStatus, updateUser } from '../fetchers';
+import { StyledOptionsTab } from '../styles/HomePage.styled';
+import { useOutletContext, useNavigate } from 'react-router-dom';
+import { clearTextStatus, updateUser } from '../fetchers.js';
 
 const STATUS_CHARACTER_LIMIT = 70;
 
-function Options({ showOptions, setShowOptions, setBottomBarText }) {
-  const { user, setUser } = useOutletContext();
+function OptionsTab() {
+  const { user, setUser, setBottomBarText } = useOutletContext();
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState(user.username);
   const [status, setStatus] = useState(user.status_text);
@@ -26,8 +26,7 @@ function Options({ showOptions, setShowOptions, setBottomBarText }) {
       status,
       user,
       setUser,
-      showOptions,
-      setShowOptions,
+      navigate,
       setBottomBarText,
     );
   }
@@ -39,14 +38,13 @@ function Options({ showOptions, setShowOptions, setBottomBarText }) {
       setInProgress,
       user,
       setUser,
-      showOptions,
-      setShowOptions,
+      navigate,
       setBottomBarText,
     );
   }
 
   return (
-    <StyledOptions>
+    <StyledOptionsTab>
       <form id="options-form" method="post" onSubmit={handleSaveButtonClick}>
         <label htmlFor="username">Username:</label>
         <input
@@ -80,16 +78,10 @@ function Options({ showOptions, setShowOptions, setBottomBarText }) {
           Save
         </button>
         <button onClick={handleNoStatusButtonClick}>No Status</button>
-        <button onClick={() => setShowOptions(!showOptions)}>Close</button>
+        <button onClick={() => navigate('/home')}>Close</button>
       </div>
-    </StyledOptions>
+    </StyledOptionsTab>
   );
 }
 
-Options.propTypes = {
-  showOptions: PropTypes.bool,
-  setShowOptions: PropTypes.func,
-  setBottomBarText: PropTypes.func,
-};
-
-export default Options;
+export default OptionsTab;

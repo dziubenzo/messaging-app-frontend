@@ -69,7 +69,7 @@ function RegisterPage() {
         {error && <p className="error-message">{error}</p>}
         <button type="submit">Register</button>
       </form>
-      <Link to="/">
+      <Link to="/login">
         <button>Log In Page</button>
       </Link>
     </StyledRegisterPage>

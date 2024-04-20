@@ -8,11 +8,10 @@ export const clearTextStatus = async (
   setInProgress,
   user,
   setUser,
-  showOptions,
-  setShowOptions,
+  navigate,
   setBottomBarText,
 ) => {
-  if (inProgress) {
+  if (inProgress || user.status_text === '') {
     return;
   }
   setInProgress(true);
@@ -37,7 +36,6 @@ export const clearTextStatus = async (
   }
   const updatedUser = await res.json();
   setUser(updatedUser);
-  setShowOptions(!showOptions);
   setBottomBarText({
     id: updatedUser.user_id,
     status: updatedUser.status_text,
@@ -48,7 +46,8 @@ export const clearTextStatus = async (
     updatedUser.username,
     updatedUser.status_text,
   );
-  return toast.success(`Changes made successfully!`);
+  toast.success(`Changes made successfully!`);
+  return navigate('/home');
 };
 
 // Update logged in user's username and/or text status
@@ -60,8 +59,7 @@ export const updateUser = async (
   status,
   user,
   setUser,
-  showOptions,
-  setShowOptions,
+  navigate,
   setBottomBarText,
 ) => {
   event.preventDefault();
@@ -94,7 +92,6 @@ export const updateUser = async (
   }
   const updatedUser = await res.json();
   setUser(updatedUser);
-  setShowOptions(!showOptions);
   setBottomBarText({
     id: updatedUser.user_id,
     status: updatedUser.status_text,
@@ -105,5 +102,6 @@ export const updateUser = async (
     updatedUser.username,
     updatedUser.status_text,
   );
-  return toast.success(`Changes made successfully!`);
+  toast.success(`Changes made successfully!`);
+  return navigate('/home');
 };

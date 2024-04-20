@@ -47,9 +47,17 @@ export const StyledContactsBar = styled.div`
   padding: 0.2em;
   border-bottom: 2px solid ${(props) => props.theme.colours.primary};
 
-  .all-users,
-  .contacts,
-  .group-chats {
+  a {
+    text-decoration: none;
+
+    &.active {
+      p {
+        font-weight: 800;
+      }
+    }
+  }
+
+  div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,18 +71,13 @@ export const StyledContactsBar = styled.div`
     p {
       font-size: ${(props) => props.theme.fontSizes.extraSmall};
     }
-
-    p.active {
-      font-weight: 900;
-    }
   }
 `;
 
-export const UsersList = styled.div`
+export const MiddleSection = styled.section`
   display: flex;
   flex-direction: column;
   height: 500px;
-  overflow-y: scroll;
 `;
 
 export const StyledContact = styled.div`
@@ -192,17 +195,23 @@ export const StyledStatusBar = styled.div`
     height: 18px;
   }
 
-  svg {
+  a {
     margin-left: auto;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
   }
 `;
 
-export const StyledOptions = styled(UsersList)`
-  padding: 0.5em;
+export const StyledOptionsTab = styled.div`
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  height: 500px;
+  padding: 0.5em;
   gap: 16px;
 
   form {

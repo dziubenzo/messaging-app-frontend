@@ -1,13 +1,16 @@
-import PropTypes from 'prop-types';
 import API_URL from '../API';
 import { StyledStatusBar } from '../styles/HomePage.styled';
+import { NavLink, useLocation, useOutletContext } from 'react-router-dom';
 import { statusIcons } from '../helpers';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
 
-function StatusBar({ user, setUser, showOptions, setShowOptions }) {
+function StatusBar() {
+  const { pathname } = useLocation();
+  const { user, setUser } = useOutletContext();
+
   // State for preventing multiple fetches from being executed
   const [inProgress, setInProgress] = useState(false);
   const { user_id, status_icon } = user;
@@ -62,19 +65,14 @@ function StatusBar({ user, setUser, showOptions, setShowOptions }) {
           </div>
         </div>
       </div>
-      <PiDotsThreeOutlineFill
+      <NavLink
+        to={pathname !== '/home/options' ? '/home/options' : '/home'}
         title="Options"
-        onClick={() => setShowOptions(!showOptions)}
-      />
+      >
+        <PiDotsThreeOutlineFill />
+      </NavLink>
     </StyledStatusBar>
   );
 }
-
-StatusBar.propTypes = {
-  user: PropTypes.object,
-  setUser: PropTypes.func,
-  showOptions: PropTypes.bool,
-  setShowOptions: PropTypes.func,
-};
 
 export default StatusBar;
