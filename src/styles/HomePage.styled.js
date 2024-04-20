@@ -200,7 +200,6 @@ export const StyledStatusBar = styled.div`
 `;
 
 export const StyledOptions = styled(UsersList)`
-  position: relative;
   padding: 0.5em;
   justify-content: center;
   gap: 16px;
@@ -219,9 +218,22 @@ export const StyledOptions = styled(UsersList)`
     input,
     textarea {
       font-size: ${(props) => props.theme.fontSizes.standard};
+      background-color: ${(props) => props.theme.colours.bgSecondary};
+      border: none;
+      outline: 2px solid ${(props) => props.theme.colours.bgPrimary};
       padding: 0.2em;
       width: 100%;
       resize: none;
+
+      &:focus-visible {
+        outline: 3px solid ${(props) => props.theme.colours.bgPrimary};
+      }
+    }
+
+    input {
+      width: 18ch;
+      align-self: center;
+      text-align: center;
     }
 
     .characters-left {
