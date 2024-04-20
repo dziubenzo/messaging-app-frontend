@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
-import API_URL from '../API';
 import { useState } from 'react';
 import { StyledOptions } from '../styles/HomePage.styled';
 import { useOutletContext } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { socket } from '../socket';
+import { clearTextStatus, updateUser } from '../fetchers';
 
 const STATUS_CHARACTER_LIMIT = 70;
 
@@ -19,54 +17,37 @@ function Options({ showOptions, setShowOptions, setBottomBarText }) {
   const [inProgress, setInProgress] = useState(false);
 
   // Update logged in user's username and/or text status
-  async function updateUser(event) {
-    event.preventDefault();
-    if (
-      inProgress ||
-      (username === user.username && status === user.status_text)
-    ) {
-      return;
-    }
-    setInProgress(true);
-    toast.info('Making changes...');
-    const formData = new FormData(event.target);
-    const updates = {
-      current_username: user.username,
-      username: formData.get('username'),
-      status_text: formData.get('status_text'),
-    };
-    const res = await fetch(`${API_URL}/users/${user.user_id}/update`, {
-      method: 'PUT',
-      body: JSON.stringify(updates),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-    if (!res.ok) {
-      const error = await res.json();
-      setInProgress(false);
-      return toast.error(error);
-    }
-    const updatedUser = await res.json();
-    setUser(updatedUser);
-    setShowOptions(!showOptions);
-    setBottomBarText({
-      id: updatedUser.user_id,
-      status: updatedUser.status_text,
-    });
-    socket.emit(
-      'change username/text status',
-      updatedUser.user_id,
-      updatedUser.username,
-      updatedUser.status_text,
+  function handleSaveButtonClick(event) {
+    updateUser(
+      event,
+      inProgress,
+      setInProgress,
+      username,
+      status,
+      user,
+      setUser,
+      showOptions,
+      setShowOptions,
+      setBottomBarText,
     );
-    return toast.success(`Changes made successfully!`);
+  }
+
+  // Clear logged in user's text status
+  function handleNoStatusButtonClick() {
+    clearTextStatus(
+      inProgress,
+      setInProgress,
+      user,
+      setUser,
+      showOptions,
+      setShowOptions,
+      setBottomBarText,
+    );
   }
 
   return (
     <StyledOptions>
-      <form id="options-form" method="post" onSubmit={updateUser}>
+      <form id="options-form" method="post" onSubmit={handleSaveButtonClick}>
         <label htmlFor="username">Username:</label>
         <input
           type="text"
@@ -77,7 +58,7 @@ function Options({ showOptions, setShowOptions, setBottomBarText }) {
           value={username}
           onChange={(event) => setUsername(event.target.value)}
         />
-        <label htmlFor="status-text">Status:</label>
+        <label htmlFor="status-text">Text Status:</label>
         <textarea
           type="text"
           name="status_text"
@@ -98,6 +79,7 @@ function Options({ showOptions, setShowOptions, setBottomBarText }) {
         <button form="options-form" type="submit">
           Save
         </button>
+        <button onClick={handleNoStatusButtonClick}>No Status</button>
         <button onClick={() => setShowOptions(!showOptions)}>Close</button>
       </div>
     </StyledOptions>
