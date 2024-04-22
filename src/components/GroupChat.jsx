@@ -47,11 +47,13 @@ function GroupChat({ groupChat, setGroupChats }) {
       <div className="group-chat-info">
         <p className="group-chat-name">{name}</p>
         <p className="group-chat-members">
-          {`(${members.length}) - `}
+          {`(${members.length}) - Me, `}
           {members.map((member, index) => {
             return index === members.length - 1
               ? member.username
-              : member.username + ', ';
+              : member.username === user.username
+                ? ''
+                : member.username + ', ';
           })}
         </p>
       </div>
