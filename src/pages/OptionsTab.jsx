@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyledOptionsTab } from '../styles/HomePage.styled';
+import { StyledOptionsTab } from '../styles/OptionsTab.styled.js';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { clearTextStatus, updateUser } from '../fetchers.js';
 
