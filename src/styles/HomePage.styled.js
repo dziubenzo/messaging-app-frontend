@@ -101,15 +101,18 @@ export const StyledContact = styled.div`
     margin-right: 0.2em;
   }
 
-  .user-info {
+  .user-info,
+  .group-chat-info {
     max-width: 80%;
 
-    .username {
+    .username,
+    .group-chat-name {
       font-size: ${(props) => props.theme.fontSizes.standard};
       font-weight: 800;
     }
 
-    .text-status {
+    .text-status,
+    .group-chat-members {
       font-size: ${(props) => props.theme.fontSizes.small};
     }
   }
@@ -132,6 +135,7 @@ export const StyledContact = styled.div`
 
       svg {
         stroke: white;
+        fill: white;
       }
     }
   }
