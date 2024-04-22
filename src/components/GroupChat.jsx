@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
 import API_URL from '../API';
-import { useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { StyledGroupChat } from '../styles/GroupChatsTab.styled';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { statusIcons } from '../helpers';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
+import slugify from 'slugify';
 
 function GroupChat({ groupChat, setGroupChats }) {
+  const navigate = useNavigate();
   const { user } = useOutletContext();
   const { _id, name, created_by, members } = groupChat;
 
@@ -41,11 +43,15 @@ function GroupChat({ groupChat, setGroupChats }) {
   }
 
   return (
-    <StyledGroupChat>
-      <img
-        src={statusIcons.availableMessage}
-        alt={'Status Icon - Group Chat'}
-      />
+    <StyledGroupChat
+      onClick={() =>
+        navigate(`/group-chats/${slugify(name, { lower: true })}`, {
+          state: { groupChat },
+        })
+      }
+      title={`Click to chat in ${name}`}
+    >
+      <img src={statusIcons.availableMessage} alt={'Group Chat Icon'} />
       <div className="group-chat-info">
         <p className="group-chat-name">{name}</p>
         <p className="group-chat-members">
@@ -61,7 +67,9 @@ function GroupChat({ groupChat, setGroupChats }) {
           })}
         </p>
       </div>
-      {created_by === user._id && <FaRegTrashAlt onClick={deleteGroupChat} />}
+      {created_by === user._id && (
+        <FaRegTrashAlt title="Delete Group Chat" onClick={deleteGroupChat} />
+      )}
     </StyledGroupChat>
   );
 }
