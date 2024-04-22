@@ -105,3 +105,81 @@ export const updateUser = async (
   toast.success(`Changes made successfully!`);
   return navigate('/home');
 };
+
+// Send message (Editor component) if it is not empty and if it doesn't contain <br>, which gets created after using formatting options and then clearing input field manually
+// Clear input fields if operation successful
+// Support both DMs and group chats
+export const sendMessage = async (
+  text,
+  inProgress,
+  setInProgress,
+  isGroupChat,
+  loggedInUser,
+  recipient,
+  setMessages,
+  clearInputField,
+) => {
+  if (text === '<br>' || !text || inProgress) {
+    return;
+  }
+  setInProgress(true);
+  toast.info('Sending message...');
+  // Group chat case
+  if (isGroupChat) {
+    const message = {
+      sender: loggedInUser._id,
+      text,
+    };
+    const res = await fetch(
+      `${API_URL}/group-chats/${recipient._id}/messages`,
+      {
+        method: 'POST',
+        body: JSON.stringify(message),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      },
+    );
+    if (!res.ok) {
+      setInProgress(false);
+      toast.error('Sending message failed');
+      return;
+    }
+    const newMessage = await res.json();
+    setMessages((draft) => {
+      draft.push(newMessage);
+    });
+    clearInputField();
+    setInProgress(false);
+    return toast.success('Message sent!');
+    // Direct message case
+  } else {
+    const message = {
+      sender: loggedInUser._id,
+      recipient: recipient._id,
+      text,
+    };
+    const res = await fetch(`${API_URL}/messages`, {
+      method: 'POST',
+      body: JSON.stringify(message),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    if (!res.ok) {
+      setInProgress(false);
+      toast.error('Sending message failed');
+      return;
+    }
+    const newMessage = await res.json();
+    setMessages((draft) => {
+      draft.push(newMessage);
+    });
+    socket.emit('send message', loggedInUser.user_id, newMessage);
+    clearInputField();
+    setInProgress(false);
+    return toast.success('Message sent!');
+  }
+};

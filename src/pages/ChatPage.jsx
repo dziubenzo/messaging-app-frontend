@@ -51,7 +51,7 @@ function ChatPage() {
         />
       </StyledTopBar>
       <Messages loading={loading} messages={messages} loggedInUser={user} />
-      <Editor sender={user} recipient={recipient} setMessages={setMessages} />
+      <Editor loggedInUser={user} recipient={recipient} setMessages={setMessages} />
     </StyledChatPage>
   );
 }

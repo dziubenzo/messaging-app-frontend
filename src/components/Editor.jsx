@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import API_URL from '../API';
 import {
   StyledEditor,
   StyledInputField,
@@ -8,10 +7,9 @@ import {
 import { useRef, useState } from 'react';
 import Toolbar from './Toolbar';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { socket } from '../socket';
+import { sendMessage } from '../fetchers';
 
-function Editor({ sender, recipient, setMessages }) {
+function Editor({ loggedInUser, recipient, setMessages, isGroupChat = false }) {
   const navigate = useNavigate();
   const inputFieldRef = useRef(null);
 
@@ -32,44 +30,22 @@ function Editor({ sender, recipient, setMessages }) {
   function sendMessageOnEnter(event) {
     if (event.key === 'Enter') {
       event.preventDefault();
-      sendMessage();
+      handleSendButtonClick();
     }
   }
 
-  // Send message if it is not empty and if it doesn't contain <br>, which gets created after using formatting options and then clearing input field manually
-  // Clear input fields if operation successful
-  async function sendMessage() {
-    if (text === '<br>' || !text || inProgress) {
-      return;
-    }
-    setInProgress(true);
-    toast.info('Sending message...');
-    const message = {
-      sender: sender._id,
-      recipient: recipient._id,
+  // Send message (DMs and group chats)
+  function handleSendButtonClick() {
+    sendMessage(
       text,
-    };
-    const res = await fetch(`${API_URL}/messages`, {
-      method: 'POST',
-      body: JSON.stringify(message),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-    if (!res.ok) {
-      setInProgress(false);
-      toast.error('Sending message failed');
-      return;
-    }
-    const newMessage = await res.json();
-    setMessages((draft) => {
-      draft.push(newMessage);
-    });
-    socket.emit('send message', sender.user_id, newMessage);
-    clearInputField();
-    setInProgress(false);
-    return toast.success('Message sent!');
+      inProgress,
+      setInProgress,
+      isGroupChat,
+      loggedInUser,
+      recipient,
+      setMessages,
+      clearInputField,
+    );
   }
 
   return (
@@ -82,18 +58,25 @@ function Editor({ sender, recipient, setMessages }) {
         onKeyDown={sendMessageOnEnter}
       ></StyledInputField>
       <StyledInputButtons>
-        <button onClick={sendMessage}>Send</button>
+        <button onClick={handleSendButtonClick}>Send</button>
         <button onClick={clearInputField}>Clear</button>
-        <button onClick={() => navigate('/home')}>Close</button>
+        <button
+          onClick={() => {
+            isGroupChat ? navigate('/home/group-chats') : navigate('/home');
+          }}
+        >
+          Close
+        </button>
       </StyledInputButtons>
     </StyledEditor>
   );
 }
 
 Editor.propTypes = {
-  sender: PropTypes.object,
+  loggedInUser: PropTypes.object,
   recipient: PropTypes.object,
   setMessages: PropTypes.func,
+  isGroupChat: PropTypes.bool,
 };
 
 export default Editor;
