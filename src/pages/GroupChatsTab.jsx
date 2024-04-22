@@ -37,7 +37,13 @@ function GroupChatsTab() {
   return (
     <>
       {groupChats.map((groupChat) => {
-        return <GroupChat key={groupChat._id} groupChat={groupChat} />;
+        return (
+          <GroupChat
+            key={groupChat._id}
+            groupChat={groupChat}
+            setGroupChats={setGroupChats}
+          />
+        );
       })}
     </>
   );
