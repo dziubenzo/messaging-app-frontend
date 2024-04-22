@@ -3,13 +3,13 @@ import { StyledMessage } from '../styles/ChatPage.styled';
 import { format } from 'date-fns';
 import parse from 'html-react-parser';
 
-function Message({ message, sender, recipient }) {
-  const isSender = message.sender === sender._id;
+function Message({ message, loggedInUser }) {
+  const isSender = message.sender._id === loggedInUser._id;
 
   return (
-    <StyledMessage sender={isSender}>
+    <StyledMessage sender={isSender ? 'true' : undefined}>
       <p className="sender">
-        {isSender ? 'Me' : recipient.username}
+        {isSender ? 'Me' : message.sender.username}
         <span className="date" title={format(message.date, 'd MMMM y')}>
           {' (' + format(message.date, 'HH:mm') + ')'}
         </span>
@@ -21,8 +21,7 @@ function Message({ message, sender, recipient }) {
 
 Message.propTypes = {
   message: PropTypes.object,
-  sender: PropTypes.object,
-  recipient: PropTypes.object,
+  loggedInUser: PropTypes.object,
 };
 
 export default Message;

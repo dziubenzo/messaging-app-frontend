@@ -5,7 +5,7 @@ import { BarLoader } from 'react-spinners';
 import { useRef } from 'react';
 import { useScrollToBottom } from '../helpers';
 
-function Messages({ loading, messages, sender, recipient }) {
+function Messages({ loading, messages, loggedInUser }) {
   const messagesRef = useRef(null);
 
   // Scroll to bottom when messages change
@@ -22,8 +22,7 @@ function Messages({ loading, messages, sender, recipient }) {
               <Message
                 key={message._id}
                 message={message}
-                sender={sender}
-                recipient={recipient}
+                loggedInUser={loggedInUser}
               />
             );
           })
@@ -36,9 +35,7 @@ function Messages({ loading, messages, sender, recipient }) {
 Messages.propTypes = {
   loading: PropTypes.bool,
   messages: PropTypes.array,
-  sender: PropTypes.object,
-  recipient: PropTypes.object,
-  messagesRef: PropTypes.object,
+  loggedInUser: PropTypes.object,
 };
 
 export default Messages;

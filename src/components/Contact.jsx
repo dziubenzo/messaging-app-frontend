@@ -100,7 +100,7 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
       onMouseEnter={handleUserMouseEnter}
       onMouseLeave={handleUserMouseLeave}
       onClick={() =>
-        navigate(`/chat/${user.user_id}`, { state: { recipient: user } })
+        navigate(`/chats/${user.user_id}`, { state: { recipient: user } })
       }
       title={`Click to chat with ${username}`}
     >

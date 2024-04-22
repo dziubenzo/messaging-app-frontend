@@ -11,6 +11,7 @@ import OptionsTab from '../pages/OptionsTab';
 import LoadingPage from '../pages/LoadingPage';
 import ChatPage from '../pages/ChatPage';
 import { homePageLoader } from '../loaders';
+import GroupChatPage from '../pages/GroupChatPage';
 
 function Router() {
   const router = createBrowserRouter([
@@ -59,8 +60,12 @@ function Router() {
           ],
         },
         {
-          path: '/chat/:userId',
+          path: '/chats/:userId',
           element: <ChatPage />,
+        },
+        {
+          path: '/group-chats/:groupChatName',
+          element: <GroupChatPage />,
         },
       ],
     },

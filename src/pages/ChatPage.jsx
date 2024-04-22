@@ -50,12 +50,7 @@ function ChatPage() {
           onClick={() => navigate('/home')}
         />
       </StyledTopBar>
-      <Messages
-        loading={loading}
-        messages={messages}
-        sender={user}
-        recipient={recipient}
-      />
+      <Messages loading={loading} messages={messages} loggedInUser={user} />
       <Editor sender={user} recipient={recipient} setMessages={setMessages} />
     </StyledChatPage>
   );
