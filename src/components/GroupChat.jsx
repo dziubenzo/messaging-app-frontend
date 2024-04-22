@@ -6,6 +6,7 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { statusIcons } from '../helpers';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { socket } from '../socket';
 
 function GroupChat({ groupChat, setGroupChats }) {
   const { user } = useOutletContext();
@@ -35,6 +36,7 @@ function GroupChat({ groupChat, setGroupChats }) {
       return draft.filter((groupChat) => groupChat._id !== _id);
     });
     setInProgress(false);
+    socket.emit('delete group chat', groupChat);
     return toast.success(successMessage);
   }
 

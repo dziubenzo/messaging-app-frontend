@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useImmer } from 'use-immer';
 import { BarLoader } from 'react-spinners';
 import GroupChat from '../components/GroupChat';
+import { useEventsGroupChatsTab } from '../socket';
 
 function GroupChatsTab() {
   const { user } = useOutletContext();
@@ -17,6 +18,9 @@ function GroupChatsTab() {
       setGroupChats(data);
     }
   }, [data]);
+
+  // Manage events emitted by the server
+  useEventsGroupChatsTab(groupChats, setGroupChats);
 
   if (loading) {
     return (
