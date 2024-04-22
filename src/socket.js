@@ -96,10 +96,24 @@ export const useEventsGroupChatsTab = (groupChats, setGroupChats) => {
       });
     };
 
+    const updateUsername = (userId, username) => {
+      setGroupChats((draft) => {
+        for (const groupChat of draft) {
+          for (const member of groupChat.members) {
+            if (member.user_id === userId) {
+              member.username = username;
+            }
+          }
+        }
+      });
+    };
+
     socket.on('update group chats', updateGroupChats);
+    socket.on('update username/text status', updateUsername);
 
     return () => {
       socket.off('update group chats', updateGroupChats);
+      socket.off('update username/text status', updateUsername);
     };
   }, []);
 };
