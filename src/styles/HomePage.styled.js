@@ -78,6 +78,10 @@ export const StyledContactsBar = styled.div`
     }
   }
 
+  a:last-child {
+    margin-left: auto;
+  }
+
   div {
     display: flex;
     flex-direction: column;
@@ -91,6 +95,7 @@ export const StyledContactsBar = styled.div`
 
     p {
       font-size: ${(props) => props.theme.fontSizes.extraSmall};
+      text-align: center;
     }
   }
 `;

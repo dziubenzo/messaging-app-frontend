@@ -11,6 +11,7 @@ import OptionsTab from '../pages/OptionsTab';
 import LoadingPage from '../pages/LoadingPage';
 import ChatPage from '../pages/ChatPage';
 import GroupChatPage from '../pages/GroupChatPage';
+import NewGroupChatTab from '../pages/NewGroupChatTab';
 
 function Router() {
   const router = createBrowserRouter([
@@ -50,6 +51,10 @@ function Router() {
             {
               path: 'group-chats',
               element: <GroupChatsTab />,
+            },
+            {
+              path: 'group-chats/new',
+              element: <NewGroupChatTab />,
             },
             {
               path: 'options',
