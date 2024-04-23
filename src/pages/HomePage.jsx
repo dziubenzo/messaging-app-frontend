@@ -1,15 +1,18 @@
-import { Outlet, useLoaderData, useOutletContext } from 'react-router-dom';
+import { Outlet, useOutletContext } from 'react-router-dom';
 import {
   useChangeToAvailable,
   useChangeToUnavailable,
   useCheckAuth,
+  useFetch,
 } from '../helpers';
 import StatusBar from '../components/StatusBar';
 import TopBar from '../components/TopBar';
 import ContactsBar from '../components/ContactsBar';
 import BottomBar from '../components/BottomBar';
+import Loading from '../components/Loading';
+import Error from '../components/Error';
 import { StyledHomePage, MiddleSection } from '../styles/HomePage.styled';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { useEventsHomePage } from '../socket';
 
@@ -17,18 +20,25 @@ function HomePage() {
   const { user, setUser } = useOutletContext();
   useCheckAuth(setUser);
 
-  const allUsers = useLoaderData();
+  const { data, loading, error } = useFetch('/users');
   const { contacts } = user;
 
   // State for storing all users except for logged in user
-  const [allUsersFiltered, setAllUsersFiltered] = useImmer(
-    allUsers.filter((dbUser) => dbUser.user_id !== user.user_id),
-  );
+  const [allUsersFiltered, setAllUsersFiltered] = useImmer([]);
   // State for managing Bottom Bar text
   const [bottomBarText, setBottomBarText] = useState({
     id: user.user_id,
     status: user.status_text,
   });
+
+  // Set allUsersFiltered state once all users data are fetched
+  useEffect(() => {
+    if (data) {
+      setAllUsersFiltered(
+        data.filter((dbUser) => dbUser.user_id !== user.user_id),
+      );
+    }
+  }, [data]);
 
   // Change logged in user's status icon to available on component load
   useChangeToAvailable(user, setUser);
@@ -44,15 +54,21 @@ function HomePage() {
       <TopBar />
       <ContactsBar />
       <MiddleSection>
-        <Outlet
-          context={{
-            allUsersFiltered,
-            contacts,
-            user,
-            setUser,
-            setBottomBarText,
-          }}
-        />
+        {loading ? (
+          <Loading />
+        ) : error ? (
+          <Error />
+        ) : (
+          <Outlet
+            context={{
+              allUsersFiltered,
+              contacts,
+              user,
+              setUser,
+              setBottomBarText,
+            }}
+          />
+        )}
       </MiddleSection>
       <BottomBar bottomBarText={bottomBarText} />
       <StatusBar />

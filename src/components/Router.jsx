@@ -10,7 +10,6 @@ import GroupChatsTab from '../pages/GroupChatsTab';
 import OptionsTab from '../pages/OptionsTab';
 import LoadingPage from '../pages/LoadingPage';
 import ChatPage from '../pages/ChatPage';
-import { homePageLoader } from '../loaders';
 import GroupChatPage from '../pages/GroupChatPage';
 
 function Router() {
@@ -39,7 +38,6 @@ function Router() {
         {
           path: 'home',
           element: <HomePage />,
-          loader: homePageLoader,
           children: [
             {
               path: '',

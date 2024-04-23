@@ -5,8 +5,25 @@ export const StyledHomePage = styled.main`
   background-color: ${(props) => props.theme.colours.bgSecondary};
   border: 2px solid ${(props) => props.theme.colours.primary};
 
+  .loading-wrapper,
+  .error-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      height: 32px;
+      width: 32px;
+    }
+  }
+
   @media (width <= ${(props) => props.theme.mobile}) {
     width: 90vw;
+    max-width: 400px;
   }
 `;
 
@@ -82,22 +99,6 @@ export const MiddleSection = styled.section`
   display: flex;
   flex-direction: column;
   height: 500px;
-
-  .loading-wrapper,
-  .error-wrapper {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-      height: 32px;
-      width: 32px;
-    }
-  }
 `;
 
 export const StyledContact = styled.div`

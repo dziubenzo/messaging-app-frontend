@@ -6,14 +6,6 @@ export const StyledChatPage = styled(StyledHomePage)`
     height: 26px;
     width: 26px;
   }
-`;
-
-export const StyledMessages = styled.div`
-  position: relative;
-  display: flex;
-  height: 300px;
-  overflow-y: scroll;
-  flex-direction: column-reverse;
 
   .loading-wrapper,
   .error-wrapper {
@@ -30,6 +22,14 @@ export const StyledMessages = styled.div`
       width: 32px;
     }
   }
+`;
+
+export const StyledMessages = styled.div`
+  position: relative;
+  display: flex;
+  height: 300px;
+  overflow-y: scroll;
+  flex-direction: column-reverse;
 `;
 
 export const StyledMessage = styled.div`

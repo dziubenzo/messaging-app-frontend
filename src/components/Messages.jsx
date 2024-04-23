@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { StyledMessages } from '../styles/ChatPage.styled';
 import Message from './Message';
-import { BarLoader } from 'react-spinners';
+import Loading from './Loading';
+import Error from './Error';
 import { useRef } from 'react';
 import { useScrollToBottom } from '../helpers';
-import { BiError } from 'react-icons/bi';
 
 function Messages({ loading, error, messages, loggedInUser }) {
   const messagesRef = useRef(null);
@@ -15,9 +15,7 @@ function Messages({ loading, error, messages, loggedInUser }) {
   if (loading) {
     return (
       <StyledMessages ref={messagesRef}>
-        <div className="loading-wrapper">
-          <BarLoader color="#ff7f3f" size={30} />
-        </div>
+        <Loading />
       </StyledMessages>
     );
   }
@@ -25,10 +23,7 @@ function Messages({ loading, error, messages, loggedInUser }) {
   if (error) {
     return (
       <StyledMessages ref={messagesRef}>
-        <div className="error-wrapper">
-          <BiError />
-          <h3>Error</h3>
-        </div>
+        <Error />
       </StyledMessages>
     );
   }

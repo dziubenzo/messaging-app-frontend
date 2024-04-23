@@ -2,10 +2,10 @@ import { useOutletContext } from 'react-router-dom';
 import { useFetch } from '../helpers';
 import { useEffect } from 'react';
 import { useImmer } from 'use-immer';
-import { BarLoader } from 'react-spinners';
 import GroupChat from '../components/GroupChat';
 import { useEventsGroupChatsTab } from '../socket';
-import { BiError } from 'react-icons/bi';
+import Loading from '../components/Loading';
+import Error from '../components/Error';
 
 function GroupChatsTab() {
   const { user } = useOutletContext();
@@ -24,20 +24,11 @@ function GroupChatsTab() {
   useEventsGroupChatsTab(groupChats, setGroupChats);
 
   if (loading) {
-    return (
-      <div className="loading-wrapper">
-        <BarLoader color="#ff7f3f" size={30} />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <div className="error-wrapper">
-        <BiError />
-        <h3>Error</h3>
-      </div>
-    );
+    return <Error />;
   }
 
   return (
