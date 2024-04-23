@@ -42,7 +42,7 @@ function ChatPage() {
         <p>
           {recipient.username}
           {recipient.status_text
-            ? ` (${recipient.status_text.slice(0, 24)}....)`
+            ? ` (${recipient.status_text})`
             : undefined}
         </p>
         <LiaWindowCloseSolid

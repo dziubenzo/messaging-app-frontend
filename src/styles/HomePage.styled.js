@@ -28,7 +28,11 @@ export const StyledTopBar = styled.div`
     font-weight: 700;
     letter-spacing: 1px;
     padding: 0.5em;
-    text-align: center;
+    text-align: start;
+    width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   svg {
