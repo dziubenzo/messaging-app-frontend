@@ -135,10 +135,22 @@ export const useEventsGroupChatPage = (groupChat, setMessages) => {
         });
       }
     };
+    const updateUsernameInMessages = (senderId, username) => {
+      setMessages((draft) => {
+        draft.map((message) => {
+          if (message.sender.user_id === senderId) {
+            message.sender.username = username;
+          }
+        });
+      });
+    };
+
     socket.on('receive group chat message', receiveGroupChatMessage);
+    socket.on('update username/text status', updateUsernameInMessages);
 
     return () => {
       socket.off('receive group chat message', receiveGroupChatMessage);
+      socket.off('update username/text status', updateUsernameInMessages);
     };
   }, []);
 };
