@@ -65,12 +65,19 @@ export const useEventsChatPage = (recipient, setRecipient, setMessages) => {
       }
     };
 
-    // Update username and text status in the top bar if the sender matches the recipient
+    // Update username and text status in the top bar and username in chat messages if the sender matches the recipient
     const updateUsernameOrTextStatus = (senderId, username, textStatus) => {
       if (senderId === recipient.user_id) {
         setRecipient((draft) => {
           draft.username = username;
           draft.status_text = textStatus;
+        });
+        setMessages((draft) => {
+          draft.map((message) => {
+            if (message.sender.user_id === senderId) {
+              message.sender.username = username;
+            }
+          });
         });
       }
     };
