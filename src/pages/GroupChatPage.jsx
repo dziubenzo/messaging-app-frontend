@@ -41,7 +41,9 @@ function GroupChatPage() {
     <StyledGroupChatPage>
       <StyledTopBar>
         <img src={statusIcons.availableMessage} alt="Group Chat Icon" />
-        <p>{groupChat.name}</p>
+        <p>
+          {groupChat.name} ({groupChat.members.length} members)
+        </p>
         <LiaWindowCloseSolid
           title="Close Group Chat"
           onClick={() => navigate('/home/group-chats')}

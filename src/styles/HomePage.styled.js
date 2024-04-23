@@ -104,6 +104,14 @@ export const MiddleSection = styled.section`
   display: flex;
   flex-direction: column;
   height: 500px;
+
+  .no-contacts-wrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 export const StyledContact = styled.div`

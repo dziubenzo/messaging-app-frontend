@@ -63,7 +63,7 @@ export const StyledToolbar = styled.div`
   background-color: ${(props) => props.theme.colours.bgPrimary};
   border-top: 2px solid ${(props) => props.theme.colours.primary};
   border-bottom: 2px solid ${(props) => props.theme.colours.primary};
-  padding: 0.4em 0.2em;
+  padding: 0.4em 0.2em 0.2em 0.2em;
 
   svg {
     height: 16px;
