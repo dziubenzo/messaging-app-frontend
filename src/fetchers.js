@@ -150,6 +150,11 @@ export const sendMessage = async (
     setMessages((draft) => {
       draft.push(newMessage);
     });
+    socket.emit(
+      'send group chat message',
+      recipient._id,
+      newMessage,
+    );
     clearInputField();
     setInProgress(false);
     return toast.success('Message sent!');

@@ -7,6 +7,7 @@ import { useImmer } from 'use-immer';
 import { useEffect } from 'react';
 import Messages from '../components/Messages';
 import Editor from '../components/Editor';
+import { socket, useEventsGroupChatPage } from '../socket';
 
 function GroupChatPage() {
   const navigate = useNavigate();
@@ -25,11 +26,16 @@ function GroupChatPage() {
   );
 
   // Set messages state once messages are fetched
+  // Emit open group chat event
   useEffect(() => {
     if (data) {
       setMessages(data);
+      socket.emit('open group chat', groupChat._id);
     }
   }, [data]);
+
+  // Manage events emitted by the server
+  useEventsGroupChatPage(groupChat, setMessages);
 
   return (
     <StyledGroupChatPage>

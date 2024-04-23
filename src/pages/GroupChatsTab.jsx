@@ -21,7 +21,7 @@ function GroupChatsTab() {
   }, [data]);
 
   // Manage events emitted by the server
-  useEventsGroupChatsTab(groupChats, setGroupChats);
+  useEventsGroupChatsTab(setGroupChats);
 
   if (loading) {
     return <Loading />;

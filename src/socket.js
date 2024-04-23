@@ -93,7 +93,7 @@ export const useEventsChatPage = (recipient, setRecipient, setMessages) => {
 };
 
 // Manage events emitted by the server (Group Chats tab)
-export const useEventsGroupChatsTab = (groupChats, setGroupChats) => {
+export const useEventsGroupChatsTab = (setGroupChats) => {
   useEffect(() => {
     const updateGroupChats = (deletedGroupChat) => {
       setGroupChats((draft) => {
@@ -121,6 +121,24 @@ export const useEventsGroupChatsTab = (groupChats, setGroupChats) => {
     return () => {
       socket.off('update group chats', updateGroupChats);
       socket.off('update username/text status', updateUsername);
+    };
+  }, []);
+};
+
+// Manage events emitted by the server (Group Chat page)
+export const useEventsGroupChatPage = (groupChat, setMessages) => {
+  useEffect(() => {
+    const receiveGroupChatMessage = (groupChatId, message) => {
+      if (groupChatId === groupChat._id) {
+        setMessages((draft) => {
+          draft.push(message);
+        });
+      }
+    };
+    socket.on('receive group chat message', receiveGroupChatMessage);
+
+    return () => {
+      socket.off('receive group chat message', receiveGroupChatMessage);
     };
   }, []);
 };
