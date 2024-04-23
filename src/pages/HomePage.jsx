@@ -1,5 +1,6 @@
 import { Outlet, useOutletContext } from 'react-router-dom';
 import {
+  sortByStatusIcon,
   useChangeToAvailable,
   useChangeToUnavailable,
   useCheckAuth,
@@ -31,12 +32,19 @@ function HomePage() {
     status: user.status_text,
   });
 
-  // Set allUsersFiltered state once all users data are fetched
+  // Set allUsersFiltered state once all users data are fetched and sort the array
+  // Sort contacts
   useEffect(() => {
     if (data) {
       setAllUsersFiltered(
         data.filter((dbUser) => dbUser.user_id !== user.user_id),
       );
+      setAllUsersFiltered((draft) => {
+        draft.sort(sortByStatusIcon);
+      });
+      setUser((draft) => {
+        draft.contacts.sort(sortByStatusIcon);
+      });
     }
   }, [data]);
 

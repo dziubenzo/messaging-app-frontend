@@ -2,6 +2,7 @@ import API_URL from './API';
 import { io } from 'socket.io-client';
 
 import { useEffect } from 'react';
+import { sortByStatusIcon } from './helpers';
 
 // Establish Socket.IO connection
 export const socket = io(API_URL);
@@ -10,10 +11,12 @@ export const socket = io(API_URL);
 export const useEventsHomePage = (setAllUsersFiltered, setUser) => {
   useEffect(() => {
     // Update status icon in both tabs
+    // Sort both tabs if justified to do so
     const updateStatusIcon = (userId, imageURL) => {
       setAllUsersFiltered((draft) => {
         const user = draft.find((user) => user.user_id === userId);
         user.status_icon = imageURL;
+        draft.sort(sortByStatusIcon);
       });
       setUser((draft) => {
         const user = draft.contacts.find(
@@ -21,15 +24,20 @@ export const useEventsHomePage = (setAllUsersFiltered, setUser) => {
         );
         if (user) {
           user.status_icon = imageURL;
+          draft.contacts.sort(sortByStatusIcon);
         }
       });
     };
 
     // Update username and text status in both tabs
+    // Sort both tabs if justified to do so
     const updateUsernameOrTextStatus = (userId, username, textStatus) => {
       setAllUsersFiltered((draft) => {
         const user = draft.find((user) => user.user_id === userId);
-        user.username = username;
+        if (user.username !== username) {
+          user.username = username;
+          draft.sort(sortByStatusIcon);
+        }
         user.status_text = textStatus;
       });
       setUser((draft) => {
@@ -37,7 +45,10 @@ export const useEventsHomePage = (setAllUsersFiltered, setUser) => {
           (contact) => contact.user_id === userId,
         );
         if (user) {
-          user.username = username;
+          if (user.username !== username) {
+            user.username = username;
+            draft.contacts.sort(sortByStatusIcon);
+          }
           user.status_text = textStatus;
         }
       });

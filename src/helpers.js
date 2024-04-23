@@ -178,3 +178,44 @@ export const generateMembersList = (members, loggedInUserUsername) => {
 
   return usernamesArray.join(', ');
 };
+
+// Sort by status icon (compare function)
+export const sortByStatusIcon = (a, b) => {
+  let statusIconA;
+  let statusIconB;
+
+  // Define comparison rules based on status icon
+  if (a.status_icon === statusIcons.available) {
+    statusIconA = 1;
+  } else if (a.status_icon === statusIcons.brb) {
+    statusIconA = 2;
+  } else {
+    statusIconA = 3;
+  }
+
+  if (b.status_icon === statusIcons.available) {
+    statusIconB = 1;
+  } else if (b.status_icon === statusIcons.brb) {
+    statusIconB = 2;
+  } else {
+    statusIconB = 3;
+  }
+
+  if (statusIconA < statusIconB) {
+    return -1;
+  }
+  if (statusIconA > statusIconB) {
+    return 1;
+  }
+
+  // Sort by username if status icons are the same
+  // Ignore case
+  const usernameA = a.username.toUpperCase();
+  const usernameB = b.username.toUpperCase();
+
+  if (usernameA < usernameB) {
+    return -1;
+  } else {
+    return 1;
+  }
+};

@@ -4,7 +4,7 @@ import { StyledContact } from '../styles/HomePage.styled';
 import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
-import { statusIcons } from '../helpers';
+import { sortByStatusIcon, statusIcons } from '../helpers';
 import { useNavigate } from 'react-router-dom';
 
 function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
@@ -28,6 +28,7 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
 
   // Add a contact to logged in user's contacts
   // Show toast if operation successful or unsuccessful and update user state if the former is true
+  // Sort contacts once the updated user is fetched
   async function addContact(event) {
     if (inProgress) {
       return;
@@ -49,12 +50,16 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
     }
     const updatedUser = await res.json();
     setUser(updatedUser);
+    setUser((draft) => {
+      draft.contacts.sort(sortByStatusIcon);
+    });
     setInProgress(false);
     return toast.success(`User ${username} has been added to your contacts`);
   }
 
   // Remove a contact from logged in user's contacts
   // Show toast if operation successful or unsuccessful and update user state if the former is true
+  // Sort contacts once the updated user is fetched
   async function removeContact(event) {
     if (inProgress) {
       return;
@@ -76,6 +81,9 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
     }
     const updatedUser = await res.json();
     setUser(updatedUser);
+    setUser((draft) => {
+      draft.contacts.sort(sortByStatusIcon);
+    });
     setInProgress(false);
     return toast.success(
       `User ${username} has been removed from your contacts`,
