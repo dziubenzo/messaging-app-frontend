@@ -164,3 +164,17 @@ export const useScrollToBottom = (messagesRef, messages) => {
     });
   }, [messagesRef, messages]);
 };
+
+// Generate a comma-separated list of group chat members exclusive of logged in user
+export const generateMembersList = (members, loggedInUserUsername) => {
+  const usernamesArray = [];
+
+  for (const member of members) {
+    if (member.username === loggedInUserUsername) {
+      continue;
+    }
+    usernamesArray.push(member.username);
+  }
+
+  return usernamesArray.join(', ');
+};

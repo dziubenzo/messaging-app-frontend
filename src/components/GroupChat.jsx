@@ -3,7 +3,7 @@ import API_URL from '../API';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { StyledGroupChat } from '../styles/GroupChatsTab.styled';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { statusIcons } from '../helpers';
+import { generateMembersList, statusIcons } from '../helpers';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
@@ -55,16 +55,8 @@ function GroupChat({ groupChat, setGroupChats }) {
       <div className="group-chat-info">
         <p className="group-chat-name">{name}</p>
         <p className="group-chat-members">
-          {`(${members.length}) - Me, `}
-          {members.map((member, index) => {
-            return member.user_id === user.user_id
-              ? ''
-              : index === members.length - 2
-                ? member.username
-                : index === members.length - 1
-                  ? ', ' + member.username
-                  : member.username + ', ';
-          })}
+          {`(${members.length}) - Me, ` +
+            generateMembersList(members, user.username)}
         </p>
       </div>
       {created_by === user._id && (
