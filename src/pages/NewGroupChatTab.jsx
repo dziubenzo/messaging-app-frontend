@@ -7,6 +7,7 @@ import {
   StyledContactCheckbox,
 } from '../styles/NewGroupChatTab.styled';
 import { toast } from 'react-toastify';
+import { socket } from '../socket';
 
 function NewGroupChatTab() {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ function NewGroupChatTab() {
       return;
     }
     const newGroupChat = await res.json();
+    socket.emit('create group chat', members, newGroupChat);
     toast.success('Group chat created successfully!');
     return navigate('/home/group-chats');
   }
