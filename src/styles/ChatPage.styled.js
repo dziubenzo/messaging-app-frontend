@@ -15,11 +15,20 @@ export const StyledMessages = styled.div`
   overflow-y: scroll;
   flex-direction: column-reverse;
 
-  .spinner {
-    position: absolute !important;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 200%);
+  .loading-wrapper,
+  .error-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      height: 32px;
+      width: 32px;
+    }
   }
 `;
 

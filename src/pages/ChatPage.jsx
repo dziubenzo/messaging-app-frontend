@@ -41,17 +41,24 @@ function ChatPage() {
         <img src={statusIcons.message} alt="Message Icon" />
         <p>
           {recipient.username}
-          {recipient.status_text
-            ? ` (${recipient.status_text})`
-            : undefined}
+          {recipient.status_text ? ` (${recipient.status_text})` : undefined}
         </p>
         <LiaWindowCloseSolid
           title="Close Chat"
           onClick={() => navigate('/home')}
         />
       </StyledTopBar>
-      <Messages loading={loading} messages={messages} loggedInUser={user} />
-      <Editor loggedInUser={user} recipient={recipient} setMessages={setMessages} />
+      <Messages
+        loading={loading}
+        error={error}
+        messages={messages}
+        loggedInUser={user}
+      />
+      <Editor
+        loggedInUser={user}
+        recipient={recipient}
+        setMessages={setMessages}
+      />
     </StyledChatPage>
   );
 }

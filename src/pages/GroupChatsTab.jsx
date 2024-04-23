@@ -5,6 +5,7 @@ import { useImmer } from 'use-immer';
 import { BarLoader } from 'react-spinners';
 import GroupChat from '../components/GroupChat';
 import { useEventsGroupChatsTab } from '../socket';
+import { BiError } from 'react-icons/bi';
 
 function GroupChatsTab() {
   const { user } = useOutletContext();
@@ -25,7 +26,7 @@ function GroupChatsTab() {
   if (loading) {
     return (
       <div className="loading-wrapper">
-        <BarLoader className="spinner" color="#ff7f3f" size={30} />
+        <BarLoader color="#ff7f3f" size={30} />
       </div>
     );
   }
@@ -33,6 +34,7 @@ function GroupChatsTab() {
   if (error) {
     return (
       <div className="error-wrapper">
+        <BiError />
         <h3>Error</h3>
       </div>
     );

@@ -41,7 +41,12 @@ function GroupChatPage() {
           onClick={() => navigate('/home/group-chats')}
         />
       </StyledTopBar>
-      <Messages loading={loading} messages={messages} loggedInUser={user} />
+      <Messages
+        loading={loading}
+        error={error}
+        messages={messages}
+        loggedInUser={user}
+      />
       <Editor
         loggedInUser={user}
         recipient={groupChat}
