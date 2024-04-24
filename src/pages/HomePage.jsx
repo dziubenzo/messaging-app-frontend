@@ -55,7 +55,7 @@ function HomePage() {
   useChangeToUnavailable(user, setUser);
 
   // Manage events emitted by the server
-  useEventsHomePage(setAllUsersFiltered, setUser);
+  useEventsHomePage(setAllUsersFiltered, setUser, user);
 
   return (
     <StyledHomePage>

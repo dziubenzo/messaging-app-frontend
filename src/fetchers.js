@@ -183,6 +183,7 @@ export const sendMessage = async (
       loggedInUser.user_id,
       recipient.user_id,
       newMessage,
+      loggedInUser.username,
     );
     clearInputField();
     setInProgress(false);

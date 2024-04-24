@@ -4,12 +4,13 @@ import { io } from 'socket.io-client';
 import { useEffect } from 'react';
 import { sortByStatusIcon } from './helpers';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 // Establish Socket.IO connection
 export const socket = io(API_URL);
 
 // Manage events emitted by the server (Home page)
-export const useEventsHomePage = (setAllUsersFiltered, setUser) => {
+export const useEventsHomePage = (setAllUsersFiltered, setUser, user) => {
   useEffect(() => {
     // Update status icon in both tabs
     // Sort both tabs if justified to do so
@@ -55,12 +56,21 @@ export const useEventsHomePage = (setAllUsersFiltered, setUser) => {
       });
     };
 
+    // Show new message toast if the message recipient is logged in user
+    const showNewMessageToast = (toId, senderUsername) => {
+      if (toId === user.user_id) {
+        toast.info(`${senderUsername} messaged you!`);
+      }
+    };
+
     socket.on('update status icon', updateStatusIcon);
     socket.on('update username/text status', updateUsernameOrTextStatus);
+    socket.on('show new message toast', showNewMessageToast);
 
     return () => {
       socket.off('update status icon', updateStatusIcon);
       socket.off('update username/text status', updateUsernameOrTextStatus);
+      socket.off('show new message toast', showNewMessageToast);
     };
   }, []);
 };
