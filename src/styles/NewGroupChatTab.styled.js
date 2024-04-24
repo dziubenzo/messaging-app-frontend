@@ -39,11 +39,6 @@ export const StyledContacts = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
 
-  p {
-    grid-column: 1/3;
-    font-size: ${(props) => props.theme.fontSizes.large};
-  }
-
   label {
     cursor: pointer;
   }

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { sortByStatusIcon, statusIcons } from '../helpers';
 import { useNavigate } from 'react-router-dom';
+import BoldToastMessage from './BoldToastMessage';
 
 function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
   const navigate = useNavigate();
@@ -27,12 +28,13 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
   }
 
   // Add a contact to logged in user's contacts
-  // Show toast if operation successful or unsuccessful and update user state if the former is true
+  // Show updatable toast if operation successful or unsuccessful and update user state if the former is true
   // Sort contacts once the updated user is fetched
   async function addContact(event) {
     if (inProgress) {
       return;
     }
+    const toastRef = toast.info('Adding contact...');
     event.stopPropagation();
     setInProgress(true);
     const res = await fetch(`${API_URL}/users/${user_id}/add-contact`, {
@@ -46,7 +48,10 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
       credentials: 'include',
     });
     if (!res.ok) {
-      return toast.error('There was an error. Please try again');
+      return toast.update(toastRef, {
+        render: 'There was an error. Please try again',
+        type: 'error',
+      });
     }
     const updatedUser = await res.json();
     setUser(updatedUser);
@@ -54,7 +59,12 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
       draft.contacts.sort(sortByStatusIcon);
     });
     setInProgress(false);
-    return toast.success(`User ${username} has been added to your contacts`);
+    return toast.update(toastRef, {
+      render: (
+        <BoldToastMessage bold={username} text={'was added to your contacts'} />
+      ),
+      type: 'success',
+    });
   }
 
   // Remove a contact from logged in user's contacts
@@ -64,6 +74,7 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
     if (inProgress) {
       return;
     }
+    const toastRef = toast.info('Removing contact...');
     event.stopPropagation();
     setInProgress(true);
     const res = await fetch(`${API_URL}/users/${user_id}/remove-contact`, {
@@ -77,7 +88,10 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
       credentials: 'include',
     });
     if (!res.ok) {
-      return toast.error('There was an error. Please try again');
+      return toast.update(toastRef, {
+        render: 'There was an error. Please try again',
+        type: 'error',
+      });
     }
     const updatedUser = await res.json();
     setUser(updatedUser);
@@ -85,9 +99,15 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
       draft.contacts.sort(sortByStatusIcon);
     });
     setInProgress(false);
-    return toast.success(
-      `User ${username} has been removed from your contacts`,
-    );
+    return toast.update(toastRef, {
+      render: (
+        <BoldToastMessage
+          bold={username}
+          text={'was removed from your contacts'}
+        />
+      ),
+      type: 'success',
+    });
   }
 
   // Set bottom bar fields to match hovered over user

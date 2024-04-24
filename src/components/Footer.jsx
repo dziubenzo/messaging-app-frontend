@@ -24,6 +24,7 @@ function Footer() {
         autoClose={2000}
         closeButton={false}
         hideProgressBar={true}
+        newestOnTop={true}
         theme="light"
         closeOnClick
         transition={Zoom}

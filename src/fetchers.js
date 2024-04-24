@@ -15,7 +15,7 @@ export const clearTextStatus = async (
     return;
   }
   setInProgress(true);
-  toast.info('Making changes...');
+  const toastRef = toast.info('Clearing text status...');
   const updates = {
     current_username: user.username,
     username: user.username,
@@ -32,7 +32,7 @@ export const clearTextStatus = async (
   if (!res.ok) {
     const error = await res.json();
     setInProgress(false);
-    return toast.error(error);
+    return toast.update(toastRef, { render: error, type: 'error' });
   }
   const updatedUser = await res.json();
   setUser(updatedUser);
@@ -46,7 +46,10 @@ export const clearTextStatus = async (
     updatedUser.username,
     updatedUser.status_text,
   );
-  toast.success(`Changes made successfully!`);
+  toast.update(toastRef, {
+    render: 'Text status cleared successfully',
+    type: 'success',
+  });
   return navigate('/home');
 };
 
@@ -70,7 +73,7 @@ export const updateUser = async (
     return;
   }
   setInProgress(true);
-  toast.info('Making changes...');
+  const toastRef = toast.info('Making changes...');
   const formData = new FormData(event.target);
   const updates = {
     current_username: user.username,
@@ -88,7 +91,7 @@ export const updateUser = async (
   if (!res.ok) {
     const error = await res.json();
     setInProgress(false);
-    return toast.error(error);
+    return toast.update(toastRef, { render: error, type: 'error' });
   }
   const updatedUser = await res.json();
   setUser(updatedUser);
@@ -102,7 +105,10 @@ export const updateUser = async (
     updatedUser.username,
     updatedUser.status_text,
   );
-  toast.success(`Changes made successfully!`);
+  toast.update(toastRef, {
+    render: 'Changes made successfully',
+    type: 'success',
+  });
   return navigate('/home');
 };
 
@@ -123,7 +129,7 @@ export const sendMessage = async (
     return;
   }
   setInProgress(true);
-  toast.info('Sending message...');
+  const toastRef = toast.info('Sending message...');
   // Group chat case
   if (isGroupChat) {
     const message = {
@@ -143,8 +149,10 @@ export const sendMessage = async (
     );
     if (!res.ok) {
       setInProgress(false);
-      toast.error('Sending message failed');
-      return;
+      return toast.update(toastRef, {
+        render: 'Sending message failed',
+        type: 'error',
+      });
     }
     const newMessage = await res.json();
     setMessages((draft) => {
@@ -153,7 +161,10 @@ export const sendMessage = async (
     socket.emit('send group chat message', recipient._id, newMessage);
     clearInputField();
     setInProgress(false);
-    return toast.success('Message sent!');
+    return toast.update(toastRef, {
+      render: 'Message delivered',
+      type: 'success',
+    });
     // Direct message case
   } else {
     const message = {
@@ -171,8 +182,10 @@ export const sendMessage = async (
     });
     if (!res.ok) {
       setInProgress(false);
-      toast.error('Sending message failed');
-      return;
+      return toast.update(toastRef, {
+        render: 'Sending message failed',
+        type: 'error',
+      });
     }
     const newMessage = await res.json();
     setMessages((draft) => {
@@ -187,6 +200,9 @@ export const sendMessage = async (
     );
     clearInputField();
     setInProgress(false);
-    return toast.success('Message sent!');
+    return toast.update(toastRef, {
+      render: 'Message delivered',
+      type: 'success',
+    });
   }
 };

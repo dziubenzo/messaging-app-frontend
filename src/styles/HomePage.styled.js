@@ -88,6 +88,7 @@ export const MiddleSection = styled.section`
   display: flex;
   flex-direction: column;
   height: 500px;
+  overflow-y: auto;
 `;
 
 export const StyledContact = styled.div`

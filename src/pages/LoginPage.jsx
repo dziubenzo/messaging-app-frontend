@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { StyledLoginPage } from '../styles/LoginPage.styled';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import API_URL from '../API';
@@ -9,11 +8,10 @@ import { toast } from 'react-toastify';
 function LoginPage() {
   const navigate = useNavigate();
   const { setUser } = useOutletContext();
-  const [error, setError] = useState('');
 
   // Log in user, change their status icon to available, set user state and navigate to the Home page on successful login
   // Make sure icon is changes and user state is set before navigating to the Home page
-  // Otherwise show error message
+  // Otherwise show error message in toast
   async function logIn(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -21,7 +19,7 @@ function LoginPage() {
       username: formData.get('username'),
       password: formData.get('password'),
     };
-    toast.info('Logging in...');
+    const toastRef = toast.info('Logging in...');
     const res = await fetch(`${API_URL}/users/login`, {
       method: 'POST',
       body: JSON.stringify(user),
@@ -31,7 +29,10 @@ function LoginPage() {
       credentials: 'include',
     });
     if (!res.ok) {
-      return setError('Incorrect username or password');
+      return toast.update(toastRef, {
+        render: 'Incorrect username or password',
+        type: 'error',
+      });
     }
     const loggedInUser = await res.json();
     socket.emit(
@@ -40,6 +41,7 @@ function LoginPage() {
       statusIcons.unavailable,
     );
     await changeStatusIcon(loggedInUser, setUser, statusIcons.available);
+    toast.dismiss();
     return navigate('/home');
   }
 
@@ -65,7 +67,6 @@ function LoginPage() {
           maxLength={16}
           required
         />
-        {error && <p className="error-message">{error}</p>}
         <button type="submit">Log In</button>
       </form>
       <Link to="/register">

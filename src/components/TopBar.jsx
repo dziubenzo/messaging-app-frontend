@@ -15,7 +15,7 @@ function TopBar() {
   // Wait for status icon change to finish before logging out
   async function logOut(event) {
     event.preventDefault();
-    toast.info('Logging out...');
+    const toastRef = toast.info('Logging out...');
     socket.emit('change status icon', user.user_id, statusIcons.unavailable);
     await changeStatusIcon(user, setUser, statusIcons.unavailable);
     const res = await fetch(`${API_URL}/users/logout`, {
@@ -25,9 +25,15 @@ function TopBar() {
     if (!res.ok) {
       socket.emit('change status icon', user.user_id, statusIcons.available);
       changeStatusIcon(user, setUser, statusIcons.available);
-      return toast.error('There was an error. Please try again');
+      return toast.update(toastRef, {
+        render: 'There was an error. Please try again',
+        type: 'error',
+      });
     }
-    toast.success('You have been logged out successfully');
+    toast.update(toastRef, {
+      render: 'You have been logged out successfully',
+      type: 'success',
+    });
     setUser({});
     return navigate('/login');
   }

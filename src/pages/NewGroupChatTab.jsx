@@ -7,6 +7,7 @@ import {
   StyledContactCheckbox,
 } from '../styles/NewGroupChatTab.styled';
 import NoContacts from '../components/NoContacts';
+import BoldToastMessage from '../components/BoldToastMessage';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
 
@@ -20,9 +21,9 @@ function NewGroupChatTab() {
     const formData = new FormData(event.target);
     const members = formData.getAll('contact');
     if (members.length < 2) {
-      return toast.error('You need to select at least two contacts');
+      return toast.error('Select at least two contacts');
     }
-    toast.info('Creating group chat...');
+    const toastRef = toast.info('Creating group chat...');
     members.push(user._id);
     const newChat = {
       name: formData.get('name'),
@@ -38,12 +39,20 @@ function NewGroupChatTab() {
       credentials: 'include',
     });
     if (!res.ok) {
-      toast.error('Creating group chat failed');
+      toast.update(toastRef, {
+        render: 'Creating group chat failed',
+        type: 'error',
+      });
       return;
     }
     const newGroupChat = await res.json();
     socket.emit('create group chat', members, newGroupChat);
-    toast.success('Group chat created successfully!');
+    toast.update(toastRef, {
+      render: (
+        <BoldToastMessage bold={newChat.name} text="created successfully" />
+      ),
+      type: 'success',
+    });
     return navigate('/home/group-chats');
   }
 

@@ -2,9 +2,10 @@ import API_URL from './API';
 import { io } from 'socket.io-client';
 
 import { useEffect } from 'react';
-import { sortByStatusIcon } from './helpers';
+import { sortByStatusIcon, statusIcons } from './helpers';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import BoldToastMessage from './components/BoldToastMessage';
 
 // Establish Socket.IO connection
 export const socket = io(API_URL);
@@ -56,10 +57,17 @@ export const useEventsHomePage = (setAllUsersFiltered, setUser, user) => {
       });
     };
 
-    // Show new message toast if the message recipient is logged in user
+    // Show new message toast with message icon if the message recipient is the logged in user
     const showNewMessageToast = (toId, senderUsername) => {
       if (toId === user.user_id) {
-        toast.info(`${senderUsername} messaged you!`);
+        toast(
+          <BoldToastMessage bold={senderUsername} text={'messaged you!'} />,
+          {
+            icon: () => (
+              <img className="toast-message-icon" src={statusIcons.message} />
+            ),
+          },
+        );
       }
     };
 

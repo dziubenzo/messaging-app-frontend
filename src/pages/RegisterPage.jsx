@@ -2,19 +2,17 @@ import { StyledRegisterPage } from '../styles/RegisterPage.styled';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import API_URL from '../API.js';
 import { statusIcons, changeStatusIcon } from '../helpers.js';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
 
 function RegisterPage() {
   const navigate = useNavigate();
   const { setUser } = useOutletContext();
-  const [error, setError] = useState('');
 
   // Register user
   async function register(event) {
     event.preventDefault();
-    toast.info('Registering...');
+    const toastRef = toast.info('Registering...');
     const formData = new FormData(event.target);
     const newUser = {
       username: formData.get('username').trim(),
@@ -33,19 +31,19 @@ function RegisterPage() {
       if (!res.ok) {
         throw result;
       }
-      return logInAfterRegister(newUser.username, newUser.password);
+      return logInAfterRegister(newUser.username, newUser.password, toastRef);
     } catch (error) {
-      setError(error);
+      toast.update(toastRef, { render: error, type: 'error' });
     }
   }
 
   // Log them in if registration successful
-  async function logInAfterRegister(username, password) {
+  async function logInAfterRegister(username, password, toastRef) {
     const user = {
       username,
       password,
     };
-    toast.info('Logging in...');
+    toast.update(toastRef, { render: 'Logging in...' });
     const res = await fetch(`${API_URL}/users/login`, {
       method: 'POST',
       body: JSON.stringify(user),
@@ -61,6 +59,7 @@ function RegisterPage() {
       statusIcons.unavailable,
     );
     await changeStatusIcon(loggedInUser, setUser, statusIcons.available);
+    toast.dismiss();
     return navigate('/home');
   }
 
@@ -95,7 +94,6 @@ function RegisterPage() {
           maxLength={16}
           required
         />
-        {error && <p className="error-message">{error}</p>}
         <button type="submit">Register</button>
       </form>
       <Link to="/login">

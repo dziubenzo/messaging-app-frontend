@@ -7,6 +7,7 @@ import { generateMembersList, statusIcons } from '../helpers';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
+import BoldToastMessage from './BoldToastMessage';
 import slugify from 'slugify';
 
 function GroupChat({ groupChat, setGroupChats }) {
@@ -22,7 +23,7 @@ function GroupChat({ groupChat, setGroupChats }) {
     if (inProgress) {
       return;
     }
-    toast.info('Deleting group chat...');
+    const toastRef = toast.info('Deleting group chat...');
     event.stopPropagation();
     setInProgress(true);
     const res = await fetch(`${API_URL}/group-chats/${_id}`, {
@@ -31,15 +32,17 @@ function GroupChat({ groupChat, setGroupChats }) {
     });
     if (!res.ok) {
       const error = await res.json();
-      return toast.error(error);
+      return toast.update(toastRef, { render: error, type: 'error' });
     }
-    const successMessage = await res.json();
     setGroupChats((draft) => {
       return draft.filter((groupChat) => groupChat._id !== _id);
     });
     setInProgress(false);
     socket.emit('delete group chat', groupChat);
-    return toast.success(successMessage);
+    return toast.update(toastRef, {
+      render: <BoldToastMessage bold={name} text="deleted successfully" />,
+      type: 'success',
+    });
   }
 
   return (

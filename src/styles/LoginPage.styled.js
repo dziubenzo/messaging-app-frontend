@@ -61,14 +61,6 @@ export const StyledLoginPage = styled.main`
     cursor: pointer;
   }
 
-  .error-message {
-    position: absolute;
-    bottom: 24%;
-    text-align: center;
-    width: 100%;
-    color: red;
-  }
-
   @media (width <= ${(props) => props.theme.mobile}) {
     form {
       gap: 16px;
