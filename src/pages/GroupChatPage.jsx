@@ -4,7 +4,7 @@ import { StyledTopBar } from '../styles/HomePage.styled';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
 import { statusIcons, useFetch } from '../helpers';
 import { useImmer } from 'use-immer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Messages from '../components/Messages';
 import Editor from '../components/Editor';
 import { socket, useEventsGroupChatPage } from '../socket';
@@ -19,6 +19,10 @@ function GroupChatPage() {
   const [messages, setMessages] = useImmer([]);
   // State for group chat
   const [groupChat, setGroupChat] = useImmer(state.groupChat);
+
+  // States for managing is typing indicator
+  const [someoneIsTyping, setSomeoneIsTyping] = useState(false);
+  const [typingUsername, setTypingUsername] = useState('');
 
   // Fetch group chat messages
   const { data, loading, error } = useFetch(
@@ -35,7 +39,12 @@ function GroupChatPage() {
   }, [data]);
 
   // Manage events emitted by the server
-  useEventsGroupChatPage(groupChat, setMessages);
+  useEventsGroupChatPage(
+    groupChat,
+    setMessages,
+    setSomeoneIsTyping,
+    setTypingUsername,
+  );
 
   return (
     <StyledGroupChatPage>
@@ -54,6 +63,8 @@ function GroupChatPage() {
         error={error}
         messages={messages}
         loggedInUser={user}
+        someoneIsTyping={someoneIsTyping}
+        typingUsername={typingUsername}
       />
       <Editor
         loggedInUser={user}

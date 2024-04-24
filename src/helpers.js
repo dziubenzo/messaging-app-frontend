@@ -154,15 +154,15 @@ export const useFetch = (endpoint) => {
   return { data, error, loading };
 };
 
-// Hook for scrolling to the bottom of messages if they change
-export const useScrollToBottom = (messagesRef, messages) => {
+// Hook for scrolling to the bottom of messages if they change or someone is typing
+export const useScrollToBottom = (messagesRef, messages, someoneIsTyping) => {
   useEffect(() => {
     messagesRef.current.scrollTo({
       top: messagesRef.current.scrollHeight,
       left: 0,
       behavior: 'smooth',
     });
-  }, [messagesRef, messages]);
+  }, [messagesRef, messages, someoneIsTyping]);
 };
 
 // Generate a comma-separated list of group chat members exclusive of logged in user
@@ -218,4 +218,51 @@ export const sortByStatusIcon = (a, b) => {
   } else {
     return 1;
   }
+};
+
+// Hook for emitting events when a user is typing or cleared their input field
+export const useEmitTypingEvents = (
+  text,
+  isGroupChat,
+  recipient,
+  loggedInUser,
+) => {
+  useEffect(() => {
+    if (text) {
+      if (isGroupChat) {
+        socket.emit(
+          'user is typing (group chat)',
+          recipient._id,
+          loggedInUser.username,
+          true,
+        );
+      } else {
+        socket.emit(
+          'user is typing (DM)',
+          loggedInUser.user_id,
+          recipient.user_id,
+          loggedInUser.username,
+          true,
+        );
+      }
+    }
+    if (!text) {
+      if (isGroupChat) {
+        socket.emit(
+          'user is typing (group chat)',
+          recipient._id,
+          loggedInUser.username,
+          false,
+        );
+      } else {
+        socket.emit(
+          'user is typing (DM)',
+          loggedInUser.user_id,
+          recipient.user_id,
+          loggedInUser.username,
+          false,
+        );
+      }
+    }
+  }, [text]);
 };

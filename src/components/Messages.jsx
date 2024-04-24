@@ -4,14 +4,22 @@ import Message from './Message';
 import Loading from './Loading';
 import Error from './Error';
 import NoMessages from './NoMessages';
+import IsTyping from './IsTyping';
 import { useRef } from 'react';
 import { useScrollToBottom } from '../helpers';
 
-function Messages({ loading, error, messages, loggedInUser }) {
+function Messages({
+  loading,
+  error,
+  messages,
+  loggedInUser,
+  someoneIsTyping,
+  typingUsername,
+}) {
   const messagesRef = useRef(null);
 
-  // Scroll to bottom when messages change
-  useScrollToBottom(messagesRef, messages);
+  // Scroll to bottom when messages change or someone is typing
+  useScrollToBottom(messagesRef, messages, someoneIsTyping);
 
   if (loading) {
     return (
@@ -49,6 +57,7 @@ function Messages({ loading, error, messages, loggedInUser }) {
             />
           );
         })}
+        {someoneIsTyping && <IsTyping username={typingUsername} />}
       </div>
     </StyledMessages>
   );
@@ -59,6 +68,8 @@ Messages.propTypes = {
   error: PropTypes.object,
   messages: PropTypes.array,
   loggedInUser: PropTypes.object,
+  someoneIsTyping: PropTypes.bool,
+  typingUsername: PropTypes.string,
 };
 
 export default Messages;

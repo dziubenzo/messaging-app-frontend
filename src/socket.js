@@ -66,11 +66,18 @@ export const useEventsHomePage = (setAllUsersFiltered, setUser) => {
 };
 
 // Manage events emitted by the server (Chat page)
-export const useEventsChatPage = (recipient, setRecipient, setMessages) => {
+export const useEventsChatPage = (
+  user,
+  recipient,
+  setRecipient,
+  setMessages,
+  setSomeoneIsTyping,
+  setTypingUsername,
+) => {
   useEffect(() => {
-    // Update messages if its sender is the recipient
-    const receiveMessage = (senderId, message) => {
-      if (senderId === recipient.user_id) {
+    // Update messages if the sender matches the recipient on the client side and the recipient matches the logged in user on the client side
+    const receiveMessage = (fromId, toId, message) => {
+      if (fromId === recipient.user_id && toId === user.user_id) {
         setMessages((draft) => {
           draft.push(message);
         });
@@ -94,12 +101,22 @@ export const useEventsChatPage = (recipient, setRecipient, setMessages) => {
       }
     };
 
+    // Show/hide is typing indicator if the sender matches the recipient on the client side and the recipient matches the logged in user on the client side
+    const showHideIsTypingDM = (fromId, toId, username, isTyping) => {
+      if (fromId === recipient.user_id && toId === user.user_id) {
+        setSomeoneIsTyping(isTyping);
+        setTypingUsername(username);
+      }
+    };
+
     socket.on('receive message', receiveMessage);
     socket.on('update username/text status', updateUsernameOrTextStatus);
+    socket.on('show/hide isTyping (DM)', showHideIsTypingDM);
 
     return () => {
       socket.off('receive message', receiveMessage);
       socket.off('update username/text status', updateUsernameOrTextStatus);
+      socket.off('show/hide isTyping (DM)', showHideIsTypingDM);
     };
   }, []);
 };
@@ -148,7 +165,12 @@ export const useEventsGroupChatsTab = (user, setGroupChats) => {
 };
 
 // Manage events emitted by the server (Group Chat page)
-export const useEventsGroupChatPage = (groupChat, setMessages) => {
+export const useEventsGroupChatPage = (
+  groupChat,
+  setMessages,
+  setSomeoneIsTyping,
+  setTypingUsername,
+) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -175,14 +197,23 @@ export const useEventsGroupChatPage = (groupChat, setMessages) => {
       }
     };
 
+    const showHideIsTypingGroupChat = (groupChatId, username, isTyping) => {
+      if (groupChatId === groupChat._id) {
+        setSomeoneIsTyping(isTyping);
+        setTypingUsername(username);
+      }
+    };
+
     socket.on('receive group chat message', receiveGroupChatMessage);
     socket.on('update username/text status', updateUsernameInMessages);
     socket.on('remove group chat', removeGroupChat);
+    socket.on('show/hide isTyping (group chat)', showHideIsTypingGroupChat);
 
     return () => {
       socket.off('receive group chat message', receiveGroupChatMessage);
       socket.off('update username/text status', updateUsernameInMessages);
       socket.off('remove group chat', removeGroupChat);
+      socket.off('show/hide isTyping (group chat)', showHideIsTypingGroupChat);
     };
   }, []);
 };

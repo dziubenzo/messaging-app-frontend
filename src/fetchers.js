@@ -150,11 +150,7 @@ export const sendMessage = async (
     setMessages((draft) => {
       draft.push(newMessage);
     });
-    socket.emit(
-      'send group chat message',
-      recipient._id,
-      newMessage,
-    );
+    socket.emit('send group chat message', recipient._id, newMessage);
     clearInputField();
     setInProgress(false);
     return toast.success('Message sent!');
@@ -182,7 +178,12 @@ export const sendMessage = async (
     setMessages((draft) => {
       draft.push(newMessage);
     });
-    socket.emit('send message', loggedInUser.user_id, newMessage);
+    socket.emit(
+      'send message',
+      loggedInUser.user_id,
+      recipient.user_id,
+      newMessage,
+    );
     clearInputField();
     setInProgress(false);
     return toast.success('Message sent!');

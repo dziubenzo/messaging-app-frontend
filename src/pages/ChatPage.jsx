@@ -3,7 +3,7 @@ import { StyledTopBar } from '../styles/HomePage.styled';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import { useFetch, statusIcons } from '../helpers';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
 import Messages from '../components/Messages';
 import Editor from '../components/Editor';
@@ -20,6 +20,10 @@ function ChatPage() {
   // State for managing chat recipient
   const [recipient, setRecipient] = useImmer(state.recipient);
 
+  // States for managing is typing indicator
+  const [someoneIsTyping, setSomeoneIsTyping] = useState(false);
+  const [typingUsername, setTypingUsername] = useState('');
+
   // Fetch messages
   const { data, loading, error } = useFetch(
     `/messages/?from=${user._id}&to=${recipient._id}`,
@@ -33,7 +37,14 @@ function ChatPage() {
   }, [data]);
 
   // Manage events emitted by the server
-  useEventsChatPage(recipient, setRecipient, setMessages);
+  useEventsChatPage(
+    user,
+    recipient,
+    setRecipient,
+    setMessages,
+    setSomeoneIsTyping,
+    setTypingUsername,
+  );
 
   return (
     <StyledChatPage>
@@ -53,6 +64,8 @@ function ChatPage() {
         error={error}
         messages={messages}
         loggedInUser={user}
+        someoneIsTyping={someoneIsTyping}
+        typingUsername={typingUsername}
       />
       <Editor
         loggedInUser={user}

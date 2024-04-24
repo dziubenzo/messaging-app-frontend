@@ -8,6 +8,7 @@ import { useRef, useState } from 'react';
 import Toolbar from './Toolbar';
 import { useNavigate } from 'react-router-dom';
 import { sendMessage } from '../fetchers';
+import { useEmitTypingEvents } from '../helpers';
 
 function Editor({ loggedInUser, recipient, setMessages, isGroupChat = false }) {
   const navigate = useNavigate();
@@ -47,6 +48,9 @@ function Editor({ loggedInUser, recipient, setMessages, isGroupChat = false }) {
       clearInputField,
     );
   }
+
+  // Emit events when a user is typing or cleared their input field
+  useEmitTypingEvents(text, isGroupChat, recipient, loggedInUser);
 
   return (
     <StyledEditor>
