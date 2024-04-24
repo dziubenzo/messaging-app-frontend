@@ -1,7 +1,12 @@
 import PropTypes from 'prop-types';
+import { StyledIsTyping } from '../styles/ChatPage.styled';
 
 function IsTyping({ username }) {
-  return <p>{username} is typing...</p>;
+  return (
+    <StyledIsTyping>
+      <span>{username}</span> is typing...
+    </StyledIsTyping>
+  );
 }
 
 IsTyping.propTypes = {

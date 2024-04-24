@@ -16,6 +16,15 @@ export const StyledMessages = styled.div`
   flex-direction: column-reverse;
 `;
 
+export const StyledIsTyping = styled.p`
+  padding: 0.2em 0.1em;
+  background-color: ${(props) => props.theme.colours.bgTertiary};
+
+  span {
+    font-weight: 800;
+  }
+`;
+
 export const StyledMessage = styled.div`
   background-color: ${(props) =>
     props.sender
