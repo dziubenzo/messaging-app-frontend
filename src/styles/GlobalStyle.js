@@ -29,6 +29,27 @@ const GlobalStyle = createGlobalStyle`
     padding: 1em;
   }
 
+  // Various user feedback wrappers across the app
+  .loading-wrapper,
+  .error-wrapper,
+  .no-contacts-wrapper,
+  .no-group-chats-wrapper,
+  .no-messages-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    svg {
+      height: 32px;
+      width: 32px;
+    }
+  }
+
   // Toast background colour
   :root {
     --toastify-color-light: ${(props) => props.theme.colours.bgSecondary};

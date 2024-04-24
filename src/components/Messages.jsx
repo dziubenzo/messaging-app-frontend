@@ -3,6 +3,7 @@ import { StyledMessages } from '../styles/ChatPage.styled';
 import Message from './Message';
 import Loading from './Loading';
 import Error from './Error';
+import NoMessages from './NoMessages';
 import { useRef } from 'react';
 import { useScrollToBottom } from '../helpers';
 
@@ -24,6 +25,14 @@ function Messages({ loading, error, messages, loggedInUser }) {
     return (
       <StyledMessages ref={messagesRef}>
         <Error />
+      </StyledMessages>
+    );
+  }
+
+  if (!messages.length) {
+    return (
+      <StyledMessages ref={messagesRef}>
+        <NoMessages />
       </StyledMessages>
     );
   }

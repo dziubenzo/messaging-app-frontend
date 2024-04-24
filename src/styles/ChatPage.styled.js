@@ -6,22 +6,6 @@ export const StyledChatPage = styled(StyledHomePage)`
     height: 26px;
     width: 26px;
   }
-
-  .loading-wrapper,
-  .error-wrapper {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-      height: 32px;
-      width: 32px;
-    }
-  }
 `;
 
 export const StyledMessages = styled.div`

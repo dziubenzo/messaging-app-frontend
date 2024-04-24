@@ -6,6 +6,7 @@ import {
   StyledContacts,
   StyledContactCheckbox,
 } from '../styles/NewGroupChatTab.styled';
+import NoContacts from '../components/NoContacts';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
 
@@ -21,6 +22,7 @@ function NewGroupChatTab() {
     if (members.length < 2) {
       return toast.error('You need to select at least two contacts');
     }
+    toast.info('Creating group chat...');
     members.push(user._id);
     const newChat = {
       name: formData.get('name'),
@@ -46,11 +48,7 @@ function NewGroupChatTab() {
   }
 
   if (!contacts.length) {
-    return (
-      <div className="no-contacts-wrapper">
-        <p>Add some contacts first!</p>
-      </div>
-    );
+    return <NoContacts message="Add some contacts first" />;
   }
 
   return (
