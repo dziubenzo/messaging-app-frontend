@@ -1,19 +1,24 @@
 import { StyledRegisterPage } from '../styles/RegisterPage.styled';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import API_URL from '../API.js';
+import { statusIcons, changeStatusIcon } from '../helpers.js';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { socket } from '../socket';
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const { setUser } = useOutletContext();
   const [error, setError] = useState('');
 
+  // Register user
   async function register(event) {
     event.preventDefault();
+    toast.info('Registering...');
     const formData = new FormData(event.target);
     const newUser = {
-      username: formData.get('username'),
-      password: formData.get('password'),
+      username: formData.get('username').trim(),
+      password: formData.get('password').trim(),
       confirm_password: formData.get('confirm_password'),
     };
     try {
@@ -28,13 +33,37 @@ function RegisterPage() {
       if (!res.ok) {
         throw result;
       }
-      // Show toast and redirect to login if user created successfully
-      toast.success(result);
-      navigate('/');
+      return logInAfterRegister(newUser.username, newUser.password);
     } catch (error) {
       setError(error);
     }
   }
+
+  // Log them in if registration successful
+  async function logInAfterRegister(username, password) {
+    const user = {
+      username,
+      password,
+    };
+    toast.info('Logging in...');
+    const res = await fetch(`${API_URL}/users/login`, {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    const loggedInUser = await res.json();
+    socket.emit(
+      'change status icon',
+      loggedInUser.user_id,
+      statusIcons.unavailable,
+    );
+    await changeStatusIcon(loggedInUser, setUser, statusIcons.available);
+    return navigate('/home');
+  }
+
   return (
     <StyledRegisterPage>
       <div className="top-bar">
