@@ -3,6 +3,7 @@ import { io } from 'socket.io-client';
 
 import { useEffect } from 'react';
 import { sortByStatusIcon } from './helpers';
+import { useNavigate } from 'react-router-dom';
 
 // Establish Socket.IO connection
 export const socket = io(API_URL);
@@ -148,6 +149,8 @@ export const useEventsGroupChatsTab = (user, setGroupChats) => {
 
 // Manage events emitted by the server (Group Chat page)
 export const useEventsGroupChatPage = (groupChat, setMessages) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const receiveGroupChatMessage = (groupChatId, message) => {
       if (groupChatId === groupChat._id) {
@@ -166,12 +169,20 @@ export const useEventsGroupChatPage = (groupChat, setMessages) => {
       });
     };
 
+    const removeGroupChat = (deletedGroupChat) => {
+      if (deletedGroupChat._id === groupChat._id) {
+        navigate('/home/group-chats');
+      }
+    };
+
     socket.on('receive group chat message', receiveGroupChatMessage);
     socket.on('update username/text status', updateUsernameInMessages);
+    socket.on('remove group chat', removeGroupChat);
 
     return () => {
       socket.off('receive group chat message', receiveGroupChatMessage);
       socket.off('update username/text status', updateUsernameInMessages);
+      socket.off('remove group chat', removeGroupChat);
     };
   }, []);
 };
