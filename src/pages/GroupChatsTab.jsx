@@ -6,7 +6,6 @@ import GroupChat from '../components/GroupChat';
 import { useEventsGroupChatsTab } from '../socket';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
-import NoGroupChats from '../components/NoGroupChats';
 
 function GroupChatsTab() {
   const { user } = useOutletContext();
@@ -30,10 +29,6 @@ function GroupChatsTab() {
 
   if (error) {
     return <Error />;
-  }
-
-  if (!groupChats.length) {
-    return <NoGroupChats />;
   }
 
   return (
