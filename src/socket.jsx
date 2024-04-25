@@ -73,14 +73,23 @@ export const useEventsHomePage = (setAllUsersFiltered, setUser, user) => {
       }
     };
 
+    // Show toast when a new user registers
+    const showNewUserToast = (username) => {
+      toast.info(
+        <BoldToastMessage bold={username} text={'just registered!'} />,
+      );
+    };
+
     socket.on('update status icon', updateStatusIcon);
     socket.on('update username/text status', updateUsernameOrTextStatus);
     socket.on('show new message toast', showNewMessageToast);
+    socket.on('show new user toast', showNewUserToast);
 
     return () => {
       socket.off('update status icon', updateStatusIcon);
       socket.off('update username/text status', updateUsernameOrTextStatus);
       socket.off('show new message toast', showNewMessageToast);
+      socket.off('show new user toast', showNewUserToast);
     };
   }, []);
 };

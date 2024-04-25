@@ -31,6 +31,7 @@ function RegisterPage() {
       if (!res.ok) {
         throw result;
       }
+      socket.emit('user registers', newUser.username);
       return logInAfterRegister(newUser.username, newUser.password, toastRef);
     } catch (error) {
       toast.update(toastRef, { render: error, type: 'error' });
