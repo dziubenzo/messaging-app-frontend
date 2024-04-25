@@ -18,8 +18,10 @@ export const useEventsHomePage = (setAllUsersFiltered, setUser, user) => {
     const updateStatusIcon = (userId, imageURL) => {
       setAllUsersFiltered((draft) => {
         const user = draft.find((user) => user.user_id === userId);
-        user.status_icon = imageURL;
-        draft.sort(sortByStatusIcon);
+        if (user) {
+          user.status_icon = imageURL;
+          draft.sort(sortByStatusIcon);
+        }
       });
       setUser((draft) => {
         const user = draft.contacts.find(
@@ -37,11 +39,13 @@ export const useEventsHomePage = (setAllUsersFiltered, setUser, user) => {
     const updateUsernameOrTextStatus = (userId, username, textStatus) => {
       setAllUsersFiltered((draft) => {
         const user = draft.find((user) => user.user_id === userId);
-        if (user.username !== username) {
-          user.username = username;
-          draft.sort(sortByStatusIcon);
+        if (user) {
+          if (user.username !== username) {
+            user.username = username;
+            draft.sort(sortByStatusIcon);
+          }
+          user.status_text = textStatus;
         }
-        user.status_text = textStatus;
       });
       setUser((draft) => {
         const user = draft.contacts.find(
