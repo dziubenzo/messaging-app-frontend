@@ -1,7 +1,7 @@
 # Odin Project - Messaging App (Frontend)
 
-![App - Home Page](https://res.cloudinary.com/dvhkp9wc6/image/upload/v1714057805/messaging_app/gpww83xlhtsflekh3jgg.png)
-![App - Chat Page](https://res.cloudinary.com/dvhkp9wc6/image/upload/v1714057805/messaging_app/s2biyhzign7klmrndjbf.png)
+<img src="https://res.cloudinary.com/dvhkp9wc6/image/upload/v1714057805/messaging_app/gpww83xlhtsflekh3jgg.png" height="500" title="App - Home Page">
+<img src="https://res.cloudinary.com/dvhkp9wc6/image/upload/v1714057805/messaging_app/s2biyhzign7klmrndjbf.png" height="500" title="App - Chat Page">
 
 A real-time messaging app with two types of statuses, original GG emoticons, group chats and notifications.
 
