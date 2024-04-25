@@ -58,8 +58,9 @@ function GroupChat({ groupChat, setGroupChats }) {
       <div className="group-chat-info">
         <p className="group-chat-name">{name}</p>
         <p className="group-chat-members">
-          {`(${members.length}) - Me, ` +
-            generateMembersList(members, user.username)}
+          {name === 'General'
+            ? `(${members.length}) - All Users`
+            : `(${members.length}) - Me, ${generateMembersList(members, user.username)}`}
         </p>
       </div>
       {created_by === user._id && (
