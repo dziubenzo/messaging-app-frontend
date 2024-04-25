@@ -22,7 +22,7 @@ function StatusBar() {
     if (inProgress || status_icon === imageURL) {
       return;
     }
-    toast.info('Changing status icon...');
+    const toastRef = toast.info('Changing status icon...');
     setInProgress(true);
     const res = await fetch(`${API_URL}/users/${user_id}/change-status-icon`, {
       method: 'PUT',
@@ -36,13 +36,20 @@ function StatusBar() {
     });
     if (!res.ok) {
       setInProgress(false);
-      return toast.error('There was an error. Please try again');
+      return toast.update(toastRef, {
+        render: 'There was an error. Please try again',
+        type: 'error',
+      });
     }
     const updatedUser = await res.json();
     setUser(updatedUser);
     setInProgress(false);
     socket.emit('change status icon', user_id, imageURL);
-    return toast.success(`Status icon has been changed successfully`);
+    return toast.update(toastRef, {
+      render: `Status icon changed successfully`,
+      type: 'success',
+      icon: <img className="toast-icon" src={imageURL} />,
+    });
   }
 
   return (

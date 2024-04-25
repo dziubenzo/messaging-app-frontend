@@ -63,9 +63,7 @@ export const useEventsHomePage = (setAllUsersFiltered, setUser, user) => {
         toast(
           <BoldToastMessage bold={senderUsername} text={'messaged you!'} />,
           {
-            icon: () => (
-              <img className="toast-message-icon" src={statusIcons.message} />
-            ),
+            icon: <img className="toast-icon" src={statusIcons.message} />,
           },
         );
       }

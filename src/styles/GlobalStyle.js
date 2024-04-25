@@ -55,10 +55,10 @@ const GlobalStyle = createGlobalStyle`
     --toastify-color-light: ${(props) => props.theme.colours.bgSecondary};
   }
 
-  // Toast message icon
-  .toast-message-icon {
-    height: 28px;
-    width: 28px;
+  // Toast icons
+  .toast-icon {
+    height: 26px;
+    width: 26px;
   }
 
   // Toast utility class
