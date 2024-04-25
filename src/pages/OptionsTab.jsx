@@ -16,6 +16,13 @@ function OptionsTab() {
   );
   const [inProgress, setInProgress] = useState(false);
 
+  // Disable Enter in text status field to prevent inserting new lines
+  function disableEnter(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
+
   // Update logged in user's username and/or text status
   function handleSaveButtonClick(event) {
     updateUser(
@@ -70,6 +77,7 @@ function OptionsTab() {
               STATUS_CHARACTER_LIMIT - event.target.value.length,
             );
           }}
+          onKeyDown={disableEnter}
         />
         <span className="characters-left">{charactersLeft}</span>
       </form>
