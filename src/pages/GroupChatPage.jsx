@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { StyledGroupChatPage } from '../styles/GroupChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
-import { statusIcons, useFetch } from '../helpers';
+import { useChangeToUnavailable, statusIcons, useFetch } from '../helpers';
 import { useImmer } from 'use-immer';
 import { useEffect, useState } from 'react';
 import Messages from '../components/Messages';
@@ -12,7 +12,7 @@ import { socket, useEventsGroupChatPage } from '../socket';
 function GroupChatPage() {
   const navigate = useNavigate();
 
-  const { user } = useOutletContext();
+  const { user, setUser } = useOutletContext();
   const { state } = useLocation();
 
   // States for messages
@@ -45,6 +45,9 @@ function GroupChatPage() {
     setSomeoneIsTyping,
     setTypingUsername,
   );
+
+  // Change logged in user's status icon to unavailable on unload
+  useChangeToUnavailable(user, setUser);
 
   return (
     <StyledGroupChatPage>
