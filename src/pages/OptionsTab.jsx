@@ -62,6 +62,7 @@ function OptionsTab() {
           maxLength={16}
           value={username}
           onChange={(event) => setUsername(event.target.value)}
+          readOnly={user.username === 'Guest' ? true : undefined}
         />
         <label htmlFor="status-text">Text Status:</label>
         <textarea

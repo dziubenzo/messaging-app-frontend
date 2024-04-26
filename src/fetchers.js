@@ -54,6 +54,7 @@ export const clearTextStatus = async (
 };
 
 // Update logged in user's username and/or text status
+// Prevent tampering with guest user's username
 export const updateUser = async (
   event,
   inProgress,
@@ -77,7 +78,7 @@ export const updateUser = async (
   const formData = new FormData(event.target);
   const updates = {
     current_username: user.username,
-    username: formData.get('username'),
+    username: user.username === 'Guest' ? 'Guest' : formData.get('username'),
     status_text: formData.get('status_text'),
   };
   const res = await fetch(`${API_URL}/users/${user.user_id}/update`, {
