@@ -72,6 +72,7 @@ function LoginPage() {
       <Link to="/register">
         <button>Register Page</button>
       </Link>
+      <button className="guest-account-btn">Log In As Guest</button>
     </StyledLoginPage>
   );
 }

@@ -48,13 +48,18 @@ export const StyledLoginPage = styled.main`
 
   a {
     position: absolute;
-    right: 50%;
-    transform: translateX(50%);
+    right: 0;
     bottom: -75px;
 
     button {
       padding: 0.5em;
     }
+  }
+
+  .guest-account-btn {
+    position: absolute;
+    bottom: -75px;
+    padding: 0.5em;
   }
 
   button {
