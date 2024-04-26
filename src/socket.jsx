@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import BoldToastMessage from './components/BoldToastMessage';
 
 // Establish Socket.IO connection
-export const socket = io(API_URL);
+export const socket = io(API_URL, { withCredentials: true });
 
 // Manage events emitted by the server (Home page)
 export const useEventsHomePage = (setAllUsersFiltered, setUser, user) => {
