@@ -2,7 +2,7 @@ import { StyledChatPage } from '../styles/ChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
-import { useChangeToUnavailable, useFetch, statusIcons } from '../helpers';
+import { useChangeStatusIcon, useFetch, statusIcons } from '../helpers';
 import { useState, useEffect } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
 import Messages from '../components/Messages';
@@ -12,7 +12,8 @@ import { useEventsChatPage } from '../socket';
 function ChatPage() {
   const navigate = useNavigate();
 
-  const { user, setUser } = useOutletContext();
+  const { user, setUser, previousStatusIcon, setPreviousStatusIcon } =
+    useOutletContext();
   const { state } = useLocation();
 
   // States for messages
@@ -46,8 +47,8 @@ function ChatPage() {
     setTypingUsername,
   );
 
-  // Change logged in user's status icon to unavailable on unload
-  useChangeToUnavailable(user, setUser);
+  // Change logged in user's status icon during the use of the app
+  useChangeStatusIcon(user, setUser, previousStatusIcon, setPreviousStatusIcon);
 
   return (
     <StyledChatPage>

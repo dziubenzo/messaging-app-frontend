@@ -80,7 +80,7 @@ export const statusIcons = {
     'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/m9ucqz7totsstdus4vtb.png',
 };
 
-// Change status icon when logged in user goes offline or online
+// Change status icon when logged in user goes offline or online or changes tabs
 export const changeStatusIcon = async (user, setUser, imageURL) => {
   const res = await fetch(
     `${API_URL}/users/${user.user_id}/change-status-icon`,
@@ -95,29 +95,49 @@ export const changeStatusIcon = async (user, setUser, imageURL) => {
       credentials: 'include',
     },
   );
-  // Do not update user state if it is an exit operation (logout, tab close etc.)
-  if (imageURL === statusIcons.unavailable) {
-    return;
-  }
   const updatedUser = await res.json();
   return setUser(updatedUser);
 };
 
-// Hook for changing logged in user's status icon to unavailable on unload
-export const useChangeToUnavailable = (user, setUser) => {
+// Hook for changing logged in user's status icon during the use of the app
+// Change the icon to unavailable if the user triggers the "hidden" state
+// Change the icon to either their previous one or available if the user triggers the "visible" state
+export const useChangeStatusIcon = (
+  user,
+  setUser,
+  previousStatusIcon,
+  setPreviousStatusIcon,
+) => {
   useEffect(() => {
     function changeIcon() {
-      socket.emit('change status icon', user.user_id, statusIcons.unavailable);
-      changeStatusIcon(user, setUser, statusIcons.unavailable);
+      if (document.visibilityState === 'hidden') {
+        socket.emit(
+          'change status icon',
+          user.user_id,
+          statusIcons.unavailable,
+        );
+        setPreviousStatusIcon(user.status_icon);
+        changeStatusIcon(user, setUser, statusIcons.unavailable);
+      } else {
+        if (
+          previousStatusIcon !== statusIcons.unavailable &&
+          previousStatusIcon
+        ) {
+          socket.emit('change status icon', user.user_id, previousStatusIcon);
+          return changeStatusIcon(user, setUser, previousStatusIcon);
+        }
+        socket.emit('change status icon', user.user_id, statusIcons.available);
+        changeStatusIcon(user, setUser, statusIcons.available);
+      }
     }
-    window.addEventListener('beforeunload', changeIcon);
+    window.addEventListener('visibilitychange', changeIcon);
     return () => {
-      window.removeEventListener('beforeunload', changeIcon);
+      window.removeEventListener('visibilitychange', changeIcon);
     };
-  }, []);
+  }, [user]);
 };
 
-// Hook for changing logged in user's status icon to available on load
+// Hook for changing logged in user's status icon to available on Home page load
 export const useChangeToAvailable = (user, setUser) => {
   useEffect(() => {
     changeStatusIcon(user, setUser, statusIcons.available);

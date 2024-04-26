@@ -2,7 +2,7 @@ import { Outlet, useOutletContext } from 'react-router-dom';
 import {
   sortByStatusIcon,
   useChangeToAvailable,
-  useChangeToUnavailable,
+  useChangeStatusIcon,
   useCheckAuth,
   useFetch,
 } from '../helpers';
@@ -18,7 +18,8 @@ import { useImmer } from 'use-immer';
 import { useEventsHomePage } from '../socket';
 
 function HomePage() {
-  const { user, setUser } = useOutletContext();
+  const { user, setUser, previousStatusIcon, setPreviousStatusIcon } =
+    useOutletContext();
   useCheckAuth(setUser);
 
   const { data, loading, error } = useFetch('/users');
@@ -51,8 +52,8 @@ function HomePage() {
   // Change logged in user's status icon to available on component load
   useChangeToAvailable(user, setUser);
 
-  // Change logged in user's status icon to unavailable on unload
-  useChangeToUnavailable(user, setUser);
+  // Change logged in user's status icon during the use of the app
+  useChangeStatusIcon(user, setUser, previousStatusIcon, setPreviousStatusIcon);
 
   // Manage events emitted by the server
   useEventsHomePage(setAllUsersFiltered, setUser, user);
