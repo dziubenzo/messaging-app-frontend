@@ -23,7 +23,7 @@ The functionality and design of the app are heavily inspired by [GG version 6](h
 
 ## How To Use
 
-- Create an account (you will be logged in automatically)
+- Create an account (you will be logged in automatically) or log in as guest
 - You will be assigned a number between 1000000 and 9999999 (you'll see it in the top bar, it has no other meaningful uses)
 - Click on a user to chat with them
 - Tap/hover over **My status** in the bottom left corner to set your status icon:
