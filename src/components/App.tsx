@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Outlet, useNavigation } from 'react-router-dom';
 import LoadingPage from '../pages/LoadingPage';
 import Footer from './Footer';
@@ -8,8 +7,8 @@ import { ReactNode, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { statusIcons, useCheckRootAuth } from '../helpers';
 import GlobalStyle from '../styles/GlobalStyle';
-import Theme from './Theme';
 import type { StatusIcon, User } from '../types';
+import Theme from './Theme';
 
 type AppProps = {
   children?: ReactNode;
@@ -41,9 +40,5 @@ function App({ children }: AppProps) {
     </Theme>
   );
 }
-
-App.propTypes = {
-  children: PropTypes.node,
-};
 
 export default App;

@@ -1,16 +1,16 @@
-import PropTypes from 'prop-types';
 import { StyledIsTyping } from '../styles/ChatPage.styled';
+import { User } from '../types';
 
-function IsTyping({ username }) {
+type IsTypingProps = {
+  username: User['username'];
+};
+
+function IsTyping({ username }: IsTypingProps) {
   return (
     <StyledIsTyping>
       <span>{username}</span> is typing...
     </StyledIsTyping>
   );
 }
-
-IsTyping.propTypes = {
-  username: PropTypes.string,
-};
 
 export default IsTyping;

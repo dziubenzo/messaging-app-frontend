@@ -1,27 +1,29 @@
-import PropTypes from 'prop-types';
-import { StyledToolbar } from '../styles/ChatPage.styled';
-import Emoticons from './Emoticons';
+import { useState } from 'react';
 import { FaBold, FaItalic } from 'react-icons/fa';
 import { FaUnderline } from 'react-icons/fa6';
 import { MdInsertEmoticon } from 'react-icons/md';
-import { useState } from 'react';
+import { StyledToolbar } from '../styles/ChatPage.styled';
+import Emoticons from './Emoticons';
 
-function Toolbar({ inputFieldRef }) {
+type ToolbarProps = {};
+
+function Toolbar({ inputFieldRef }: ToolbarProps) {
   // State for showing/hiding emoticons
   const [showEmoticons, setShowEmoticons] = useState(false);
 
   // Bold, italicise or underline selected text in input field
-  function changeSelection(action) {
-    document.execCommand(action, false, null);
+  function changeSelection(action: 'bold' | 'italic' | 'underline') {
+    document.execCommand(action, false, undefined);
   }
 
   // Add emoticon to the end of input field
   // Move caret to the end of input field
-  function insertEmoticon(event) {
+  function insertEmoticon(event: React.MouseEvent<HTMLImageElement>) {
     const selection = window.getSelection();
+    if (!selection) return;
     selection.selectAllChildren(inputFieldRef.current);
     selection.collapseToEnd();
-    document.execCommand('insertImage', false, event.target.src);
+    document.execCommand('insertImage', false, event.currentTarget.src);
     setShowEmoticons(false);
   }
 
@@ -49,9 +51,5 @@ function Toolbar({ inputFieldRef }) {
     </StyledToolbar>
   );
 }
-
-Toolbar.propTypes = {
-  inputFieldRef: PropTypes.object,
-};
 
 export default Toolbar;

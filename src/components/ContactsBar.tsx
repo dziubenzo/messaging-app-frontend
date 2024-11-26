@@ -1,12 +1,11 @@
-import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
-import { StyledContactsBar } from '../styles/HomePage.styled';
 import {
-  LiaUsersSolid,
+  LiaPlusCircleSolid,
   LiaUser,
   LiaUserFriendsSolid,
-  LiaPlusCircleSolid,
+  LiaUsersSolid,
 } from 'react-icons/lia';
+import { NavLink } from 'react-router-dom';
+import { StyledContactsBar } from '../styles/HomePage.styled';
 
 function ContactsBar() {
   return (
@@ -38,10 +37,5 @@ function ContactsBar() {
     </StyledContactsBar>
   );
 }
-
-ContactsBar.propTypes = {
-  showTab: PropTypes.array,
-  setShowTab: PropTypes.func,
-};
 
 export default ContactsBar;

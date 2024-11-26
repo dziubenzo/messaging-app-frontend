@@ -1,7 +1,11 @@
-import PropTypes from 'prop-types';
 import { StyledBottomBar } from '../styles/HomePage.styled';
+import type { BottomBar } from '../types';
 
-function BottomBar({ bottomBarText }) {
+type BottomBarProps = {
+  bottomBarText: BottomBar;
+};
+
+function BottomBar({ bottomBarText }: BottomBarProps) {
   return (
     <StyledBottomBar>
       <p>ID {bottomBarText.id}</p>
@@ -9,9 +13,5 @@ function BottomBar({ bottomBarText }) {
     </StyledBottomBar>
   );
 }
-
-BottomBar.propTypes = {
-  bottomBarText: PropTypes.object,
-};
 
 export default BottomBar;

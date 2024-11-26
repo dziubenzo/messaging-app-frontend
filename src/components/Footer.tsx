@@ -1,9 +1,8 @@
-import { StyledFooter } from '../styles/App.styled';
 import { DiGithubBadge } from 'react-icons/di';
+import { StyledFooter } from '../styles/App.styled';
 
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { Zoom } from 'react-toastify';
 
 function Footer() {
   return (

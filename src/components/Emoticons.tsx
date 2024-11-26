@@ -1,7 +1,10 @@
-import PropTypes from 'prop-types';
 import { StyledEmoticons } from '../styles/ChatPage.styled';
 
-function Emoticons({ insertEmoticon }) {
+type EmoticonProps = {
+  insertEmoticon: (event: React.MouseEvent<HTMLImageElement>) => void;
+};
+
+function Emoticons({ insertEmoticon }: EmoticonProps) {
   return (
     <StyledEmoticons>
       <img
@@ -86,9 +89,5 @@ function Emoticons({ insertEmoticon }) {
     </StyledEmoticons>
   );
 }
-
-Emoticons.propTypes = {
-  insertEmoticon: PropTypes.func,
-};
 
 export default Emoticons;
