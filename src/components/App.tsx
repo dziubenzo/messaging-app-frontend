@@ -1,22 +1,29 @@
 import PropTypes from 'prop-types';
 import { Outlet, useNavigation } from 'react-router-dom';
+import LoadingPage from '../pages/LoadingPage';
 import Footer from './Footer';
 import Header from './Header';
-import LoadingPage from '../pages/LoadingPage';
 
-import Theme from './Theme';
-import GlobalStyle from '../styles/GlobalStyle';
-import { useCheckRootAuth } from '../helpers';
+import { ReactNode, useState } from 'react';
 import { useImmer } from 'use-immer';
-import { useState } from 'react';
+import { statusIcons, useCheckRootAuth } from '../helpers';
+import GlobalStyle from '../styles/GlobalStyle';
+import Theme from './Theme';
+import type { StatusIcon, User } from '../types';
 
-function App({ children }) {
+type AppProps = {
+  children?: ReactNode;
+};
+
+function App({ children }: AppProps) {
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
 
-  const [user, setUser] = useImmer({});
-  const [previousStatusIcon, setPreviousStatusIcon] = useState('');
+  const [user, setUser] = useImmer<User | null>(null);
   useCheckRootAuth(setUser);
+  const [previousStatusIcon, setPreviousStatusIcon] = useState<StatusIcon>(
+    statusIcons.unavailable,
+  );
 
   return (
     <Theme>

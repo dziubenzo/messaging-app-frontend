@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { StyledHomePage } from './HomePage.styled';
 
+type StyledMessageProps = {
+  sender: 'true' | undefined
+}
+
 export const StyledChatPage = styled(StyledHomePage)`
   svg {
     height: 26px;
@@ -25,7 +29,7 @@ export const StyledIsTyping = styled.p`
   }
 `;
 
-export const StyledMessage = styled.div`
+export const StyledMessage = styled.div<StyledMessageProps>`
   background-color: ${(props) =>
     props.sender
       ? (props) => props.theme.colours.bgSecondary
