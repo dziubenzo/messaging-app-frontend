@@ -1,8 +1,6 @@
 import type { Updater } from 'use-immer';
 import { statusIcons } from './helpers';
 
-export type StatusIcon = (typeof statusIcons)[keyof typeof statusIcons];
-
 export type User = {
   _id: string;
   user_id: number;
@@ -10,8 +8,34 @@ export type User = {
   status_icon: StatusIcon;
   status_text: string;
   contacts: User[];
-  _v?: string;
+  __v?: string;
 };
+
+export type Message = {
+  _id: string;
+  sender: User;
+  recipient: User;
+  text: string;
+  date: Date;
+  __v?: string;
+};
+
+export type GroupChat = {
+  _id: string;
+  name: string;
+  created_by: string;
+  members: User[];
+  messages: GroupChatMessage[];
+  __v?: string;
+};
+
+export type GroupChatMessage = {
+  sender: User;
+  text: string;
+  date: Date;
+};
+
+export type StatusIcon = (typeof statusIcons)[keyof typeof statusIcons];
 
 export type BottomBarType = {
   id: User['user_id'];
@@ -19,15 +43,13 @@ export type BottomBarType = {
 };
 
 export type AppOutletContext = {
-  user: User;
-  setUser: Updater<User | null>;
   previousStatusIcon: StatusIcon;
   setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>;
 };
 
 export type HomePageOutletContext = {
   user: User;
-  setUser: Updater<User | null>;
+  setUser: Updater<User>;
   allUsersFiltered: User[];
   contacts: User['contacts'];
   setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>;

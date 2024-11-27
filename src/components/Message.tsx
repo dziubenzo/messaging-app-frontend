@@ -1,9 +1,14 @@
-import PropTypes from 'prop-types';
-import { StyledMessage } from '../styles/ChatPage.styled';
 import { format } from 'date-fns';
 import parse from 'html-react-parser';
+import { StyledMessage } from '../styles/ChatPage.styled';
+import type { GroupChatMessage, Message as MessageType, User } from '../types';
 
-function Message({ message, loggedInUser }) {
+type MessageProps = {
+  message: MessageType | GroupChatMessage;
+  loggedInUser: User;
+};
+
+function Message({ message, loggedInUser }: MessageProps) {
   const isSender = message.sender._id === loggedInUser._id;
 
   return (
@@ -18,10 +23,5 @@ function Message({ message, loggedInUser }) {
     </StyledMessage>
   );
 }
-
-Message.propTypes = {
-  message: PropTypes.object,
-  loggedInUser: PropTypes.object,
-};
 
 export default Message;

@@ -1,12 +1,21 @@
-import PropTypes from 'prop-types';
-import { StyledMessages } from '../styles/ChatPage.styled';
-import Message from './Message';
-import Loading from './Loading';
-import Error from './Error';
-import NoMessages from './NoMessages';
-import IsTyping from './IsTyping';
 import { useRef } from 'react';
 import { useScrollToBottom } from '../helpers';
+import { StyledMessages } from '../styles/ChatPage.styled';
+import type { GroupChatMessage, Message as MessageType, User } from '../types';
+import Error from './Error';
+import IsTyping from './IsTyping';
+import Loading from './Loading';
+import Message from './Message';
+import NoMessages from './NoMessages';
+
+type MessagesProps = {
+  loading: boolean;
+  error: string;
+  messages: MessageType[] | GroupChatMessage[];
+  loggedInUser: User;
+  someoneIsTyping: boolean;
+  typingUsername: User['username'];
+};
 
 function Messages({
   loading,
@@ -15,8 +24,8 @@ function Messages({
   loggedInUser,
   someoneIsTyping,
   typingUsername,
-}) {
-  const messagesRef = useRef(null);
+}: MessagesProps) {
+  const messagesRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages change or someone is typing
   useScrollToBottom(messagesRef, messages, someoneIsTyping);
@@ -51,7 +60,7 @@ function Messages({
         {messages.map((message) => {
           return (
             <Message
-              key={message._id}
+              key={'_id' in message ? message._id : crypto.randomUUID()}
               message={message}
               loggedInUser={loggedInUser}
             />
@@ -62,14 +71,5 @@ function Messages({
     </StyledMessages>
   );
 }
-
-Messages.propTypes = {
-  loading: PropTypes.bool,
-  error: PropTypes.object,
-  messages: PropTypes.array,
-  loggedInUser: PropTypes.object,
-  someoneIsTyping: PropTypes.bool,
-  typingUsername: PropTypes.string,
-};
 
 export default Messages;

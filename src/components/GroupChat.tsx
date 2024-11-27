@@ -1,25 +1,31 @@
-import PropTypes from 'prop-types';
-import API_URL from '../API';
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import { StyledGroupChat } from '../styles/GroupChatsTab.styled';
-import { FaRegTrashAlt } from 'react-icons/fa';
-import { generateMembersList, statusIcons } from '../helpers';
 import { useState } from 'react';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { socket } from '../socket';
-import BoldToastMessage from './BoldToastMessage';
 import slugify from 'slugify';
+import type { Updater } from 'use-immer';
+import API_URL from '../API';
+import { generateMembersList, statusIcons } from '../helpers';
+import { socket } from '../socket';
+import { StyledGroupChat } from '../styles/GroupChatsTab.styled';
+import { AppOutletContext, type GroupChat } from '../types';
+import BoldToastMessage from './BoldToastMessage';
 
-function GroupChat({ groupChat, setGroupChats }) {
+type GroupChatProps = {
+  groupChat: GroupChat;
+  setGroupChats: Updater<GroupChat[]>;
+};
+
+function GroupChat({ groupChat, setGroupChats }: GroupChatProps) {
   const navigate = useNavigate();
-  const { user } = useOutletContext();
+  const { user } = useOutletContext<AppOutletContext>();
   const { _id, name, created_by, members } = groupChat;
 
   // State for preventing multiple fetches from being executed
   const [inProgress, setInProgress] = useState(false);
 
   // Delete group chat
-  async function deleteGroupChat(event) {
+  async function deleteGroupChat(event: React.MouseEvent<SVGElement>) {
     if (inProgress) {
       return;
     }
@@ -69,10 +75,5 @@ function GroupChat({ groupChat, setGroupChats }) {
     </StyledGroupChat>
   );
 }
-
-GroupChat.propTypes = {
-  groupChat: PropTypes.object,
-  setGroupChats: PropTypes.func,
-};
 
 export default GroupChat;

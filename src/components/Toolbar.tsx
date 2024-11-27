@@ -5,7 +5,9 @@ import { MdInsertEmoticon } from 'react-icons/md';
 import { StyledToolbar } from '../styles/ChatPage.styled';
 import Emoticons from './Emoticons';
 
-type ToolbarProps = {};
+type ToolbarProps = {
+  inputFieldRef: React.RefObject<HTMLDivElement>;
+};
 
 function Toolbar({ inputFieldRef }: ToolbarProps) {
   // State for showing/hiding emoticons
@@ -19,6 +21,7 @@ function Toolbar({ inputFieldRef }: ToolbarProps) {
   // Add emoticon to the end of input field
   // Move caret to the end of input field
   function insertEmoticon(event: React.MouseEvent<HTMLImageElement>) {
+    if (!inputFieldRef.current) return;
     const selection = window.getSelection();
     if (!selection) return;
     selection.selectAllChildren(inputFieldRef.current);

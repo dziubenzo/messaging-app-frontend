@@ -1,32 +1,33 @@
-import { StyledChatPage } from '../styles/ChatPage.styled';
-import { StyledTopBar } from '../styles/HomePage.styled';
+import { useEffect, useState } from 'react';
+import { LiaWindowCloseSolid } from 'react-icons/lia';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
-import { useChangeStatusIcon, useFetch, statusIcons } from '../helpers';
-import { useState, useEffect } from 'react';
-import { LiaWindowCloseSolid } from 'react-icons/lia';
-import Messages from '../components/Messages';
 import Editor from '../components/Editor';
+import Messages from '../components/Messages';
+import { statusIcons, useChangeStatusIcon, useFetch } from '../helpers';
 import { useEventsChatPage } from '../socket';
+import { StyledChatPage } from '../styles/ChatPage.styled';
+import { StyledTopBar } from '../styles/HomePage.styled';
+import type { AppOutletContext, Message, User } from '../types';
 
 function ChatPage() {
   const navigate = useNavigate();
 
   const { user, setUser, previousStatusIcon, setPreviousStatusIcon } =
-    useOutletContext();
+    useOutletContext<AppOutletContext>();
   const { state } = useLocation();
 
   // States for messages
-  const [messages, setMessages] = useImmer([]);
+  const [messages, setMessages] = useImmer<Message[]>([]);
   // State for managing chat recipient
-  const [recipient, setRecipient] = useImmer(state.recipient);
+  const [recipient, setRecipient] = useImmer<User>(state.recipient);
 
   // States for managing is typing indicator
   const [someoneIsTyping, setSomeoneIsTyping] = useState(false);
-  const [typingUsername, setTypingUsername] = useState('');
+  const [typingUsername, setTypingUsername] = useState<User['username']>('');
 
   // Fetch messages
-  const { data, loading, error } = useFetch(
+  const { data, loading, error } = useFetch<Message[]>(
     `/messages/?from=${user._id}&to=${recipient._id}`,
   );
 

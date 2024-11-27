@@ -12,7 +12,7 @@ import BoldToastMessage from './BoldToastMessage';
 type ContactProps = {
   loggedInUser: User;
   user: User;
-  setUser: Updater<User | null>;
+  setUser: Updater<User>;
   setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>;
   isContact: boolean;
 };

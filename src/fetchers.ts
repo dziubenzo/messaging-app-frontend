@@ -3,14 +3,20 @@ import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
 import API_URL from './API';
 import { socket } from './socket';
-import type { BottomBarType, User } from './types';
+import type {
+  BottomBarType,
+  GroupChat,
+  GroupChatMessage,
+  Message,
+  User,
+} from './types';
 
 // Clear logged in user's text status (Options component)
 export const clearTextStatus = async (
   inProgress: boolean,
   setInProgress: React.Dispatch<React.SetStateAction<boolean>>,
   user: User,
-  setUser: Updater<User | null>,
+  setUser: Updater<User>,
   navigate: NavigateFunction,
   setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>,
 ) => {
@@ -65,7 +71,7 @@ export const updateUser = async (
   username: User['username'],
   status: User['status_text'],
   user: User,
-  setUser: Updater<User | null>,
+  setUser: Updater<User>,
   navigate: NavigateFunction,
   setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>,
 ) => {
@@ -120,14 +126,14 @@ export const updateUser = async (
 // Clear input fields if operation successful
 // Support both DMs and group chats
 export const sendMessage = async (
-  text,
-  inProgress,
-  setInProgress,
-  isGroupChat,
-  loggedInUser,
-  recipient,
-  setMessages,
-  clearInputField,
+  text: string,
+  inProgress: boolean,
+  setInProgress: React.Dispatch<React.SetStateAction<boolean>>,
+  isGroupChat: boolean,
+  loggedInUser: User,
+  recipient: User | GroupChat,
+  setMessages: Updater<Message[]> | Updater<GroupChatMessage[]>,
+  clearInputField: () => void,
 ) => {
   if (text === '<br>' || !text || inProgress) {
     return;
@@ -159,7 +165,7 @@ export const sendMessage = async (
       });
     }
     const newMessage = await res.json();
-    setMessages((draft) => {
+    (setMessages as Updater<GroupChatMessage[]>)((draft) => {
       draft.push(newMessage);
     });
     socket.emit('send group chat message', recipient._id, newMessage);
@@ -192,13 +198,13 @@ export const sendMessage = async (
       });
     }
     const newMessage = await res.json();
-    setMessages((draft) => {
+    (setMessages as Updater<Message[]>)((draft) => {
       draft.push(newMessage);
     });
     socket.emit(
       'send message',
       loggedInUser.user_id,
-      recipient.user_id,
+      (recipient as User).user_id,
       newMessage,
       loggedInUser.username,
     );

@@ -1,18 +1,31 @@
-import PropTypes from 'prop-types';
-import {
-  StyledEditor,
-  StyledInputField,
-  StyledInputButtons,
-} from '../styles/ChatPage.styled';
 import { useRef, useState } from 'react';
-import Toolbar from './Toolbar';
 import { useNavigate } from 'react-router-dom';
+import { Updater } from 'use-immer';
 import { sendMessage } from '../fetchers';
 import { useEmitTypingEvents } from '../helpers';
+import {
+  StyledEditor,
+  StyledInputButtons,
+  StyledInputField,
+} from '../styles/ChatPage.styled';
+import type { GroupChat, GroupChatMessage, Message, User } from '../types';
+import Toolbar from './Toolbar';
 
-function Editor({ loggedInUser, recipient, setMessages, isGroupChat = false }) {
+type EditorProps = {
+  loggedInUser: User;
+  recipient: User | GroupChat;
+  setMessages: Updater<Message[]> | Updater<GroupChatMessage[]>;
+  isGroupChat?: boolean;
+};
+
+function Editor({
+  loggedInUser,
+  recipient,
+  setMessages,
+  isGroupChat = false,
+}: EditorProps) {
   const navigate = useNavigate();
-  const inputFieldRef = useRef(null);
+  const inputFieldRef = useRef<HTMLDivElement>(null);
 
   // State for grabbing user chat message from input field
   const [text, setText] = useState('');
@@ -21,6 +34,7 @@ function Editor({ loggedInUser, recipient, setMessages, isGroupChat = false }) {
 
   // Clear input field and focus on it
   function clearInputField() {
+    if (!inputFieldRef.current) return;
     inputFieldRef.current.innerHTML = '';
     setText('');
     inputFieldRef.current.focus();
@@ -28,7 +42,7 @@ function Editor({ loggedInUser, recipient, setMessages, isGroupChat = false }) {
 
   // Make Enter send message
   // This also prevents sending messages containing <br> only
-  function sendMessageOnEnter(event) {
+  function sendMessageOnEnter(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleSendButtonClick();
@@ -66,7 +80,9 @@ function Editor({ loggedInUser, recipient, setMessages, isGroupChat = false }) {
         <button onClick={clearInputField}>Clear</button>
         <button
           onClick={() => {
-            isGroupChat ? navigate('/home/group-chats') : navigate('/home');
+            return isGroupChat
+              ? navigate('/home/group-chats')
+              : navigate('/home');
           }}
         >
           Close
@@ -75,12 +91,5 @@ function Editor({ loggedInUser, recipient, setMessages, isGroupChat = false }) {
     </StyledEditor>
   );
 }
-
-Editor.propTypes = {
-  loggedInUser: PropTypes.object,
-  recipient: PropTypes.object,
-  setMessages: PropTypes.func,
-  isGroupChat: PropTypes.bool,
-};
 
 export default Editor;

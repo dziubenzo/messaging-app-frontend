@@ -1,32 +1,33 @@
+import { useEffect, useState } from 'react';
+import { LiaWindowCloseSolid } from 'react-icons/lia';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { useImmer } from 'use-immer';
+import Editor from '../components/Editor';
+import Messages from '../components/Messages';
+import { statusIcons, useChangeStatusIcon, useFetch } from '../helpers';
+import { socket, useEventsGroupChatPage } from '../socket';
 import { StyledGroupChatPage } from '../styles/GroupChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
-import { LiaWindowCloseSolid } from 'react-icons/lia';
-import { useChangeStatusIcon, statusIcons, useFetch } from '../helpers';
-import { useImmer } from 'use-immer';
-import { useEffect, useState } from 'react';
-import Messages from '../components/Messages';
-import Editor from '../components/Editor';
-import { socket, useEventsGroupChatPage } from '../socket';
+import type { GroupChatMessage, AppOutletContext, GroupChat } from '../types';
 
 function GroupChatPage() {
   const navigate = useNavigate();
 
   const { user, setUser, previousStatusIcon, setPreviousStatusIcon } =
-    useOutletContext();
+    useOutletContext<AppOutletContext>();
   const { state } = useLocation();
 
   // States for messages
-  const [messages, setMessages] = useImmer([]);
+  const [messages, setMessages] = useImmer<GroupChatMessage[]>([]);
   // State for group chat
-  const [groupChat, setGroupChat] = useImmer(state.groupChat);
+  const [groupChat, setGroupChat] = useImmer<GroupChat>(state.groupChat);
 
   // States for managing is typing indicator
   const [someoneIsTyping, setSomeoneIsTyping] = useState(false);
   const [typingUsername, setTypingUsername] = useState('');
 
   // Fetch group chat messages
-  const { data, loading, error } = useFetch(
+  const { data, loading, error } = useFetch<GroupChatMessage[]>(
     `/group-chats/${groupChat._id}/messages`,
   );
 

@@ -6,12 +6,15 @@ import GroupChat from '../components/GroupChat';
 import { useEventsGroupChatsTab } from '../socket';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import type { AppOutletContext } from '../types';
 
 function GroupChatsTab() {
-  const { user } = useOutletContext();
-  const { data, loading, error } = useFetch(`/group-chats/?member=${user._id}`);
+  const { user } = useOutletContext<AppOutletContext>();
+  const { data, loading, error } = useFetch<GroupChat[]>(
+    `/group-chats/?member=${user._id}`,
+  );
 
-  const [groupChats, setGroupChats] = useImmer([]);
+  const [groupChats, setGroupChats] = useImmer<GroupChat[]>([]);
 
   // Set state once group chats are fetched
   useEffect(() => {
