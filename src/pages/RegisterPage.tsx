@@ -1,23 +1,31 @@
-import { StyledRegisterPage } from '../styles/RegisterPage.styled';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { type Id, toast } from 'react-toastify';
 import API_URL from '../API.js';
-import { statusIcons, changeStatusIcon } from '../helpers.js';
-import { toast } from 'react-toastify';
-import { socket } from '../socket';
+import { changeStatusIcon, statusIcons } from '../helpers.js';
+import { socket } from '../socket.js';
+import { StyledRegisterPage } from '../styles/RegisterPage.styled';
+import type { OutletContext } from '../types.js';
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { setUser } = useOutletContext();
+  const { setUser } = useOutletContext<OutletContext>();
 
   // Register user
-  async function register(event) {
+  async function register(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const toastRef = toast.info('Registering...');
-    const formData = new FormData(event.target);
+
+    const formData = new FormData(event.currentTarget);
+    const username = formData.get('username') as string;
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirm_password') as string;
+
+    if (!username || !password || !confirmPassword) return;
+
     const newUser = {
-      username: formData.get('username').trim(),
-      password: formData.get('password').trim(),
-      confirm_password: formData.get('confirm_password'),
+      username: username.trim(),
+      password: password.trim(),
+      confirm_password: confirmPassword.trim(),
     };
     try {
       const res = await fetch(`${API_URL}/users`, {
@@ -34,12 +42,20 @@ function RegisterPage() {
       socket.emit('user registers', newUser.username);
       return logInAfterRegister(newUser.username, newUser.password, toastRef);
     } catch (error) {
-      toast.update(toastRef, { render: error, type: 'error' });
+      if (error instanceof Error) {
+        toast.update(toastRef, { render: error.message, type: 'error' });
+      } else if (typeof error === 'string') {
+        toast.update(toastRef, { render: error, type: 'error' });
+      }
     }
   }
 
   // Log them in if registration successful
-  async function logInAfterRegister(username, password, toastRef) {
+  async function logInAfterRegister(
+    username: string,
+    password: string,
+    toastRef: Id,
+  ) {
     const user = {
       username,
       password,

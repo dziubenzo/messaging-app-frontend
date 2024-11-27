@@ -1,3 +1,4 @@
+import type { Updater } from 'use-immer';
 import { statusIcons } from './helpers';
 
 export type StatusIcon = (typeof statusIcons)[keyof typeof statusIcons];
@@ -15,4 +16,11 @@ export type User = {
 export type BottomBar = {
   id: User['_id'];
   status: User['status_text'];
+};
+
+export type OutletContext = {
+  user: User | null;
+  setUser: Updater<User | null>;
+  previousStatusIcon: StatusIcon;
+  setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>;
 };

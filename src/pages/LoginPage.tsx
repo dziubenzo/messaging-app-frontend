@@ -1,20 +1,21 @@
-import { StyledLoginPage } from '../styles/LoginPage.styled';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import API_URL from '../API';
 import { changeStatusIcon, statusIcons } from '../helpers';
 import { socket } from '../socket';
-import { toast } from 'react-toastify';
+import { StyledLoginPage } from '../styles/LoginPage.styled';
+import type { OutletContext } from '../types';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setUser } = useOutletContext();
+  const { setUser } = useOutletContext<OutletContext>();
 
   // Log in user, change their status icon to available, set user state and navigate to the Home page on successful login
-  // Make sure icon is changes and user state is set before navigating to the Home page
+  // Make sure icon is changed and user state is set before navigating to the Home page
   // Otherwise show error message in toast
-  async function logIn(event) {
+  async function logIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
     const user = {
       username: formData.get('username'),
       password: formData.get('password'),
