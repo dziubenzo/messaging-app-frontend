@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { StyledOptionsTab } from '../styles/OptionsTab.styled.js';
 import { useOutletContext, useNavigate } from 'react-router-dom';
-import { clearTextStatus, updateUser } from '../fetchers.js';
+import { clearTextStatus, updateUser } from '../fetchers';
+import { HomePageOutletContext } from '../types.js';
 
 const STATUS_CHARACTER_LIMIT = 70;
 
 function OptionsTab() {
-  const { user, setUser, setBottomBarText } = useOutletContext();
+  const { user, setUser, setBottomBarText } =
+    useOutletContext<HomePageOutletContext>();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState(user.username);
@@ -17,14 +19,14 @@ function OptionsTab() {
   const [inProgress, setInProgress] = useState(false);
 
   // Disable Enter in text status field to prevent inserting new lines
-  function disableEnter(event) {
+  function disableEnter(event: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === 'Enter') {
       event.preventDefault();
     }
   }
 
   // Update logged in user's username and/or text status
-  function handleSaveButtonClick(event) {
+  function handleSaveButtonClick(event: React.FormEvent<HTMLFormElement>) {
     updateUser(
       event,
       inProgress,
@@ -66,7 +68,6 @@ function OptionsTab() {
         />
         <label htmlFor="status-text">Text Status:</label>
         <textarea
-          type="text"
           name="status_text"
           id="status-text"
           maxLength={STATUS_CHARACTER_LIMIT}

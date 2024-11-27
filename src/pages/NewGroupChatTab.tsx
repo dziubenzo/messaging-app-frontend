@@ -10,23 +10,26 @@ import NoContacts from '../components/NoContacts';
 import BoldToastMessage from '../components/BoldToastMessage';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
+import { HomePageOutletContext } from '../types';
 
 function NewGroupChatTab() {
   const navigate = useNavigate();
-  const { user, contacts } = useOutletContext();
+  const { user, contacts } = useOutletContext<HomePageOutletContext>();
 
   // Create new group chat if there are at least two members selected
-  async function createGroupChat(event) {
+  async function createGroupChat(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
     const members = formData.getAll('contact');
     if (members.length < 2) {
       return toast.error('Select at least two contacts');
     }
     const toastRef = toast.info('Creating group chat...');
     members.push(user._id);
+    const newChatName = formData.get('name');
+    if (!newChatName) return;
     const newChat = {
-      name: formData.get('name'),
+      name: newChatName,
       created_by: user._id,
       members,
     };
@@ -49,7 +52,10 @@ function NewGroupChatTab() {
     socket.emit('create group chat', members, newGroupChat);
     toast.update(toastRef, {
       render: (
-        <BoldToastMessage bold={newChat.name} text="created successfully" />
+        <BoldToastMessage
+          bold={newChat.name as string}
+          text="created successfully"
+        />
       ),
       type: 'success',
     });
@@ -81,11 +87,13 @@ function NewGroupChatTab() {
             <StyledContactCheckbox key={contact.user_id}>
               <input
                 type="checkbox"
-                id={contact.user_id}
+                id={contact.user_id.toString()}
                 name="contact"
                 value={contact._id}
               />
-              <label htmlFor={contact.user_id}>{contact.username}</label>
+              <label htmlFor={contact.user_id.toString()}>
+                {contact.username}
+              </label>
             </StyledContactCheckbox>
           );
         })}

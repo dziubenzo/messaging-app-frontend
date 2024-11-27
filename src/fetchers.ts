@@ -1,15 +1,18 @@
-import API_URL from './API';
+import { NavigateFunction } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import type { Updater } from 'use-immer';
+import API_URL from './API';
 import { socket } from './socket';
+import type { BottomBarType, User } from './types';
 
 // Clear logged in user's text status (Options component)
 export const clearTextStatus = async (
-  inProgress,
-  setInProgress,
-  user,
-  setUser,
-  navigate,
-  setBottomBarText,
+  inProgress: boolean,
+  setInProgress: React.Dispatch<React.SetStateAction<boolean>>,
+  user: User,
+  setUser: Updater<User | null>,
+  navigate: NavigateFunction,
+  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>,
 ) => {
   if (inProgress || user.status_text === '') {
     return;
@@ -56,15 +59,15 @@ export const clearTextStatus = async (
 // Update logged in user's username and/or text status
 // Prevent tampering with guest user's username
 export const updateUser = async (
-  event,
-  inProgress,
-  setInProgress,
-  username,
-  status,
-  user,
-  setUser,
-  navigate,
-  setBottomBarText,
+  event: React.FormEvent<HTMLFormElement>,
+  inProgress: boolean,
+  setInProgress: React.Dispatch<React.SetStateAction<boolean>>,
+  username: User['username'],
+  status: User['status_text'],
+  user: User,
+  setUser: Updater<User | null>,
+  navigate: NavigateFunction,
+  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>,
 ) => {
   event.preventDefault();
   if (
@@ -75,7 +78,7 @@ export const updateUser = async (
   }
   setInProgress(true);
   const toastRef = toast.info('Making changes...');
-  const formData = new FormData(event.target);
+  const formData = new FormData(event.currentTarget);
   const updates = {
     current_username: user.username,
     username: user.username === 'Guest' ? 'Guest' : formData.get('username'),

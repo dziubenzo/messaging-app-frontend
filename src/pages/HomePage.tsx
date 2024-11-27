@@ -1,34 +1,35 @@
+import { useEffect, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
+import { useImmer } from 'use-immer';
+import BottomBar from '../components/BottomBar';
+import ContactsBar from '../components/ContactsBar';
+import Error from '../components/Error';
+import Loading from '../components/Loading';
+import StatusBar from '../components/StatusBar';
+import TopBar from '../components/TopBar';
 import {
   sortByStatusIcon,
-  useChangeToAvailable,
   useChangeStatusIcon,
+  useChangeToAvailable,
   useCheckAuth,
   useFetch,
 } from '../helpers';
-import StatusBar from '../components/StatusBar';
-import TopBar from '../components/TopBar';
-import ContactsBar from '../components/ContactsBar';
-import BottomBar from '../components/BottomBar';
-import Loading from '../components/Loading';
-import Error from '../components/Error';
-import { StyledHomePage, MiddleSection } from '../styles/HomePage.styled';
-import { useEffect, useState } from 'react';
-import { useImmer } from 'use-immer';
 import { useEventsHomePage } from '../socket';
+import { MiddleSection, StyledHomePage } from '../styles/HomePage.styled';
+import type { AppOutletContext, BottomBarType, User } from '../types';
 
 function HomePage() {
   const { user, setUser, previousStatusIcon, setPreviousStatusIcon } =
-    useOutletContext();
+    useOutletContext<AppOutletContext>();
   useCheckAuth(setUser);
 
-  const { data, loading, error } = useFetch('/users');
+  const { data, loading, error } = useFetch<User[]>('/users');
   const { contacts } = user;
 
   // State for storing all users except for logged in user
-  const [allUsersFiltered, setAllUsersFiltered] = useImmer([]);
+  const [allUsersFiltered, setAllUsersFiltered] = useImmer<User[]>([]);
   // State for managing Bottom Bar text
-  const [bottomBarText, setBottomBarText] = useState({
+  const [bottomBarText, setBottomBarText] = useState<BottomBarType>({
     id: user.user_id,
     status: user.status_text,
   });
@@ -44,6 +45,7 @@ function HomePage() {
         draft.sort(sortByStatusIcon);
       });
       setUser((draft) => {
+        if (!draft) return;
         draft.contacts.sort(sortByStatusIcon);
       });
     }

@@ -1,8 +1,8 @@
 import { StyledBottomBar } from '../styles/HomePage.styled';
-import type { BottomBar } from '../types';
+import type { BottomBarType } from '../types';
 
 type BottomBarProps = {
-  bottomBarText: BottomBar;
+  bottomBarText: BottomBarType;
 };
 
 function BottomBar({ bottomBarText }: BottomBarProps) {

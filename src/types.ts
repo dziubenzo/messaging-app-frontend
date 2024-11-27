@@ -9,18 +9,26 @@ export type User = {
   username: string;
   status_icon: StatusIcon;
   status_text: string;
-  contacts: User['_id'][];
+  contacts: User[];
   _v?: string;
 };
 
-export type BottomBar = {
-  id: User['_id'];
+export type BottomBarType = {
+  id: User['user_id'];
   status: User['status_text'];
 };
 
-export type OutletContext = {
-  user: User | null;
+export type AppOutletContext = {
+  user: User;
   setUser: Updater<User | null>;
   previousStatusIcon: StatusIcon;
   setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>;
+};
+
+export type HomePageOutletContext = {
+  user: User;
+  setUser: Updater<User | null>;
+  allUsersFiltered: User[];
+  contacts: User['contacts'];
+  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>;
 };

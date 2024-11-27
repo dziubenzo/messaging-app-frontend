@@ -5,11 +5,11 @@ import API_URL from '../API';
 import { changeStatusIcon, statusIcons } from '../helpers';
 import { socket } from '../socket';
 import { StyledTopBar } from '../styles/HomePage.styled';
-import type { OutletContext } from '../types';
+import type { AppOutletContext } from '../types';
 
 function TopBar() {
   const navigate = useNavigate();
-  const { user, setUser } = useOutletContext<OutletContext>();
+  const { user, setUser } = useOutletContext<AppOutletContext>();
 
   if (!user) return;
 

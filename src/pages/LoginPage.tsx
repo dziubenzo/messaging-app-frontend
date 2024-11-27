@@ -4,11 +4,11 @@ import API_URL from '../API';
 import { changeStatusIcon, statusIcons } from '../helpers';
 import { socket } from '../socket';
 import { StyledLoginPage } from '../styles/LoginPage.styled';
-import type { OutletContext } from '../types';
+import type { AppOutletContext } from '../types';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setUser } = useOutletContext<OutletContext>();
+  const { setUser } = useOutletContext<AppOutletContext>();
 
   // Log in user, change their status icon to available, set user state and navigate to the Home page on successful login
   // Make sure icon is changed and user state is set before navigating to the Home page

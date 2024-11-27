@@ -4,11 +4,11 @@ import API_URL from '../API.js';
 import { changeStatusIcon, statusIcons } from '../helpers.js';
 import { socket } from '../socket.js';
 import { StyledRegisterPage } from '../styles/RegisterPage.styled';
-import type { OutletContext } from '../types.js';
+import type { AppOutletContext } from '../types.js';
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { setUser } = useOutletContext<OutletContext>();
+  const { setUser } = useOutletContext<AppOutletContext>();
 
   // Register user
   async function register(event: React.FormEvent<HTMLFormElement>) {

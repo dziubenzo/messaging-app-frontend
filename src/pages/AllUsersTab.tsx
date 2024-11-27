@@ -1,9 +1,10 @@
 import Contact from '../components/Contact';
 import { useOutletContext } from 'react-router-dom';
+import { HomePageOutletContext } from '../types';
 
 function AllUsersTab() {
   const { user, setUser, allUsersFiltered, setBottomBarText } =
-    useOutletContext();
+    useOutletContext<HomePageOutletContext>();
 
   return (
     <>

@@ -37,7 +37,7 @@ export const useCheckRootAuth = (setUser: Updater<User | null>) => {
 // Check if the user is authenticated
 // If they are not, redirect to Login page
 // Otherwise, populate user object
-export const useCheckAuth = (setUser: Updater<User>) => {
+export const useCheckAuth = (setUser: Updater<User | null>) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -160,9 +160,9 @@ export const useChangeToAvailable = (
 };
 
 // Hook for fetching data
-export const useFetch = (endpoint: string) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+export const useFetch = <T>(endpoint: string) => {
+  const [data, setData] = useState<T>();
+  const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -174,10 +174,10 @@ export const useFetch = (endpoint: string) => {
         if (!res.ok) {
           throw new Error('Server error');
         }
-        const data = await res.json();
+        const data: T = await res.json();
         setData(data);
       } catch (error) {
-        setError(error);
+        setError(error as string);
       } finally {
         setLoading(false);
       }

@@ -1,14 +1,29 @@
-import PropTypes from 'prop-types';
-import API_URL from '../API';
-import { StyledContact } from '../styles/HomePage.styled';
-import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
-import { toast } from 'react-toastify';
 import { useState } from 'react';
-import { sortByStatusIcon, statusIcons } from '../helpers';
+import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import type { Updater } from 'use-immer';
+import API_URL from '../API';
+import { sortByStatusIcon, statusIcons } from '../helpers';
+import { StyledContact } from '../styles/HomePage.styled';
+import type { BottomBarType, User } from '../types';
 import BoldToastMessage from './BoldToastMessage';
 
-function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
+type ContactProps = {
+  loggedInUser: User;
+  user: User;
+  setUser: Updater<User | null>;
+  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>;
+  isContact: boolean;
+};
+
+function Contact({
+  loggedInUser,
+  user,
+  setUser,
+  setBottomBarText,
+  isContact,
+}: ContactProps) {
   const navigate = useNavigate();
 
   const { username, status_icon, status_text, _id } = user;
@@ -30,7 +45,7 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
   // Add a contact to logged in user's contacts
   // Show updatable toast if operation successful or unsuccessful and update user state if the former is true
   // Sort contacts once the updated user is fetched
-  async function addContact(event) {
+  async function addContact(event: React.MouseEvent<SVGElement>) {
     if (inProgress) {
       return;
     }
@@ -53,9 +68,10 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
         type: 'error',
       });
     }
-    const updatedUser = await res.json();
+    const updatedUser: User = await res.json();
     setUser(updatedUser);
     setUser((draft) => {
+      if (!draft) return;
       draft.contacts.sort(sortByStatusIcon);
     });
     setInProgress(false);
@@ -70,7 +86,7 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
   // Remove a contact from logged in user's contacts
   // Show toast if operation successful or unsuccessful and update user state if the former is true
   // Sort contacts once the updated user is fetched
-  async function removeContact(event) {
+  async function removeContact(event: React.MouseEvent<SVGElement>) {
     if (inProgress) {
       return;
     }
@@ -93,9 +109,10 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
         type: 'error',
       });
     }
-    const updatedUser = await res.json();
+    const updatedUser: User = await res.json();
     setUser(updatedUser);
     setUser((draft) => {
+      if (!draft) return;
       draft.contacts.sort(sortByStatusIcon);
     });
     setInProgress(false);
@@ -154,12 +171,5 @@ function Contact({ loggedInUser, user, setUser, setBottomBarText, isContact }) {
     </StyledContact>
   );
 }
-Contact.propTypes = {
-  loggedInUser: PropTypes.object,
-  user: PropTypes.object,
-  setUser: PropTypes.func,
-  setBottomBarText: PropTypes.func,
-  isContact: PropTypes.bool,
-};
 
 export default Contact;

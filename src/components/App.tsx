@@ -19,10 +19,13 @@ function App({ children }: AppProps) {
   const isLoading = navigation.state === 'loading';
 
   const [user, setUser] = useImmer<User | null>(null);
+  
   useCheckRootAuth(setUser);
   const [previousStatusIcon, setPreviousStatusIcon] = useState<StatusIcon>(
     statusIcons.unavailable,
   );
+
+  if (!user) return;
 
   return (
     <Theme>
