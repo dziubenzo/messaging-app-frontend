@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
 import {
-  useLoaderData,
   useLocation,
   useNavigate,
-  useOutletContext,
+  useOutletContext
 } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
-import { statusIcons, useChangeStatusIcon, useFetch } from '../helpers';
+import { statusIcons, useChangeStatusIcon, useFetch, useUser } from '../helpers';
 import { useEventsChatPage } from '../socket';
 import { StyledChatPage } from '../styles/ChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
@@ -21,8 +20,8 @@ function ChatPage() {
   const { previousStatusIcon, setPreviousStatusIcon } =
     useOutletContext<OutletContext>();
 
-  const fetchedUser = useLoaderData();
-  const [user, setUser] = useImmer<User>(fetchedUser as User);
+  const { user: fetchedUser } = useUser();
+  const [user, setUser] = useImmer<User>(fetchedUser);
 
   // States for messages
   const [messages, setMessages] = useImmer<Message[]>([]);

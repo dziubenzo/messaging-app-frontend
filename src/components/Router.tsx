@@ -12,9 +12,10 @@ import LoginPage from '../pages/LoginPage';
 import NewGroupChatTab from '../pages/NewGroupChatTab';
 import OptionsTab from '../pages/OptionsTab';
 import RegisterPage from '../pages/RegisterPage';
-import App from './App';
-import SuspenseWrapper from '../pages/SuspenseWrapper';
+import SkeletonChatPage from '../pages/SkeletonChatPage';
 import SkeletonHomePage from '../pages/SkeletonHomePage';
+import SuspenseWrapper from '../pages/SuspenseWrapper';
+import App from './App';
 
 function Router() {
   const router = createBrowserRouter([
@@ -72,12 +73,20 @@ function Router() {
         },
         {
           path: '/chats/:userId',
-          element: <ChatPage />,
+          element: (
+            <SuspenseWrapper fallback={<SkeletonChatPage />}>
+              <ChatPage />
+            </SuspenseWrapper>
+          ),
           loader: userLoader,
         },
         {
           path: '/group-chats/:groupChatName',
-          element: <GroupChatPage />,
+          element: (
+            <SuspenseWrapper fallback={<SkeletonChatPage />}>
+              <GroupChatPage />
+            </SuspenseWrapper>
+          ),
           loader: userLoader,
         },
       ],

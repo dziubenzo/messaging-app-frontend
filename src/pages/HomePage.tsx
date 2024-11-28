@@ -21,8 +21,8 @@ import type { BottomBar as BottomBarType, OutletContext, User } from '../types';
 export default function HomePage() {
   const { previousStatusIcon, setPreviousStatusIcon } =
     useOutletContext<OutletContext>();
+  
   const { user: fetchedUser } = useUser();
-
   const [user, setUser] = useImmer<User>(fetchedUser);
 
   const { data, loading, error } = useFetch<User[]>('/users');

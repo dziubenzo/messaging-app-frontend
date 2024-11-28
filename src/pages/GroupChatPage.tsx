@@ -1,14 +1,23 @@
 import { useEffect, useState } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
-import { useLoaderData, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+  useOutletContext
+} from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
-import { statusIcons, useChangeStatusIcon, useFetch } from '../helpers';
+import { statusIcons, useChangeStatusIcon, useFetch, useUser } from '../helpers';
 import { socket, useEventsGroupChatPage } from '../socket';
 import { StyledGroupChatPage } from '../styles/GroupChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
-import type { GroupChat, GroupChatMessage, OutletContext, User } from '../types';
+import type {
+  GroupChat,
+  GroupChatMessage,
+  OutletContext,
+  User,
+} from '../types';
 
 function GroupChatPage() {
   const navigate = useNavigate();
@@ -16,8 +25,8 @@ function GroupChatPage() {
   const { previousStatusIcon, setPreviousStatusIcon } =
     useOutletContext<OutletContext>();
 
-  const fetchedUser = useLoaderData();
-  const [user, setUser] = useImmer<User>(fetchedUser as User);
+  const { user: fetchedUser } = useUser();
+  const [user, setUser] = useImmer<User>(fetchedUser);
 
   // States for messages
   const [messages, setMessages] = useImmer<GroupChatMessage[]>([]);
