@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import type { Updater } from 'use-immer';
 import API_URL from './API';
+import { UserContext } from './pages/SuspenseWrapper';
 import { socket } from './socket';
 import type {
   GroupChat,
@@ -9,6 +10,16 @@ import type {
   StatusIcon,
   User,
 } from './types';
+
+export const useUser = () => {
+  const context = useContext(UserContext);
+
+  if (context === null) {
+    throw new ApiError('useUser must be used within UserContext', 500);
+  }
+
+  return context;
+};
 
 // Class for API errors
 export class ApiError extends Error {

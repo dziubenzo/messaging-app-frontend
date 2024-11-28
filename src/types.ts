@@ -8,7 +8,7 @@ export type User = {
   status_icon: StatusIcon;
   status_text: string;
   contacts: User[];
-  __v?: string;
+  __v?: number;
 };
 
 export type Message = {
@@ -17,7 +17,7 @@ export type Message = {
   recipient: User;
   text: string;
   date: Date;
-  __v?: string;
+  __v?: number;
 };
 
 export type GroupChat = {
@@ -26,7 +26,7 @@ export type GroupChat = {
   created_by: string;
   members: User[];
   messages: GroupChatMessage[];
-  __v?: string;
+  __v?: number;
 };
 
 export type GroupChatMessage = {

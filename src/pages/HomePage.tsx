@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useLoaderData, useOutletContext } from 'react-router-dom';
+import { Outlet, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import BottomBar from '../components/BottomBar';
 import ContactsBar from '../components/ContactsBar';
@@ -11,7 +11,8 @@ import {
   sortByStatusIcon,
   useChangeStatusIcon,
   useChangeToAvailable,
-  useFetch
+  useFetch,
+  useUser,
 } from '../helpers';
 import { useEventsHomePage } from '../socket';
 import { MiddleSection, StyledHomePage } from '../styles/HomePage.styled';
@@ -20,9 +21,9 @@ import type { BottomBar as BottomBarType, OutletContext, User } from '../types';
 export default function HomePage() {
   const { previousStatusIcon, setPreviousStatusIcon } =
     useOutletContext<OutletContext>();
+  const { user: fetchedUser } = useUser();
 
-  const fetchedUser = useLoaderData();
-  const [user, setUser] = useImmer<User>(fetchedUser as User);
+  const [user, setUser] = useImmer<User>(fetchedUser);
 
   const { data, loading, error } = useFetch<User[]>('/users');
 

@@ -13,6 +13,8 @@ import NewGroupChatTab from '../pages/NewGroupChatTab';
 import OptionsTab from '../pages/OptionsTab';
 import RegisterPage from '../pages/RegisterPage';
 import App from './App';
+import SuspenseWrapper from '../pages/SuspenseWrapper';
+import SkeletonHomePage from '../pages/SkeletonHomePage';
 
 function Router() {
   const router = createBrowserRouter([
@@ -39,7 +41,11 @@ function Router() {
         },
         {
           path: 'home',
-          element: <HomePage />,
+          element: (
+            <SuspenseWrapper fallback={<SkeletonHomePage />}>
+              <HomePage />
+            </SuspenseWrapper>
+          ),
           loader: userLoader,
           children: [
             {
