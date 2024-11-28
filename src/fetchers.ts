@@ -4,7 +4,7 @@ import type { Updater } from 'use-immer';
 import API_URL from './API';
 import { socket } from './socket';
 import type {
-  BottomBarType,
+  BottomBar,
   GroupChat,
   GroupChatMessage,
   Message,
@@ -18,7 +18,7 @@ export const clearTextStatus = async (
   user: User,
   setUser: Updater<User>,
   navigate: NavigateFunction,
-  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>,
+  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>,
 ) => {
   if (inProgress || user.status_text === '') {
     return;
@@ -73,7 +73,7 @@ export const updateUser = async (
   user: User,
   setUser: Updater<User>,
   navigate: NavigateFunction,
-  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>,
+  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>,
 ) => {
   event.preventDefault();
   if (

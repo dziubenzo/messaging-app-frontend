@@ -1,63 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { type Updater } from 'use-immer';
+import type { Updater } from 'use-immer';
 import API_URL from './API';
-import type { StatusIcon, User } from './types';
 import { socket } from './socket';
-
-// Check if the user is authenticated when they visit '/'
-// If they are not, redirect to Login page
-// Otherwise, populate user object and redirect to Home page
-export const useCheckRootAuth = (setUser: Updater<User | null>) => {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    async function checkAuth() {
-      const res = await fetch(`${API_URL}/users/auth`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-      if (!res.ok) {
-        return navigate('/login');
-      }
-      const user: User = await res.json();
-      setUser(user);
-      return navigate('/home');
-    }
-    if (pathname === '/') {
-      checkAuth();
-    }
-  }, [pathname]);
-};
-
-// Check if the user is authenticated
-// If they are not, redirect to Login page
-// Otherwise, populate user object
-export const useCheckAuth = (setUser: Updater<User | null>) => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    async function checkAuth() {
-      const res = await fetch(`${API_URL}/users/auth`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-      if (!res.ok) {
-        return navigate('/login');
-      }
-      const retrievedUser = await res.json();
-      setUser(retrievedUser);
-    }
-    checkAuth();
-  }, []);
-};
+import type {
+  GroupChat,
+  GroupChatMessage,
+  Message,
+  StatusIcon,
+  User,
+} from './types';
 
 // Class for API errors
 export class ApiError extends Error {
@@ -86,11 +37,10 @@ export const statusIcons = {
 
 // Change status icon when logged in user goes offline or online or changes tabs
 export const changeStatusIcon = async (
-  user: User | null,
-  setUser: Updater<User | null>,
+  user: User,
+  setUser: Updater<User>,
   imageURL: StatusIcon,
 ) => {
-  if (!user) return;
   const res = await fetch(
     `${API_URL}/users/${user.user_id}/change-status-icon`,
     {
@@ -112,14 +62,13 @@ export const changeStatusIcon = async (
 // Change the icon to unavailable if the user triggers the "hidden" state
 // Change the icon to either their previous one or available if the user triggers the "visible" state
 export const useChangeStatusIcon = (
-  user: User | null,
-  setUser: Updater<User | null>,
+  user: User,
+  setUser: Updater<User>,
   previousStatusIcon: StatusIcon,
   setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>,
 ) => {
   useEffect(() => {
     function changeIcon() {
-      if (!user) return;
       if (document.visibilityState === 'hidden') {
         socket.emit(
           'change status icon',
@@ -148,12 +97,8 @@ export const useChangeStatusIcon = (
 };
 
 // Hook for changing logged in user's status icon to available on Home page load
-export const useChangeToAvailable = (
-  user: User | null,
-  setUser: Updater<User | null>,
-) => {
+export const useChangeToAvailable = (user: User, setUser: Updater<User>) => {
   useEffect(() => {
-    if (!user) return;
     changeStatusIcon(user, setUser, statusIcons.available);
     socket.emit('change status icon', user.user_id, statusIcons.available);
   }, []);
@@ -189,8 +134,13 @@ export const useFetch = <T>(endpoint: string) => {
 };
 
 // Hook for scrolling to the bottom of messages if they change or someone is typing
-export const useScrollToBottom = (messagesRef, messages, someoneIsTyping) => {
+export const useScrollToBottom = (
+  messagesRef: React.RefObject<HTMLDivElement>,
+  messages: GroupChatMessage[] | Message[],
+  someoneIsTyping: boolean,
+) => {
   useEffect(() => {
+    if (!messagesRef.current) return;
     messagesRef.current.scrollTo({
       top: messagesRef.current.scrollHeight,
       left: 0,
@@ -200,7 +150,10 @@ export const useScrollToBottom = (messagesRef, messages, someoneIsTyping) => {
 };
 
 // Generate a comma-separated list of group chat members exclusive of logged in user
-export const generateMembersList = (members, loggedInUserUsername) => {
+export const generateMembersList = (
+  members: User[],
+  loggedInUserUsername: User['username'],
+) => {
   const usernamesArray = [];
 
   for (const member of members) {
@@ -214,7 +167,7 @@ export const generateMembersList = (members, loggedInUserUsername) => {
 };
 
 // Sort by status icon (compare function)
-export const sortByStatusIcon = (a, b) => {
+export const sortByStatusIcon = (a: User, b: User) => {
   let statusIconA;
   let statusIconB;
 
@@ -256,10 +209,10 @@ export const sortByStatusIcon = (a, b) => {
 
 // Hook for emitting events when a user is typing or cleared their input field
 export const useEmitTypingEvents = (
-  text,
-  isGroupChat,
-  recipient,
-  loggedInUser,
+  text: string,
+  isGroupChat: boolean,
+  recipient: User | GroupChat,
+  loggedInUser: User,
 ) => {
   useEffect(() => {
     if (text) {
@@ -274,7 +227,7 @@ export const useEmitTypingEvents = (
         socket.emit(
           'user is typing (DM)',
           loggedInUser.user_id,
-          recipient.user_id,
+          (recipient as User).user_id,
           loggedInUser.username,
           true,
         );
@@ -292,7 +245,7 @@ export const useEmitTypingEvents = (
         socket.emit(
           'user is typing (DM)',
           loggedInUser.user_id,
-          recipient.user_id,
+          (recipient as User).user_id,
           loggedInUser.username,
           false,
         );

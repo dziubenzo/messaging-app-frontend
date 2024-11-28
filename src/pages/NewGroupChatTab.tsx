@@ -10,11 +10,11 @@ import NoContacts from '../components/NoContacts';
 import BoldToastMessage from '../components/BoldToastMessage';
 import { toast } from 'react-toastify';
 import { socket } from '../socket';
-import { HomePageOutletContext } from '../types';
+import { OutletContext } from '../types';
 
 function NewGroupChatTab() {
   const navigate = useNavigate();
-  const { user, contacts } = useOutletContext<HomePageOutletContext>();
+  const { user, contacts } = useOutletContext<OutletContext>();
 
   // Create new group chat if there are at least two members selected
   async function createGroupChat(event: React.FormEvent<HTMLFormElement>) {

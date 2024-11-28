@@ -1,17 +1,20 @@
 import { AiOutlineLogout } from 'react-icons/ai';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import type { Updater } from 'use-immer';
 import API_URL from '../API';
 import { changeStatusIcon, statusIcons } from '../helpers';
 import { socket } from '../socket';
 import { StyledTopBar } from '../styles/HomePage.styled';
-import type { AppOutletContext } from '../types';
+import type { User } from '../types';
 
-function TopBar() {
+type TopBarProps = {
+  user: User;
+  setUser: Updater<User>;
+};
+
+function TopBar({ user, setUser }: TopBarProps) {
   const navigate = useNavigate();
-  const { user, setUser } = useOutletContext<AppOutletContext>();
-
-  if (!user) return;
 
   // Logout user, show toast and redirect to the Login page
   // Change status icon to unavailable
@@ -38,7 +41,6 @@ function TopBar() {
       render: 'You have been logged out successfully',
       type: 'success',
     });
-    setUser(null);
     return navigate('/login');
   }
 

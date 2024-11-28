@@ -6,14 +6,14 @@ import type { Updater } from 'use-immer';
 import API_URL from '../API';
 import { sortByStatusIcon, statusIcons } from '../helpers';
 import { StyledContact } from '../styles/HomePage.styled';
-import type { BottomBarType, User } from '../types';
+import type { BottomBar, User } from '../types';
 import BoldToastMessage from './BoldToastMessage';
 
 type ContactProps = {
   loggedInUser: User;
   user: User;
   setUser: Updater<User>;
-  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>;
+  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>;
   isContact: boolean;
 };
 

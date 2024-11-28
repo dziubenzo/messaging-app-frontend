@@ -1,15 +1,13 @@
-import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { type Id, toast } from 'react-toastify';
 import API_URL from '../API.js';
-import { changeStatusIcon, statusIcons } from '../helpers.js';
+import { statusIcons } from '../helpers.js';
 import { socket } from '../socket.js';
 import { StyledRegisterPage } from '../styles/RegisterPage.styled';
-import type { AppOutletContext } from '../types.js';
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { setUser } = useOutletContext<AppOutletContext>();
-
+  
   // Register user
   async function register(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -75,7 +73,6 @@ function RegisterPage() {
       loggedInUser.user_id,
       statusIcons.unavailable,
     );
-    await changeStatusIcon(loggedInUser, setUser, statusIcons.available);
     toast.dismiss();
     return navigate('/home');
   }

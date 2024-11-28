@@ -1,5 +1,5 @@
 import { StyledBottomBar } from '../styles/HomePage.styled';
-import type { BottomBarType } from '../types';
+import type { BottomBar as BottomBarType } from '../types';
 
 type BottomBarProps = {
   bottomBarText: BottomBarType;

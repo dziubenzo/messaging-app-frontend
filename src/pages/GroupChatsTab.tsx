@@ -1,15 +1,15 @@
-import { useOutletContext } from 'react-router-dom';
-import { useFetch } from '../helpers';
 import { useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
-import GroupChat from '../components/GroupChat';
-import { useEventsGroupChatsTab } from '../socket';
-import Loading from '../components/Loading';
 import Error from '../components/Error';
-import type { AppOutletContext } from '../types';
+import GroupChat from '../components/GroupChat';
+import Loading from '../components/Loading';
+import { useFetch } from '../helpers';
+import { useEventsGroupChatsTab } from '../socket';
+import type { OutletContext } from '../types';
 
 function GroupChatsTab() {
-  const { user } = useOutletContext<AppOutletContext>();
+  const { user } = useOutletContext<OutletContext>();
   const { data, loading, error } = useFetch<GroupChat[]>(
     `/group-chats/?member=${user._id}`,
   );

@@ -1,11 +1,11 @@
 import { useOutletContext } from 'react-router-dom';
 import Contact from '../components/Contact';
 import NoContacts from '../components/NoContacts';
-import { HomePageOutletContext } from '../types';
+import { OutletContext } from '../types';
 
 function ContactsTab() {
   const { user, setUser, contacts, setBottomBarText } =
-    useOutletContext<HomePageOutletContext>();
+    useOutletContext<OutletContext>();
 
   if (!contacts.length) {
     return <NoContacts message="Add contacts to see them here" />;

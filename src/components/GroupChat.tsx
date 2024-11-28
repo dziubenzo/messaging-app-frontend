@@ -8,7 +8,7 @@ import API_URL from '../API';
 import { generateMembersList, statusIcons } from '../helpers';
 import { socket } from '../socket';
 import { StyledGroupChat } from '../styles/GroupChatsTab.styled';
-import { AppOutletContext, type GroupChat } from '../types';
+import type { OutletContext, GroupChat } from '../types';
 import BoldToastMessage from './BoldToastMessage';
 
 type GroupChatProps = {
@@ -18,7 +18,7 @@ type GroupChatProps = {
 
 function GroupChat({ groupChat, setGroupChats }: GroupChatProps) {
   const navigate = useNavigate();
-  const { user } = useOutletContext<AppOutletContext>();
+  const { user } = useOutletContext<OutletContext>();
   const { _id, name, created_by, members } = groupChat;
 
   // State for preventing multiple fetches from being executed

@@ -1,14 +1,12 @@
-import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
-import { changeStatusIcon, statusIcons } from '../helpers';
+import { statusIcons } from '../helpers';
 import { socket } from '../socket';
 import { StyledLoginPage } from '../styles/LoginPage.styled';
-import type { AppOutletContext } from '../types';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setUser } = useOutletContext<AppOutletContext>();
 
   // Log in user, change their status icon to available, set user state and navigate to the Home page on successful login
   // Make sure icon is changed and user state is set before navigating to the Home page
@@ -41,7 +39,6 @@ function LoginPage() {
       loggedInUser.user_id,
       statusIcons.unavailable,
     );
-    await changeStatusIcon(loggedInUser, setUser, statusIcons.available);
     toast.dismiss();
     return navigate('/home');
   }
@@ -67,7 +64,6 @@ function LoginPage() {
       loggedInUser.user_id,
       statusIcons.unavailable,
     );
-    await changeStatusIcon(loggedInUser, setUser, statusIcons.available);
     toast.dismiss();
     return navigate('/home');
   }

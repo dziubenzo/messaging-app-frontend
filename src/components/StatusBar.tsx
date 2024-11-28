@@ -1,15 +1,21 @@
-import API_URL from '../API';
-import { StyledStatusBar } from '../styles/HomePage.styled';
-import { NavLink, useLocation, useOutletContext } from 'react-router-dom';
-import { statusIcons } from '../helpers';
-import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { useState } from 'react';
+import { PiDotsThreeOutlineFill } from 'react-icons/pi';
+import { NavLink, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import type { Updater } from 'use-immer';
+import API_URL from '../API';
+import { statusIcons } from '../helpers';
 import { socket } from '../socket';
+import { StyledStatusBar } from '../styles/HomePage.styled';
+import type { StatusIcon, User } from '../types';
 
-function StatusBar() {
+type StatusBarProps = {
+  user: User;
+  setUser: Updater<User>;
+};
+
+function StatusBar({ user, setUser }: StatusBarProps) {
   const { pathname } = useLocation();
-  const { user, setUser } = useOutletContext();
 
   // State for preventing multiple fetches from being executed
   const [inProgress, setInProgress] = useState(false);
@@ -18,7 +24,7 @@ function StatusBar() {
   // Change logged in user's status icon
   // Show toast if operation successful or unsuccessful and update user state if the former is true
   // Return if the clicked icon is the same as the current logged in user's icon
-  async function changeStatusIcon(imageURL) {
+  async function changeStatusIcon(imageURL: StatusIcon) {
     if (inProgress || status_icon === imageURL) {
       return;
     }
@@ -41,7 +47,7 @@ function StatusBar() {
         type: 'error',
       });
     }
-    const updatedUser = await res.json();
+    const updatedUser: User = await res.json();
     setUser(updatedUser);
     setInProgress(false);
     socket.emit('change status icon', user_id, imageURL);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import { Outlet, useLoaderData, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import BottomBar from '../components/BottomBar';
 import ContactsBar from '../components/ContactsBar';
@@ -11,19 +11,21 @@ import {
   sortByStatusIcon,
   useChangeStatusIcon,
   useChangeToAvailable,
-  useCheckAuth,
-  useFetch,
+  useFetch
 } from '../helpers';
 import { useEventsHomePage } from '../socket';
 import { MiddleSection, StyledHomePage } from '../styles/HomePage.styled';
-import type { AppOutletContext, BottomBarType, User } from '../types';
+import type { BottomBar as BottomBarType, OutletContext, User } from '../types';
 
-function HomePage() {
-  const { user, setUser, previousStatusIcon, setPreviousStatusIcon } =
-    useOutletContext<AppOutletContext>();
-  useCheckAuth(setUser);
+export default function HomePage() {
+  const { previousStatusIcon, setPreviousStatusIcon } =
+    useOutletContext<OutletContext>();
+
+  const fetchedUser = useLoaderData();
+  const [user, setUser] = useImmer<User>(fetchedUser as User);
 
   const { data, loading, error } = useFetch<User[]>('/users');
+
   const { contacts } = user;
 
   // State for storing all users except for logged in user
@@ -44,12 +46,14 @@ function HomePage() {
       setAllUsersFiltered((draft) => {
         draft.sort(sortByStatusIcon);
       });
+    }
+    if (user) {
       setUser((draft) => {
         if (!draft) return;
         draft.contacts.sort(sortByStatusIcon);
       });
     }
-  }, [data]);
+  }, [data, user]);
 
   // Change logged in user's status icon to available on component load
   useChangeToAvailable(user, setUser);
@@ -62,7 +66,7 @@ function HomePage() {
 
   return (
     <StyledHomePage>
-      <TopBar />
+      <TopBar user={user} setUser={setUser} />
       <ContactsBar />
       <MiddleSection>
         {loading ? (
@@ -82,9 +86,7 @@ function HomePage() {
         )}
       </MiddleSection>
       <BottomBar bottomBarText={bottomBarText} />
-      <StatusBar />
+      <StatusBar user={user} setUser={setUser} />
     </StyledHomePage>
   );
 }
-
-export default HomePage;

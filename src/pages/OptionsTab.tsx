@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { StyledOptionsTab } from '../styles/OptionsTab.styled.js';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { clearTextStatus, updateUser } from '../fetchers';
-import { HomePageOutletContext } from '../types.js';
+import { OutletContext } from '../types.js';
 
 const STATUS_CHARACTER_LIMIT = 70;
 
 function OptionsTab() {
-  const { user, setUser, setBottomBarText } =
-    useOutletContext<HomePageOutletContext>();
+  const { user, setUser, setBottomBarText } = useOutletContext<OutletContext>();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState(user.username);

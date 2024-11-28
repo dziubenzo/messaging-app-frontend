@@ -1,13 +1,10 @@
-import { Outlet, useNavigation } from 'react-router-dom';
-import LoadingPage from '../pages/LoadingPage';
+import { ReactNode, useEffect, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { statusIcons } from '../helpers';
+import GlobalStyle from '../styles/GlobalStyle';
+import type { StatusIcon } from '../types';
 import Footer from './Footer';
 import Header from './Header';
-
-import { ReactNode, useState } from 'react';
-import { useImmer } from 'use-immer';
-import { statusIcons, useCheckRootAuth } from '../helpers';
-import GlobalStyle from '../styles/GlobalStyle';
-import type { StatusIcon, User } from '../types';
 import Theme from './Theme';
 
 type AppProps = {
@@ -15,29 +12,23 @@ type AppProps = {
 };
 
 function App({ children }: AppProps) {
-  const navigation = useNavigation();
-  const isLoading = navigation.state === 'loading';
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const [user, setUser] = useImmer<User | null>(null);
-  
-  useCheckRootAuth(setUser);
+  // State for storing user's previous status icon
   const [previousStatusIcon, setPreviousStatusIcon] = useState<StatusIcon>(
     statusIcons.unavailable,
   );
 
-  if (!user) return;
+  useEffect(() => {
+    if (pathname === '/') navigate('/home');
+  }, [pathname, navigate]);
 
   return (
     <Theme>
       <GlobalStyle />
       <Header />
-      {isLoading ? (
-        <LoadingPage />
-      ) : (
-        <Outlet
-          context={{ user, setUser, previousStatusIcon, setPreviousStatusIcon }}
-        />
-      )}
+      <Outlet context={{ previousStatusIcon, setPreviousStatusIcon }} />
       {children}
       <Footer />
     </Theme>

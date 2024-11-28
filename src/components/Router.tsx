@@ -1,17 +1,18 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import App from './App';
-import LoginPage from '../pages/LoginPage';
-import ErrorPage from '../pages/ErrorPage';
-import RegisterPage from '../pages/RegisterPage';
-import HomePage from '../pages/HomePage';
+import { userLoader } from '../loaders';
 import AllUsersTab from '../pages/AllUsersTab';
-import ContactsTab from '../pages/ContactsTab';
-import GroupChatsTab from '../pages/GroupChatsTab';
-import OptionsTab from '../pages/OptionsTab';
-import LoadingPage from '../pages/LoadingPage';
 import ChatPage from '../pages/ChatPage';
+import ContactsTab from '../pages/ContactsTab';
+import ErrorPage from '../pages/ErrorPage';
 import GroupChatPage from '../pages/GroupChatPage';
+import GroupChatsTab from '../pages/GroupChatsTab';
+import HomePage from '../pages/HomePage';
+import LoadingPage from '../pages/LoadingPage';
+import LoginPage from '../pages/LoginPage';
 import NewGroupChatTab from '../pages/NewGroupChatTab';
+import OptionsTab from '../pages/OptionsTab';
+import RegisterPage from '../pages/RegisterPage';
+import App from './App';
 
 function Router() {
   const router = createBrowserRouter([
@@ -39,6 +40,7 @@ function Router() {
         {
           path: 'home',
           element: <HomePage />,
+          loader: userLoader,
           children: [
             {
               path: '',
@@ -65,10 +67,12 @@ function Router() {
         {
           path: '/chats/:userId',
           element: <ChatPage />,
+          loader: userLoader,
         },
         {
           path: '/group-chats/:groupChatName',
           element: <GroupChatPage />,
+          loader: userLoader,
         },
       ],
     },

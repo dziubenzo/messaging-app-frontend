@@ -37,20 +37,17 @@ export type GroupChatMessage = {
 
 export type StatusIcon = (typeof statusIcons)[keyof typeof statusIcons];
 
-export type BottomBarType = {
+export type BottomBar = {
   id: User['user_id'];
   status: User['status_text'];
 };
 
-export type AppOutletContext = {
-  previousStatusIcon: StatusIcon;
-  setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>;
-};
-
-export type HomePageOutletContext = {
+export type OutletContext = {
   user: User;
   setUser: Updater<User>;
   allUsersFiltered: User[];
   contacts: User['contacts'];
-  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBarType>>;
+  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>;
+  previousStatusIcon: StatusIcon;
+  setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>;
 };
