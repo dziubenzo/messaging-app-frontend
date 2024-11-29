@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
-import {
-  useLocation,
-  useNavigate,
-  useOutletContext
-} from 'react-router-dom';
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
-import { statusIcons, useChangeStatusIcon, useFetch, useUser } from '../helpers';
+import {
+  statusIcons,
+  useChangeStatusIcon,
+  useFetch,
+  useUser,
+} from '../helpers';
 import { useEventsChatPage } from '../socket';
 import { StyledChatPage } from '../styles/ChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
@@ -42,10 +43,7 @@ function ChatPage() {
     if (data) {
       setMessages(data);
     }
-    if (fetchedUser) {
-      setUser(fetchedUser as User);
-    }
-  }, [data, fetchedUser]);
+  }, [data]);
 
   // Manage events emitted by the server
   useEventsChatPage(

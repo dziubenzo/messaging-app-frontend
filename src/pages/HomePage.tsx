@@ -3,15 +3,12 @@ import { Outlet, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import BottomBar from '../components/BottomBar';
 import ContactsBar from '../components/ContactsBar';
-import Error from '../components/Error';
-import Loading from '../components/Loading';
 import StatusBar from '../components/StatusBar';
 import TopBar from '../components/TopBar';
 import {
   sortByStatusIcon,
   useChangeStatusIcon,
   useChangeToAvailable,
-  useFetch,
   useUser,
 } from '../helpers';
 import { useEventsHomePage } from '../socket';
@@ -21,40 +18,36 @@ import type { BottomBar as BottomBarType, OutletContext, User } from '../types';
 export default function HomePage() {
   const { previousStatusIcon, setPreviousStatusIcon } =
     useOutletContext<OutletContext>();
-  
-  const { user: fetchedUser } = useUser();
-  const [user, setUser] = useImmer<User>(fetchedUser);
 
-  const { data, loading, error } = useFetch<User[]>('/users');
+  const { user: fetchedUser, allUsers } = useUser();
+  const [user, setUser] = useImmer<User>(fetchedUser);
+  const [allUsersFiltered, setAllUsersFiltered] = useImmer<User[]>(
+    allUsers as User[],
+  );
 
   const { contacts } = user;
 
-  // State for storing all users except for logged in user
-  const [allUsersFiltered, setAllUsersFiltered] = useImmer<User[]>([]);
   // State for managing Bottom Bar text
   const [bottomBarText, setBottomBarText] = useState<BottomBarType>({
     id: user.user_id,
     status: user.status_text,
   });
 
-  // Set allUsersFiltered state once all users data are fetched and sort the array
-  // Sort contacts
+  // Sort all users and logged in user's contacts
   useEffect(() => {
-    if (data) {
-      setAllUsersFiltered(
-        data.filter((dbUser) => dbUser.user_id !== user.user_id),
+    if (allUsers) {
+      setAllUsersFiltered((draft) =>
+        draft
+          .filter((dbUser) => dbUser.user_id !== user.user_id)
+          .sort(sortByStatusIcon),
       );
-      setAllUsersFiltered((draft) => {
-        draft.sort(sortByStatusIcon);
-      });
     }
     if (user) {
       setUser((draft) => {
-        if (!draft) return;
         draft.contacts.sort(sortByStatusIcon);
       });
     }
-  }, [data, user]);
+  }, [allUsers, user]);
 
   // Change logged in user's status icon to available on component load
   useChangeToAvailable(user, setUser);
@@ -70,21 +63,15 @@ export default function HomePage() {
       <TopBar user={user} setUser={setUser} />
       <ContactsBar />
       <MiddleSection>
-        {loading ? (
-          <Loading />
-        ) : error ? (
-          <Error />
-        ) : (
-          <Outlet
-            context={{
-              allUsersFiltered,
-              contacts,
-              user,
-              setUser,
-              setBottomBarText,
-            }}
-          />
-        )}
+        <Outlet
+          context={{
+            allUsersFiltered,
+            contacts,
+            user,
+            setUser,
+            setBottomBarText,
+          }}
+        />
       </MiddleSection>
       <BottomBar bottomBarText={bottomBarText} />
       <StatusBar user={user} setUser={setUser} />

@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { userLoader } from '../loaders';
+import { homePageLoader, userLoader } from '../loaders';
 import AllUsersTab from '../pages/AllUsersTab';
 import ChatPage from '../pages/ChatPage';
 import ContactsTab from '../pages/ContactsTab';
@@ -43,11 +43,11 @@ function Router() {
         {
           path: 'home',
           element: (
-            <SuspenseWrapper fallback={<SkeletonHomePage />}>
+            <SuspenseWrapper fallback={<SkeletonHomePage />} isHomePage>
               <HomePage />
             </SuspenseWrapper>
           ),
-          loader: userLoader,
+          loader: homePageLoader,
           children: [
             {
               path: '',
