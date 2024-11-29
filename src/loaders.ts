@@ -3,7 +3,7 @@ import { defer } from 'react-router-dom';
 import API_URL from './API';
 import type { GroupChat, Message, User } from './types';
 
-// Fetch data for the Home page (user and all users)
+// Fetch data for the Home page (user, all users and user's group chats)
 export async function homePageLoader() {
   const userRes = fetch(`${API_URL}/users/auth`, {
     method: 'POST',
@@ -17,9 +17,16 @@ export async function homePageLoader() {
     credentials: 'include',
   }).then((res) => res.json());
 
+  const groupChatsRes = userRes.then((user) =>
+    fetch(`${API_URL}/group-chats/?member=${user._id}`, {
+      credentials: 'include',
+    }).then((res) => res.json()),
+  );
+
   return defer({
     userPromise: userRes as Promise<User>,
     allUsersPromise: allUsersRes as Promise<User[]>,
+    groupChatsPromise: groupChatsRes as Promise<GroupChat[]>,
   });
 }
 

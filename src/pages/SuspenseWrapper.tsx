@@ -19,6 +19,7 @@ type SuspenseWrapperProps = {
 type UserContextType = {
   user: User;
   allUsers?: User[];
+  groupChats?: GroupChat[];
   recipient?: User;
   messages?: Message[];
   groupChat?: GroupChat;
@@ -27,6 +28,7 @@ type UserContextType = {
 type LoaderData = {
   userPromise: Promise<User>;
   allUsersPromise: Promise<User[]>;
+  groupChatsPromise: Promise<GroupChat[]>;
   recipientPromise: Promise<User>;
   messagesPromise: Promise<Message[]>;
   groupChatPromise: Promise<GroupChat>;
@@ -44,14 +46,15 @@ export default function SuspenseWrapper({
   const {
     userPromise,
     allUsersPromise,
+    groupChatsPromise,
     recipientPromise,
     messagesPromise,
     groupChatPromise,
   } = useLoaderData() as LoaderData;
 
   const homePagePromises = useMemo(
-    () => Promise.all([userPromise, allUsersPromise]),
-    [userPromise, allUsersPromise],
+    () => Promise.all([userPromise, allUsersPromise, groupChatsPromise]),
+    [userPromise, allUsersPromise, groupChatsPromise],
   );
 
   const chatPagePromises = useMemo(
@@ -71,9 +74,9 @@ export default function SuspenseWrapper({
           resolve={homePagePromises}
           errorElement={<Navigate to="/login" />}
         >
-          {([user, allUsers]: [User, User[]]) => {
+          {([user, allUsers, groupChats]: [User, User[], GroupChat[]]) => {
             return (
-              <UserContext.Provider value={{ user, allUsers }}>
+              <UserContext.Provider value={{ user, allUsers, groupChats }}>
                 {children}
               </UserContext.Provider>
             );
