@@ -1,15 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
-import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
-import {
-  statusIcons,
-  useChangeStatusIcon,
-  useFetch,
-  useUser,
-} from '../helpers';
+import { statusIcons, useChangeStatusIcon, useUser } from '../helpers';
 import { useEventsChatPage } from '../socket';
 import { StyledChatPage } from '../styles/ChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
@@ -17,33 +12,27 @@ import type { Message, OutletContext, User } from '../types';
 
 function ChatPage() {
   const navigate = useNavigate();
-  const { state } = useLocation();
   const { previousStatusIcon, setPreviousStatusIcon } =
     useOutletContext<OutletContext>();
 
-  const { user: fetchedUser } = useUser();
+  const {
+    user: fetchedUser,
+    recipient: fetchedRecipient,
+    messages: fetchedMessages,
+  } = useUser();
+
   const [user, setUser] = useImmer<User>(fetchedUser);
 
   // States for messages
-  const [messages, setMessages] = useImmer<Message[]>([]);
+  const [messages, setMessages] = useImmer<Message[]>(
+    fetchedMessages as Message[],
+  );
   // State for managing chat recipient
-  const [recipient, setRecipient] = useImmer<User>(state.recipient);
+  const [recipient, setRecipient] = useImmer<User>(fetchedRecipient as User);
 
   // States for managing is typing indicator
   const [someoneIsTyping, setSomeoneIsTyping] = useState(false);
   const [typingUsername, setTypingUsername] = useState<User['username']>('');
-
-  // Fetch messages
-  const { data, loading, error } = useFetch<Message[]>(
-    `/messages/?from=${user._id}&to=${recipient._id}`,
-  );
-
-  // Set messages state when data fetched
-  useEffect(() => {
-    if (data) {
-      setMessages(data);
-    }
-  }, [data]);
 
   // Manage events emitted by the server
   useEventsChatPage(
@@ -72,8 +61,6 @@ function ChatPage() {
         />
       </StyledTopBar>
       <Messages
-        loading={loading}
-        error={error}
         messages={messages}
         loggedInUser={user}
         someoneIsTyping={someoneIsTyping}

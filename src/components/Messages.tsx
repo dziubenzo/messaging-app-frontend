@@ -2,15 +2,11 @@ import { useRef } from 'react';
 import { useScrollToBottom } from '../helpers';
 import { StyledMessages } from '../styles/ChatPage.styled';
 import type { GroupChatMessage, Message as MessageType, User } from '../types';
-import Error from './Error';
 import IsTyping from './IsTyping';
-import Loading from './Loading';
 import Message from './Message';
 import NoMessages from './NoMessages';
 
 type MessagesProps = {
-  loading: boolean;
-  error: string;
   messages: MessageType[] | GroupChatMessage[];
   loggedInUser: User;
   someoneIsTyping: boolean;
@@ -18,8 +14,6 @@ type MessagesProps = {
 };
 
 function Messages({
-  loading,
-  error,
   messages,
   loggedInUser,
   someoneIsTyping,
@@ -29,22 +23,6 @@ function Messages({
 
   // Scroll to bottom when messages change or someone is typing
   useScrollToBottom(messagesRef, messages, someoneIsTyping);
-
-  if (loading) {
-    return (
-      <StyledMessages ref={messagesRef}>
-        <Loading />
-      </StyledMessages>
-    );
-  }
-
-  if (error) {
-    return (
-      <StyledMessages ref={messagesRef}>
-        <Error />
-      </StyledMessages>
-    );
-  }
 
   if (!messages.length) {
     return (

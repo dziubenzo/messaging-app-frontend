@@ -144,9 +144,7 @@ function Contact({
     <StyledContact
       onMouseEnter={handleUserMouseEnter}
       onMouseLeave={handleUserMouseLeave}
-      onClick={() =>
-        navigate(`/chats/${user.user_id}`, { state: { recipient: user } })
-      }
+      onClick={() => navigate(`/chats/${user.user_id}`)}
       title={`Click to chat with ${username}`}
     >
       <img
