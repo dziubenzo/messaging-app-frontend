@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { StyledOptionsTab } from '../styles/OptionsTab.styled.js';
-import { useOutletContext, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { clearTextStatus, updateUser } from '../fetchers';
+import { getPreviousPathname } from '../helpers.js';
+import { StyledOptionsTab } from '../styles/OptionsTab.styled.js';
 import { OutletContext } from '../types.js';
 
 const STATUS_CHARACTER_LIMIT = 70;
@@ -9,6 +10,8 @@ const STATUS_CHARACTER_LIMIT = 70;
 function OptionsTab() {
   const { user, setUser, setBottomBarText } = useOutletContext<OutletContext>();
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const previousPathname = getPreviousPathname(state);
 
   const [username, setUsername] = useState(user.username);
   const [status, setStatus] = useState(user.status_text);
@@ -87,7 +90,7 @@ function OptionsTab() {
           Save
         </button>
         <button onClick={handleNoStatusButtonClick}>No Status</button>
-        <button onClick={() => navigate('/home')}>Close</button>
+        <button onClick={() => navigate(previousPathname)}>Close</button>
       </div>
     </StyledOptionsTab>
   );

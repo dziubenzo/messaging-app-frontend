@@ -1,10 +1,15 @@
 import { useState } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
-import { statusIcons, useChangeStatusIcon, useUser } from '../helpers';
+import {
+  getPreviousPathname,
+  statusIcons,
+  useChangeStatusIcon,
+  useUser,
+} from '../helpers';
 import { useEventsChatPage } from '../socket';
 import { StyledChatPage } from '../styles/ChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
@@ -12,6 +17,9 @@ import type { Message, OutletContext, User } from '../types';
 
 function ChatPage() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const previousPathname = getPreviousPathname(state);
+
   const { previousStatusIcon, setPreviousStatusIcon } =
     useOutletContext<OutletContext>();
 
@@ -55,7 +63,7 @@ function ChatPage() {
         </p>
         <LiaWindowCloseSolid
           title="Close Chat"
-          onClick={() => navigate('/home')}
+          onClick={() => navigate(previousPathname)}
         />
       </StyledTopBar>
       <Messages

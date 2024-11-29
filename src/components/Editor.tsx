@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Updater } from 'use-immer';
 import { sendMessage } from '../fetchers';
-import { useEmitTypingEvents } from '../helpers';
+import { getPreviousPathname, useEmitTypingEvents } from '../helpers';
 import {
   StyledEditor,
   StyledInputButtons,
@@ -25,7 +25,9 @@ function Editor({
   isGroupChat = false,
 }: EditorProps) {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const inputFieldRef = useRef<HTMLDivElement>(null);
+  const previousPathname = getPreviousPathname(state);
 
   // State for grabbing user chat message from input field
   const [text, setText] = useState('');
@@ -82,7 +84,7 @@ function Editor({
           onClick={() => {
             return isGroupChat
               ? navigate('/home/group-chats')
-              : navigate('/home');
+              : navigate(previousPathname);
           }}
         >
           Close

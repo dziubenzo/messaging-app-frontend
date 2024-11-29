@@ -265,3 +265,17 @@ export const useEmitTypingEvents = (
     }
   }, [text]);
 };
+
+// Determine the tab to go back to from a chat or the Options tab (either to the previous tab or the Home page if the previous tab cannot be established)
+export function getPreviousPathname(state: unknown) {
+  if (
+    state &&
+    typeof state === 'object' &&
+    'previousPathname' in state &&
+    typeof state.previousPathname === 'string'
+  ) {
+    return state.previousPathname;
+  } else {
+    return '/home';
+  }
+}

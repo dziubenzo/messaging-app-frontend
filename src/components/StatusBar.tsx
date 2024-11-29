@@ -12,9 +12,10 @@ import type { StatusIcon, User } from '../types';
 type StatusBarProps = {
   user: User;
   setUser: Updater<User>;
+  previousPathname: string;
 };
 
-function StatusBar({ user, setUser }: StatusBarProps) {
+function StatusBar({ user, setUser, previousPathname }: StatusBarProps) {
   const { pathname } = useLocation();
 
   // State for preventing multiple fetches from being executed
@@ -79,8 +80,9 @@ function StatusBar({ user, setUser }: StatusBarProps) {
         </div>
       </div>
       <NavLink
-        to={pathname !== '/home/options' ? '/home/options' : '/home'}
+        to={pathname === '/home/options' ? previousPathname : '/home/options'}
         title="Options"
+        state={{ previousPathname: pathname }}
       >
         <PiDotsThreeOutlineFill />
       </NavLink>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import { Outlet, useLocation, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import BottomBar from '../components/BottomBar';
 import ContactsBar from '../components/ContactsBar';
 import StatusBar from '../components/StatusBar';
 import TopBar from '../components/TopBar';
 import {
+  getPreviousPathname,
   sortByStatusIcon,
   useChangeStatusIcon,
   useChangeToAvailable,
@@ -18,6 +19,8 @@ import type { BottomBar as BottomBarType, OutletContext, User } from '../types';
 export default function HomePage() {
   const { previousStatusIcon, setPreviousStatusIcon } =
     useOutletContext<OutletContext>();
+  const { state } = useLocation();
+  const previousPathname = getPreviousPathname(state);
 
   const { user: fetchedUser, allUsers } = useUser();
   const [user, setUser] = useImmer<User>(fetchedUser);
@@ -72,7 +75,11 @@ export default function HomePage() {
         />
       </MiddleSection>
       <BottomBar bottomBarText={bottomBarText} />
-      <StatusBar user={user} setUser={setUser} />
+      <StatusBar
+        user={user}
+        setUser={setUser}
+        previousPathname={previousPathname}
+      />
     </StyledHomePage>
   );
 }

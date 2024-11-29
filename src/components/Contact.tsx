@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
 import API_URL from '../API';
@@ -25,6 +25,7 @@ function Contact({
   isContact,
 }: ContactProps) {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const { username, status_icon, status_text, _id } = user;
   const { user_id, contacts } = loggedInUser;
@@ -144,7 +145,11 @@ function Contact({
     <StyledContact
       onMouseEnter={handleUserMouseEnter}
       onMouseLeave={handleUserMouseLeave}
-      onClick={() => navigate(`/chats/${user.user_id}`)}
+      onClick={() =>
+        navigate(`/chats/${user.user_id}`, {
+          state: { previousPathname: pathname },
+        })
+      }
       title={`Click to chat with ${username}`}
     >
       <img
