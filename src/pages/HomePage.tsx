@@ -21,9 +21,7 @@ export default function HomePage() {
 
   const { user: fetchedUser, allUsers } = useUser();
   const [user, setUser] = useImmer<User>(fetchedUser);
-  const [allUsersFiltered, setAllUsersFiltered] = useImmer<User[]>(
-    allUsers as User[],
-  );
+  const [allUsersFiltered, setAllUsersFiltered] = useImmer<User[]>(allUsers!);
 
   const { contacts } = user;
 

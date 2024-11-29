@@ -6,6 +6,7 @@ import { socket } from './socket';
 import type {
   GroupChat,
   GroupChatMessage,
+  GroupChatUser,
   Message,
   StatusIcon,
   User,
@@ -162,7 +163,7 @@ export const useScrollToBottom = (
 
 // Generate a comma-separated list of group chat members exclusive of logged in user
 export const generateMembersList = (
-  members: User[],
+  members: GroupChatUser[],
   loggedInUserUsername: User['username'],
 ) => {
   const usernamesArray = [];

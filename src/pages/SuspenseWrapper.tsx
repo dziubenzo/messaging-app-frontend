@@ -6,13 +6,14 @@ import {
   useMemo,
 } from 'react';
 import { Await, Navigate, useLoaderData } from 'react-router-dom';
-import { Message, User } from '../types';
+import { GroupChat, Message, User } from '../types';
 
 type SuspenseWrapperProps = {
   fallback: ReactElement;
   children: ReactNode;
   isHomePage?: boolean;
   isChatPage?: boolean;
+  isGroupChatPage?: boolean;
 };
 
 type UserContextType = {
@@ -20,6 +21,7 @@ type UserContextType = {
   allUsers?: User[];
   recipient?: User;
   messages?: Message[];
+  groupChat?: GroupChat;
 };
 
 type LoaderData = {
@@ -27,6 +29,7 @@ type LoaderData = {
   allUsersPromise: Promise<User[]>;
   recipientPromise: Promise<User>;
   messagesPromise: Promise<Message[]>;
+  groupChatPromise: Promise<GroupChat>;
 };
 
 export const UserContext = createContext<UserContextType | null>(null);
@@ -36,9 +39,15 @@ export default function SuspenseWrapper({
   children,
   isHomePage,
   isChatPage,
+  isGroupChatPage,
 }: SuspenseWrapperProps) {
-  const { userPromise, allUsersPromise, recipientPromise, messagesPromise } =
-    useLoaderData() as LoaderData;
+  const {
+    userPromise,
+    allUsersPromise,
+    recipientPromise,
+    messagesPromise,
+    groupChatPromise,
+  } = useLoaderData() as LoaderData;
 
   const homePagePromises = useMemo(
     () => Promise.all([userPromise, allUsersPromise]),
@@ -48,6 +57,11 @@ export default function SuspenseWrapper({
   const chatPagePromises = useMemo(
     () => Promise.all([userPromise, recipientPromise, messagesPromise]),
     [userPromise, recipientPromise, messagesPromise],
+  );
+
+  const groupChatPagePromises = useMemo(
+    () => Promise.all([userPromise, groupChatPromise]),
+    [userPromise, groupChatPromise],
   );
 
   if (isHomePage) {
@@ -88,17 +102,22 @@ export default function SuspenseWrapper({
     );
   }
 
-  return (
-    <Suspense fallback={fallback}>
-      <Await resolve={userPromise} errorElement={<Navigate to="/login" />}>
-        {(resolvedPromise: User) => {
-          return (
-            <UserContext.Provider value={{ user: resolvedPromise }}>
-              {children}
-            </UserContext.Provider>
-          );
-        }}
-      </Await>
-    </Suspense>
-  );
+  if (isGroupChatPage) {
+    return (
+      <Suspense fallback={fallback}>
+        <Await
+          resolve={groupChatPagePromises}
+          errorElement={<Navigate to="/login" />}
+        >
+          {([user, groupChat]: [User, GroupChat]) => {
+            return (
+              <UserContext.Provider value={{ user, groupChat }}>
+                {children}
+              </UserContext.Provider>
+            );
+          }}
+        </Await>
+      </Suspense>
+    );
+  }
 }

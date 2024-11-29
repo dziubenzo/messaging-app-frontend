@@ -23,17 +23,19 @@ export type Message = {
 export type GroupChat = {
   _id: string;
   name: string;
-  created_by: string;
-  members: User[];
+  created_by: User['_id'];
+  members: GroupChatUser[];
   messages: GroupChatMessage[];
   __v?: number;
 };
 
 export type GroupChatMessage = {
-  sender: User;
+  sender: GroupChatUser;
   text: string;
   date: Date;
 };
+
+export type GroupChatUser = Pick<User, '_id' | 'user_id' | 'username'>;
 
 export type StatusIcon = (typeof statusIcons)[keyof typeof statusIcons];
 

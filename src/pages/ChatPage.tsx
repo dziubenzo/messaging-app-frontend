@@ -24,11 +24,9 @@ function ChatPage() {
   const [user, setUser] = useImmer<User>(fetchedUser);
 
   // States for messages
-  const [messages, setMessages] = useImmer<Message[]>(
-    fetchedMessages as Message[],
-  );
+  const [messages, setMessages] = useImmer<Message[]>(fetchedMessages!);
   // State for managing chat recipient
-  const [recipient, setRecipient] = useImmer<User>(fetchedRecipient as User);
+  const [recipient, setRecipient] = useImmer<User>(fetchedRecipient!);
 
   // States for managing is typing indicator
   const [someoneIsTyping, setSomeoneIsTyping] = useState(false);

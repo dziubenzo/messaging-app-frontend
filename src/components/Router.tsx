@@ -1,5 +1,9 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { chatPageLoader, homePageLoader, userLoader } from '../loaders';
+import {
+  chatPageLoader,
+  groupChatPageLoader,
+  homePageLoader
+} from '../loaders';
 import AllUsersTab from '../pages/AllUsersTab';
 import ChatPage from '../pages/ChatPage';
 import ContactsTab from '../pages/ContactsTab';
@@ -83,11 +87,11 @@ function Router() {
         {
           path: '/group-chats/:groupChatName',
           element: (
-            <SuspenseWrapper fallback={<SkeletonChatPage />}>
+            <SuspenseWrapper fallback={<SkeletonChatPage />} isGroupChatPage>
               <GroupChatPage />
             </SuspenseWrapper>
           ),
-          loader: userLoader,
+          loader: groupChatPageLoader,
         },
       ],
     },

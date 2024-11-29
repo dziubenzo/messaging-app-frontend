@@ -53,11 +53,7 @@ function GroupChat({ groupChat, setGroupChats }: GroupChatProps) {
 
   return (
     <StyledGroupChat
-      onClick={() =>
-        navigate(`/group-chats/${slugify(name, { lower: true })}`, {
-          state: { groupChat },
-        })
-      }
+      onClick={() => navigate(`/group-chats/${slugify(name, { lower: true })}`)}
       title={`Click to chat in ${name}`}
     >
       <img src={statusIcons.availableMessage} alt={'Group Chat Icon'} />

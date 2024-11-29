@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
-import {
-  useLocation,
-  useNavigate,
-  useOutletContext
-} from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
-import { statusIcons, useChangeStatusIcon, useFetch, useUser } from '../helpers';
+import { statusIcons, useChangeStatusIcon, useUser } from '../helpers';
 import { socket, useEventsGroupChatPage } from '../socket';
 import { StyledGroupChatPage } from '../styles/GroupChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
@@ -21,35 +17,29 @@ import type {
 
 function GroupChatPage() {
   const navigate = useNavigate();
-  const { state } = useLocation();
   const { previousStatusIcon, setPreviousStatusIcon } =
     useOutletContext<OutletContext>();
 
-  const { user: fetchedUser } = useUser();
+  const { user: fetchedUser, groupChat: fetchedGroupChat } = useUser();
   const [user, setUser] = useImmer<User>(fetchedUser);
 
   // States for messages
-  const [messages, setMessages] = useImmer<GroupChatMessage[]>([]);
+  const [messages, setMessages] = useImmer<GroupChatMessage[]>(
+    fetchedGroupChat!.messages,
+  );
   // State for group chat
-  const [groupChat] = useImmer<GroupChat>(state.groupChat);
+  const [groupChat] = useImmer<GroupChat>(fetchedGroupChat!);
 
   // States for managing is typing indicator
   const [someoneIsTyping, setSomeoneIsTyping] = useState(false);
   const [typingUsername, setTypingUsername] = useState('');
 
-  // Fetch group chat messages
-  const { data, loading, error } = useFetch<GroupChatMessage[]>(
-    `/group-chats/${groupChat._id}/messages`,
-  );
-
-  // Set messages state once messages are fetched
   // Emit open group chat event
   useEffect(() => {
-    if (data) {
-      setMessages(data);
+    if (fetchedGroupChat) {
       socket.emit('open group chat', groupChat._id);
     }
-  }, [data]);
+  }, [fetchedGroupChat, groupChat._id]);
 
   // Manage events emitted by the server
   useEventsGroupChatPage(
@@ -75,8 +65,6 @@ function GroupChatPage() {
         />
       </StyledTopBar>
       <Messages
-        loading={loading}
-        error={error}
         messages={messages}
         loggedInUser={user}
         someoneIsTyping={someoneIsTyping}
