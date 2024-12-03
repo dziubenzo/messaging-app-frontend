@@ -83,13 +83,13 @@ export function useCloseChatWithEsc(navigateToURL: string) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    function closeChat() {
-      navigate(navigateToURL);
+    function closeChat(event: KeyboardEvent) {
+      if (event.key === 'Escape') navigate(navigateToURL);
     }
-    document.addEventListener('keydown', closeChat);
+    document.addEventListener('keydown', (event) => closeChat(event));
 
     return () => {
-      document.removeEventListener('keydown', closeChat);
+      document.removeEventListener('keydown', (event) => closeChat(event));
     };
   }, [navigateToURL]);
 }
