@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
-import { statusIcons } from '../helpers';
+import { logInAsGuest, statusIcons } from '../helpers';
 import { socket } from '../socket';
 import { StyledLoginPage } from '../styles/LoginPage.styled';
 
@@ -43,31 +43,6 @@ function LoginPage() {
     return navigate('/home');
   }
 
-  // Log in as guest
-  async function logInAsGuest() {
-    const user = {
-      username: 'Guest',
-      password: 'Guest',
-    };
-    toast.info('Logging in as Guest...');
-    const res = await fetch(`${API_URL}/users/login`, {
-      method: 'POST',
-      body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-    const loggedInUser = await res.json();
-    socket.emit(
-      'change status icon',
-      loggedInUser.user_id,
-      statusIcons.unavailable,
-    );
-    toast.dismiss();
-    return navigate('/home');
-  }
-
   return (
     <StyledLoginPage>
       <div className="top-bar">
@@ -95,7 +70,10 @@ function LoginPage() {
       <Link to="/register">
         <button>Register Page</button>
       </Link>
-      <button className="guest-account-btn" onClick={logInAsGuest}>
+      <button
+        className="guest-account-btn"
+        onClick={() => logInAsGuest(navigate)}
+      >
         Log In As Guest
       </button>
     </StyledLoginPage>

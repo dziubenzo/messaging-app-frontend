@@ -1,4 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
+import { NavigateFunction } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
 import API_URL from './API';
 import { UserContext } from './pages/SuspenseWrapper';
@@ -46,6 +48,31 @@ export const statusIcons = {
   availableMessage:
     'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/m9ucqz7totsstdus4vtb.png',
 } as const;
+
+// Log in as guest
+export async function logInAsGuest(navigate: NavigateFunction) {
+  const user = {
+    username: 'Guest',
+    password: 'Guest',
+  };
+  toast.info('Logging in as Guest...');
+  const res = await fetch(`${API_URL}/users/login`, {
+    method: 'POST',
+    body: JSON.stringify(user),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
+  const loggedInUser = await res.json();
+  socket.emit(
+    'change status icon',
+    loggedInUser.user_id,
+    statusIcons.unavailable,
+  );
+  toast.dismiss();
+  return navigate('/home');
+}
 
 // Change status icon when logged in user goes offline or online or changes tabs
 export const changeStatusIcon = async (

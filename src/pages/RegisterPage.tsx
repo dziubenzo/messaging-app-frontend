@@ -1,13 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { type Id, toast } from 'react-toastify';
 import API_URL from '../API.js';
-import { statusIcons } from '../helpers.js';
+import { logInAsGuest, statusIcons } from '../helpers.js';
 import { socket } from '../socket.js';
 import { StyledRegisterPage } from '../styles/RegisterPage.styled';
 
 function RegisterPage() {
   const navigate = useNavigate();
-  
+
   // Register user
   async function register(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -113,6 +113,12 @@ function RegisterPage() {
       <Link to="/login">
         <button>Log In Page</button>
       </Link>
+      <button
+        className="guest-account-btn"
+        onClick={() => logInAsGuest(navigate)}
+      >
+        Log In As Guest
+      </button>
     </StyledRegisterPage>
   );
 }

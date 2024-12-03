@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
-    font-family: Microsoft Sans Serif;
+    font-family: 'Microsoft Sans Serif';
     src: url("/MSS.ttf");
   }
 
