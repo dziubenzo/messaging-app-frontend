@@ -5,8 +5,9 @@ import {
   Suspense,
   useMemo,
 } from 'react';
-import { Await, Navigate, useLoaderData } from 'react-router-dom';
+import { Await, useLoaderData } from 'react-router-dom';
 import { GroupChat, Message, User } from '../types';
+import ErrorPage from './ErrorPage';
 
 type SuspenseWrapperProps = {
   fallback: ReactElement;
@@ -70,10 +71,7 @@ export default function SuspenseWrapper({
   if (isHomePage) {
     return (
       <Suspense fallback={fallback}>
-        <Await
-          resolve={homePagePromises}
-          errorElement={<Navigate to="/login" />}
-        >
+        <Await resolve={homePagePromises} errorElement={<ErrorPage />}>
           {([user, allUsers, groupChats]: [User, User[], GroupChat[]]) => {
             return (
               <UserContext.Provider value={{ user, allUsers, groupChats }}>
@@ -89,10 +87,7 @@ export default function SuspenseWrapper({
   if (isChatPage) {
     return (
       <Suspense fallback={fallback}>
-        <Await
-          resolve={chatPagePromises}
-          errorElement={<Navigate to="/login" />}
-        >
+        <Await resolve={chatPagePromises} errorElement={<ErrorPage />}>
           {([user, recipient, messages]: [User, User, Message[]]) => {
             return (
               <UserContext.Provider value={{ user, recipient, messages }}>
@@ -108,10 +103,7 @@ export default function SuspenseWrapper({
   if (isGroupChatPage) {
     return (
       <Suspense fallback={fallback}>
-        <Await
-          resolve={groupChatPagePromises}
-          errorElement={<Navigate to="/login" />}
-        >
+        <Await resolve={groupChatPagePromises} errorElement={<ErrorPage />}>
           {([user, groupChat]: [User, GroupChat]) => {
             return (
               <UserContext.Provider value={{ user, groupChat }}>

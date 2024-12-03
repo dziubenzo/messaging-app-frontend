@@ -2,6 +2,7 @@ import type { Params } from 'react-router-dom';
 import { defer } from 'react-router-dom';
 import API_URL from './API';
 import type { GroupChat, Message, User } from './types';
+import { ApiError } from './helpers';
 
 // Fetch data for the Home page (user, all users and user's group chats)
 export async function homePageLoader() {
@@ -11,7 +12,10 @@ export async function homePageLoader() {
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  }).then((res) => res.json());
+  }).then((res) => {
+    if (!res.ok) throw new ApiError('You are not logged in', 401);
+    return res.json();
+  });
 
   const allUsersRes = fetch(`${API_URL}/users`, {
     credentials: 'include',
@@ -34,13 +38,27 @@ export async function homePageLoader() {
 export async function chatPageLoader({ params }: { params: Params<'userId'> }) {
   const recipientId = params.userId;
 
+  if (!recipientId) return;
+
+  // Make sure the path parameter is an integer in the allowed range
+  if (
+    Number.isNaN(parseInt(recipientId)) ||
+    parseInt(recipientId) < 1000000 ||
+    parseInt(recipientId) > 9999999
+  ) {
+    throw new ApiError('Invalid user id', 500);
+  }
+
   const userRes = fetch(`${API_URL}/users/auth`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  }).then((res) => res.json());
+  }).then((res) => {
+    if (!res.ok) throw new ApiError('You are not logged in', 401);
+    return res.json();
+  });
 
   const recipientRes = fetch(`${API_URL}/users/${recipientId}`, {
     credentials: 'include',
@@ -74,7 +92,10 @@ export async function groupChatPageLoader({
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  }).then((res) => res.json());
+  }).then((res) => {
+    if (!res.ok) throw new ApiError('You are not logged in', 401);
+    return res.json();
+  });
 
   const groupChatRes = fetch(`${API_URL}/group-chats/${groupChatName}`, {
     credentials: 'include',

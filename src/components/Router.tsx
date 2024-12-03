@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import {
   chatPageLoader,
   groupChatPageLoader,
-  homePageLoader
+  homePageLoader,
 } from '../loaders';
 import AllUsersTab from '../pages/AllUsersTab';
 import ChatPage from '../pages/ChatPage';
