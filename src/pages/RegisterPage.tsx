@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { type Id, toast } from 'react-toastify';
 import API_URL from '../API.js';
@@ -7,6 +8,8 @@ import { StyledRegisterPage } from '../styles/RegisterPage.styled';
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const [buttonText, setButtonText] = useState('Register');
+  const [loggingInAsGuest, setLoggingInAsGuest] = useState(false);
 
   // Register user
   async function register(event: React.FormEvent<HTMLFormElement>) {
@@ -20,6 +23,7 @@ function RegisterPage() {
 
     if (!username || !password || !confirmPassword) return;
 
+    setButtonText('Registering...');
     const newUser = {
       username: username.trim(),
       password: password.trim(),
@@ -35,14 +39,17 @@ function RegisterPage() {
       });
       const result = await res.json();
       if (!res.ok) {
+        setButtonText('Register');
         throw result;
       }
       socket.emit('user registers', newUser.username);
       return logInAfterRegister(newUser.username, newUser.password, toastRef);
     } catch (error) {
       if (error instanceof Error) {
+        setButtonText('Register');
         toast.update(toastRef, { render: error.message, type: 'error' });
       } else if (typeof error === 'string') {
+        setButtonText('Register');
         toast.update(toastRef, { render: error, type: 'error' });
       }
     }
@@ -58,6 +65,7 @@ function RegisterPage() {
       username,
       password,
     };
+    setButtonText('Logging In...');
     toast.update(toastRef, { render: 'Logging in...' });
     const res = await fetch(`${API_URL}/users/login`, {
       method: 'POST',
@@ -108,16 +116,16 @@ function RegisterPage() {
           maxLength={16}
           required
         />
-        <button type="submit">Register</button>
+        <button type="submit">{buttonText}</button>
       </form>
       <Link to="/login">
         <button>Log In Page</button>
       </Link>
       <button
         className="guest-account-btn"
-        onClick={() => logInAsGuest(navigate)}
+        onClick={() => logInAsGuest(setLoggingInAsGuest, navigate)}
       >
-        Log In As Guest
+        {loggingInAsGuest ? 'Logging In As Guest...' : 'Log In As Guest'}
       </button>
     </StyledRegisterPage>
   );

@@ -50,11 +50,15 @@ export const statusIcons = {
 } as const;
 
 // Log in as guest
-export async function logInAsGuest(navigate: NavigateFunction) {
+export async function logInAsGuest(
+  setLoggingInAsGuest: React.Dispatch<React.SetStateAction<boolean>>,
+  navigate: NavigateFunction,
+) {
   const user = {
     username: 'Guest',
     password: 'Guest',
   };
+  setLoggingInAsGuest(true);
   toast.info('Logging in as Guest...');
   const res = await fetch(`${API_URL}/users/login`, {
     method: 'POST',

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
@@ -7,9 +8,11 @@ import { StyledLoginPage } from '../styles/LoginPage.styled';
 
 function LoginPage() {
   const navigate = useNavigate();
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [loggingInAsGuest, setLoggingInAsGuest] = useState(false);
 
-  // Log in user, change their status icon to available, set user state and navigate to the Home page on successful login
-  // Make sure icon is changed and user state is set before navigating to the Home page
+  // Log in user, change their status icon to available and navigate to the Home page on successful login
+  // Make sure icon is changed before navigating to the Home page
   // Otherwise show error message in toast
   async function logIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -18,6 +21,7 @@ function LoginPage() {
       username: formData.get('username'),
       password: formData.get('password'),
     };
+    setLoggingIn(true);
     const toastRef = toast.info('Logging in...');
     const res = await fetch(`${API_URL}/users/login`, {
       method: 'POST',
@@ -28,6 +32,7 @@ function LoginPage() {
       credentials: 'include',
     });
     if (!res.ok) {
+      setLoggingIn(false);
       return toast.update(toastRef, {
         render: 'Incorrect username or password',
         type: 'error',
@@ -65,16 +70,16 @@ function LoginPage() {
           maxLength={16}
           required
         />
-        <button type="submit">Log In</button>
+        <button type="submit">{loggingIn ? 'Logging In...' : 'Log In'}</button>
       </form>
       <Link to="/register">
         <button>Register Page</button>
       </Link>
       <button
         className="guest-account-btn"
-        onClick={() => logInAsGuest(navigate)}
+        onClick={() => logInAsGuest(setLoggingInAsGuest, navigate)}
       >
-        Log In As Guest
+        {loggingInAsGuest ? 'Logging In As Guest...' : 'Log In As Guest'}
       </button>
     </StyledLoginPage>
   );
