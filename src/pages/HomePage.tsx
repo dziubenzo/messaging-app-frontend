@@ -14,7 +14,12 @@ import {
 } from '../helpers';
 import { useEventsHomePage } from '../socket';
 import { MiddleSection, StyledHomePage } from '../styles/HomePage.styled';
-import type { BottomBar as BottomBarType, OutletContext, User } from '../types';
+import type {
+  BottomBar as BottomBarType,
+  GroupChat,
+  OutletContext,
+  User,
+} from '../types';
 
 export default function HomePage() {
   const { previousStatusIcon, setPreviousStatusIcon } =
@@ -22,9 +27,14 @@ export default function HomePage() {
   const { state } = useLocation();
   const previousPathname = getPreviousPathname(state);
 
-  const { user: fetchedUser, allUsers } = useUser();
+  const {
+    user: fetchedUser,
+    allUsers,
+    groupChats: fetchedGroupChats,
+  } = useUser();
   const [user, setUser] = useImmer<User>(fetchedUser);
   const [allUsersFiltered, setAllUsersFiltered] = useImmer<User[]>(allUsers!);
+  const [groupChats, setGroupChats] = useImmer<GroupChat[]>(fetchedGroupChats!);
 
   const { contacts } = user;
 
@@ -69,8 +79,10 @@ export default function HomePage() {
             allUsersFiltered,
             contacts,
             user,
+            groupChats,
             setUser,
             setBottomBarText,
+            setGroupChats,
           }}
         />
       </MiddleSection>

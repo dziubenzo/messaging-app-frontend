@@ -3,22 +3,20 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import slugify from 'slugify';
-import type { Updater } from 'use-immer';
 import API_URL from '../API';
 import { generateMembersList, statusIcons } from '../helpers';
 import { socket } from '../socket';
 import { StyledGroupChat } from '../styles/GroupChatsTab.styled';
-import type { OutletContext, GroupChat } from '../types';
+import type { GroupChat, OutletContext } from '../types';
 import BoldToastMessage from './BoldToastMessage';
 
 type GroupChatProps = {
   groupChat: GroupChat;
-  setGroupChats: Updater<GroupChat[]>;
 };
 
-function GroupChat({ groupChat, setGroupChats }: GroupChatProps) {
+function GroupChat({ groupChat }: GroupChatProps) {
   const navigate = useNavigate();
-  const { user } = useOutletContext<OutletContext>();
+  const { user, setGroupChats } = useOutletContext<OutletContext>();
   const { _id, name, created_by, members } = groupChat;
 
   // State for preventing multiple fetches from being executed

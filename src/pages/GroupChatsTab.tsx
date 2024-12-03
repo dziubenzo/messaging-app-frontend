@@ -1,15 +1,10 @@
 import { useOutletContext } from 'react-router-dom';
-import { useImmer } from 'use-immer';
 import GroupChat from '../components/GroupChat';
-import { useUser } from '../helpers';
 import { useEventsGroupChatsTab } from '../socket';
 import type { OutletContext } from '../types';
 
 function GroupChatsTab() {
-  const { user } = useOutletContext<OutletContext>();
-
-  const { groupChats: fetchedGroupChats } = useUser();
-  const [groupChats, setGroupChats] = useImmer<GroupChat[]>(fetchedGroupChats!);
+  const { user, groupChats, setGroupChats } = useOutletContext<OutletContext>();
 
   // Manage events emitted by the server
   useEventsGroupChatsTab(user, setGroupChats);
@@ -21,7 +16,6 @@ function GroupChatsTab() {
           <GroupChat
             key={groupChat._id}
             groupChat={groupChat}
-            setGroupChats={setGroupChats}
           />
         );
       })}

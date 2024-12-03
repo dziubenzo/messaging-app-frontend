@@ -1,10 +1,9 @@
-import { io } from 'socket.io-client';
-import API_URL from './API';
-
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { io } from 'socket.io-client';
 import type { Updater } from 'use-immer';
+import API_URL from './API';
 import BoldToastMessage from './components/BoldToastMessage';
 import { sortByStatusIcon, statusIcons } from './helpers';
 import type {
@@ -12,7 +11,7 @@ import type {
   GroupChatMessage,
   Message,
   StatusIcon,
-  User,
+  User
 } from './types';
 
 // Establish Socket.IO connection
@@ -216,9 +215,8 @@ export const useEventsGroupChatsTab = (
       });
     };
 
-    // Figure out members type
-    const addGroupChat = (members: string[], newGroupChat: GroupChat) => {
-      if (members.includes(user._id)) {
+    const addGroupChat = (newGroupChatMembers: User['_id'][], newGroupChat: GroupChat) => {
+      if (newGroupChatMembers.includes(user._id)) {
         setGroupChats((draft) => {
           draft.push(newGroupChat);
         });

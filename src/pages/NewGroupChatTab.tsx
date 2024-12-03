@@ -1,20 +1,20 @@
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import API_URL from '../API';
+import BoldToastMessage from '../components/BoldToastMessage';
+import NoContacts from '../components/NoContacts';
+import { socket } from '../socket';
 import {
+  StyledContactCheckbox,
+  StyledContacts,
   StyledForm,
   StyledNameInputField,
-  StyledContacts,
-  StyledContactCheckbox,
 } from '../styles/NewGroupChatTab.styled';
-import NoContacts from '../components/NoContacts';
-import BoldToastMessage from '../components/BoldToastMessage';
-import { toast } from 'react-toastify';
-import { socket } from '../socket';
-import { OutletContext } from '../types';
+import type { GroupChat, OutletContext } from '../types';
 
 function NewGroupChatTab() {
   const navigate = useNavigate();
-  const { user, contacts } = useOutletContext<OutletContext>();
+  const { user, contacts, setGroupChats } = useOutletContext<OutletContext>();
 
   // Create new group chat if there are at least two members selected
   async function createGroupChat(event: React.FormEvent<HTMLFormElement>) {
@@ -48,7 +48,10 @@ function NewGroupChatTab() {
       });
       return;
     }
-    const newGroupChat = await res.json();
+    const newGroupChat: GroupChat = await res.json();
+    setGroupChats((draft) => {
+      draft.push(newGroupChat);
+    });
     socket.emit('create group chat', members, newGroupChat);
     toast.update(toastRef, {
       render: (

@@ -52,4 +52,6 @@ export type OutletContext = {
   setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>;
   previousStatusIcon: StatusIcon;
   setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>;
+  groupChats: GroupChat[];
+  setGroupChats: Updater<GroupChat[]>;
 };
