@@ -1,8 +1,10 @@
+import { useMemo } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
 import BoldToastMessage from '../components/BoldToastMessage';
 import NoContacts from '../components/NoContacts';
+import { sortByStatusIcon } from '../helpers';
 import { socket } from '../socket';
 import {
   StyledContactCheckbox,
@@ -14,7 +16,11 @@ import type { GroupChat, OutletContext } from '../types';
 
 function NewGroupChatTab() {
   const navigate = useNavigate();
-  const { user, contacts, setGroupChats } = useOutletContext<OutletContext>();
+  const { user, setGroupChats } = useOutletContext<OutletContext>();
+
+  const sortedContacts = useMemo(() => {
+    return user.contacts.toSorted(sortByStatusIcon);
+  }, [user]);
 
   // Create new group chat if there are at least two members selected
   async function createGroupChat(event: React.FormEvent<HTMLFormElement>) {
@@ -65,7 +71,7 @@ function NewGroupChatTab() {
     return navigate('/home/group-chats');
   }
 
-  if (!contacts.length) {
+  if (!user.contacts.length) {
     return <NoContacts message="Add some contacts first" />;
   }
 
@@ -84,8 +90,8 @@ function NewGroupChatTab() {
       </StyledNameInputField>
       <p>Contacts (at least 2):</p>
       <StyledContacts>
-        {!contacts.length && <p>Add some contacts first!</p>}
-        {contacts.map((contact) => {
+        {!sortedContacts.length && <p>Add some contacts first!</p>}
+        {sortedContacts.map((contact) => {
           return (
             <StyledContactCheckbox key={contact.user_id}>
               <input

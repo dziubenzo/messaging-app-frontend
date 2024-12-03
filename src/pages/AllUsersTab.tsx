@@ -1,9 +1,9 @@
-import Contact from '../components/Contact';
 import { useOutletContext } from 'react-router-dom';
-import { OutletContext } from '../types';
+import Contact from '../components/Contact';
+import type { OutletContext } from '../types';
 
 function AllUsersTab() {
-  const { user, setUser, allUsersFiltered, setBottomBarText } =
+  const { allUsersFiltered } =
     useOutletContext<OutletContext>();
 
   return (
@@ -12,10 +12,7 @@ function AllUsersTab() {
         return (
           <Contact
             key={filteredUser.user_id}
-            loggedInUser={user}
-            user={filteredUser}
-            setUser={setUser}
-            setBottomBarText={setBottomBarText}
+            contact={filteredUser}
             isContact={false}
           />
         );

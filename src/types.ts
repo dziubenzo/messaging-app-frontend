@@ -48,7 +48,6 @@ export type OutletContext = {
   user: User;
   setUser: Updater<User>;
   allUsersFiltered: User[];
-  contacts: User['contacts'];
   setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>;
   previousStatusIcon: StatusIcon;
   setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>;

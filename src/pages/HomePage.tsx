@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Outlet, useLocation, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import BottomBar from '../components/BottomBar';
@@ -33,32 +33,19 @@ export default function HomePage() {
     groupChats: fetchedGroupChats,
   } = useUser();
   const [user, setUser] = useImmer<User>(fetchedUser);
-  const [allUsersFiltered, setAllUsersFiltered] = useImmer<User[]>(allUsers!);
+  // Sort all users and filter out the logged in user
+  const [allUsersFiltered, setAllUsersFiltered] = useImmer<User[]>(() => {
+    return allUsers!
+      .filter((dbUser) => dbUser.user_id !== user.user_id)
+      .sort(sortByStatusIcon);
+  });
   const [groupChats, setGroupChats] = useImmer<GroupChat[]>(fetchedGroupChats!);
-
-  const { contacts } = user;
 
   // State for managing Bottom Bar text
   const [bottomBarText, setBottomBarText] = useState<BottomBarType>({
     id: user.user_id,
     status: user.status_text,
   });
-
-  // Sort all users and logged in user's contacts
-  useEffect(() => {
-    if (allUsers) {
-      setAllUsersFiltered((draft) =>
-        draft
-          .filter((dbUser) => dbUser.user_id !== user.user_id)
-          .sort(sortByStatusIcon),
-      );
-    }
-    if (user) {
-      setUser((draft) => {
-        draft.contacts.sort(sortByStatusIcon);
-      });
-    }
-  }, [allUsers, user]);
 
   // Change logged in user's status icon to available on component load
   useChangeToAvailable(user, setUser);
@@ -76,9 +63,8 @@ export default function HomePage() {
       <MiddleSection>
         <Outlet
           context={{
-            allUsersFiltered,
-            contacts,
             user,
+            allUsersFiltered,
             groupChats,
             setUser,
             setBottomBarText,

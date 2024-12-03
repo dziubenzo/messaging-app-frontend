@@ -1,34 +1,28 @@
 import { useState } from 'react';
 import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import type { Updater } from 'use-immer';
 import API_URL from '../API';
 import { sortByStatusIcon, statusIcons } from '../helpers';
 import { StyledContact } from '../styles/HomePage.styled';
-import type { BottomBar, User } from '../types';
+import type { OutletContext, User } from '../types';
 import BoldToastMessage from './BoldToastMessage';
 
 type ContactProps = {
-  loggedInUser: User;
-  user: User;
-  setUser: Updater<User>;
-  setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>;
+  contact: User;
   isContact: boolean;
 };
 
 function Contact({
-  loggedInUser,
-  user,
-  setUser,
-  setBottomBarText,
+  contact,
   isContact,
 }: ContactProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { user, setUser, setBottomBarText } = useOutletContext<OutletContext>();
 
-  const { username, status_icon, status_text, _id } = user;
-  const { user_id, contacts } = loggedInUser;
+  const { username, status_icon, status_text, _id } = contact;
+  const { user_id, contacts } = user;
 
   // State for preventing multiple fetches from being executed
   const [inProgress, setInProgress] = useState(false);
@@ -130,14 +124,14 @@ function Contact({
 
   // Set bottom bar fields to match hovered over user
   function handleUserMouseEnter() {
-    setBottomBarText({ id: user.user_id, status: user.status_text });
+    setBottomBarText({ id: contact.user_id, status: contact.status_text });
   }
 
   // Reset bottom bar fields to logged in user if no user is hovered over
   function handleUserMouseLeave() {
     setBottomBarText({
-      id: loggedInUser.user_id,
-      status: loggedInUser.status_text,
+      id: user.user_id,
+      status: user.status_text,
     });
   }
 
@@ -146,7 +140,7 @@ function Contact({
       onMouseEnter={handleUserMouseEnter}
       onMouseLeave={handleUserMouseLeave}
       onClick={() =>
-        navigate(`/chats/${user.user_id}`, {
+        navigate(`/chats/${contact.user_id}`, {
           state: { previousPathname: pathname },
         })
       }
