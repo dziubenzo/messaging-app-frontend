@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { NavigateFunction } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
 import API_URL from './API';
@@ -76,6 +76,22 @@ export async function logInAsGuest(
   );
   toast.dismiss();
   return navigate('/home');
+}
+
+// Close chat on Esc key press
+export function useCloseChatWithEsc(navigateToURL: string) {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    function closeChat() {
+      navigate(navigateToURL);
+    }
+    document.addEventListener('keydown', closeChat);
+
+    return () => {
+      document.removeEventListener('keydown', closeChat);
+    };
+  }, [navigateToURL]);
 }
 
 // Change status icon when logged in user goes offline or online or changes tabs

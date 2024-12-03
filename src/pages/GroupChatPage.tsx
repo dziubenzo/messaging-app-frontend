@@ -4,7 +4,7 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
-import { statusIcons, useChangeStatusIcon, useUser } from '../helpers';
+import { statusIcons, useChangeStatusIcon, useCloseChatWithEsc, useUser } from '../helpers';
 import { socket, useEventsGroupChatPage } from '../socket';
 import { StyledGroupChatPage } from '../styles/GroupChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
@@ -51,6 +51,9 @@ function GroupChatPage() {
 
   // Change logged in user's status icon during the use of the app
   useChangeStatusIcon(user, setUser, previousStatusIcon, setPreviousStatusIcon);
+
+  // Close chat on Esc key press
+  useCloseChatWithEsc('/home/group-chats');
 
   return (
     <StyledGroupChatPage>
