@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { clearTextStatus, updateUser } from '../fetchers';
 import { getPreviousPathname } from '../helpers.js';
@@ -18,12 +18,17 @@ function OptionsTab() {
   const [charactersLeft, setCharactersLeft] = useState(
     STATUS_CHARACTER_LIMIT - user.status_text.length,
   );
+  const saveButtonRef = useRef<HTMLButtonElement>(null);
   const [inProgress, setInProgress] = useState(false);
+  const [saveBtnText, setSaveBtnText] = useState('Save');
+  const [noStatusBtnText, setNoStatusBtnText] = useState('No Status');
 
-  // Disable Enter in text status field to prevent inserting new lines
-  function disableEnter(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+  // Disable Enter to prevent inserting new lines
+  // Simulate Save button click to submit the form
+  function submitForm(event: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === 'Enter') {
       event.preventDefault();
+      if (saveButtonRef.current) saveButtonRef.current.click();
     }
   }
 
@@ -39,6 +44,7 @@ function OptionsTab() {
       setUser,
       navigate,
       setBottomBarText,
+      setSaveBtnText,
     );
   }
 
@@ -51,6 +57,7 @@ function OptionsTab() {
       setUser,
       navigate,
       setBottomBarText,
+      setNoStatusBtnText,
     );
   }
 
@@ -81,15 +88,15 @@ function OptionsTab() {
               STATUS_CHARACTER_LIMIT - event.target.value.length,
             );
           }}
-          onKeyDown={disableEnter}
+          onKeyDown={submitForm}
         />
         <span className="characters-left">{charactersLeft}</span>
       </form>
       <div className="buttons">
-        <button form="options-form" type="submit">
-          Save
+        <button ref={saveButtonRef} form="options-form" type="submit">
+          {saveBtnText}
         </button>
-        <button onClick={handleNoStatusButtonClick}>No Status</button>
+        <button onClick={handleNoStatusButtonClick}>{noStatusBtnText}</button>
         <button onClick={() => navigate(previousPathname)}>Close</button>
       </div>
     </StyledOptionsTab>

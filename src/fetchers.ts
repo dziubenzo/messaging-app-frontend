@@ -19,11 +19,13 @@ export const clearTextStatus = async (
   setUser: Updater<User>,
   navigate: NavigateFunction,
   setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>,
+  setNoStatusBtnText: React.Dispatch<React.SetStateAction<string>>,
 ) => {
   if (inProgress || user.status_text === '') {
     return;
   }
   setInProgress(true);
+  setNoStatusBtnText('Saving...');
   const toastRef = toast.info('Clearing text status...');
   const updates = {
     current_username: user.username,
@@ -41,6 +43,7 @@ export const clearTextStatus = async (
   if (!res.ok) {
     const error = await res.json();
     setInProgress(false);
+    setNoStatusBtnText('No Status');
     return toast.update(toastRef, { render: error, type: 'error' });
   }
   const updatedUser = await res.json();
@@ -74,6 +77,7 @@ export const updateUser = async (
   setUser: Updater<User>,
   navigate: NavigateFunction,
   setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>,
+  setSaveBtnText: React.Dispatch<React.SetStateAction<string>>,
 ) => {
   event.preventDefault();
   if (
@@ -83,6 +87,7 @@ export const updateUser = async (
     return;
   }
   setInProgress(true);
+  setSaveBtnText('Saving...');
   const toastRef = toast.info('Making changes...');
   const formData = new FormData(event.currentTarget);
   const updates = {
@@ -101,6 +106,7 @@ export const updateUser = async (
   if (!res.ok) {
     const error = await res.json();
     setInProgress(false);
+    setSaveBtnText('Save');
     return toast.update(toastRef, { render: error, type: 'error' });
   }
   const updatedUser = await res.json();

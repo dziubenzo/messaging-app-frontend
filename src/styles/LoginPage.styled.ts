@@ -49,7 +49,7 @@ export const StyledLoginPage = styled.main`
   a {
     position: absolute;
     right: 0;
-    bottom: -75px;
+    bottom: -50px;
 
     button {
       padding: 0.5em;
@@ -58,8 +58,9 @@ export const StyledLoginPage = styled.main`
 
   .guest-account-btn {
     position: absolute;
-    bottom: -75px;
+    bottom: -50px;
     padding: 0.5em;
+    width: 20ch;
   }
 
   button {

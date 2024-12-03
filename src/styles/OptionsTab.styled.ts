@@ -58,10 +58,15 @@ export const StyledOptionsTab = styled.div`
     justify-content: space-around;
 
     button {
+      width: 23%;
       align-self: center;
       font-size: ${(props) => props.theme.fontSizes.standard};
       padding: 0.3em 0.5em;
       cursor: pointer;
+    }
+
+    button:nth-child(2) {
+      width: 25%;
     }
   }
 `;
