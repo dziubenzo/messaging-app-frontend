@@ -8,8 +8,7 @@ import { STATUS_ICONS } from '../constants';
 import {
   getPreviousPathname,
   useChangeStatusIcon,
-  useCloseChatWithEsc,
-  useUser,
+  useUser
 } from '../helpers';
 import { useEventsChatPage } from '../socket';
 import { StyledChatPage } from '../styles/ChatPage.styled';
@@ -53,9 +52,6 @@ function ChatPage() {
 
   // Change logged in user's status icon during the use of the app
   useChangeStatusIcon(user, setUser, previousStatusIcon, setPreviousStatusIcon);
-
-  // Close chat on Esc key press
-  useCloseChatWithEsc(previousPathname);
 
   return (
     <StyledChatPage>

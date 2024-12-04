@@ -64,20 +64,28 @@ export async function logInAsGuest(
   return navigate('/home');
 }
 
-// Close chat on Esc key press
-export function useCloseChatWithEsc(navigateToURL: string) {
+// Close chat or emoticons container on Esc key press
+export function useCloseChatOrEmoticons(
+  navigateToURL: string,
+  showEmoticons: boolean,
+  setShowEmoticons: React.Dispatch<React.SetStateAction<boolean>>,
+) {
   const navigate = useNavigate();
 
   useEffect(() => {
     function closeChat(event: KeyboardEvent) {
-      if (event.key === 'Escape') navigate(navigateToURL);
+      if (event.key === 'Escape' && showEmoticons) {
+        setShowEmoticons(false);
+      } else if (event.key === 'Escape') {
+        navigate(navigateToURL);
+      }
     }
     document.addEventListener('keydown', closeChat);
 
     return () => {
       document.removeEventListener('keydown', closeChat);
     };
-  }, [navigateToURL]);
+  }, [showEmoticons, navigateToURL]);
 }
 
 // Hide emoticons container on outside click if it is open

@@ -1,7 +1,12 @@
 import { FaBold, FaItalic } from 'react-icons/fa';
 import { FaUnderline } from 'react-icons/fa6';
 import { MdInsertEmoticon } from 'react-icons/md';
-import { useHideEmoticons } from '../helpers';
+import { useLocation } from 'react-router-dom';
+import {
+  getPreviousPathname,
+  useCloseChatOrEmoticons,
+  useHideEmoticons,
+} from '../helpers';
 import { StyledToolbar } from '../styles/ChatPage.styled';
 import Emoticons from './Emoticons';
 
@@ -10,6 +15,9 @@ type ToolbarProps = {
 };
 
 function Toolbar({ inputFieldRef }: ToolbarProps) {
+  const { state } = useLocation();
+  const previousPathname = getPreviousPathname(state);
+
   // Hide emoticons container on outside click if it is open
   const {
     showEmoticons,
@@ -39,6 +47,9 @@ function Toolbar({ inputFieldRef }: ToolbarProps) {
         : undefined,
     );
   }
+
+  // Close chat or emoticons container on Esc key press
+  useCloseChatOrEmoticons(previousPathname, showEmoticons, setShowEmoticons);
 
   return (
     <StyledToolbar>
