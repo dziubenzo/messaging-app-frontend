@@ -52,6 +52,18 @@ export const StyledMessage = styled.div<StyledMessageProps>`
   }
 `;
 
+export const StyledDay = styled.div`
+  position: absolute;
+  right: 0;
+  padding-top: 0.4em;
+  padding-right: 0.2em;
+  font-size: ${(props) => props.theme.fontSizes.extraSmall};
+
+  p {
+    transform: rotate(3deg);
+  }
+`;
+
 export const StyledEditor = styled.div``;
 
 export const StyledToolbar = styled.div`
