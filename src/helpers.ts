@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
@@ -86,12 +86,48 @@ export function useCloseChatWithEsc(navigateToURL: string) {
     function closeChat(event: KeyboardEvent) {
       if (event.key === 'Escape') navigate(navigateToURL);
     }
-    document.addEventListener('keydown', (event) => closeChat(event));
+    document.addEventListener('keydown', closeChat);
 
     return () => {
-      document.removeEventListener('keydown', (event) => closeChat(event));
+      document.removeEventListener('keydown', closeChat);
     };
   }, [navigateToURL]);
+}
+
+// Hide emoticons container on outside click if it is open
+export function useHideEmoticons() {
+  const [showEmoticons, setShowEmoticons] = useState(false);
+
+  const emoticonsContainerRef = useRef<HTMLDivElement>(null);
+  const emoticonsButtonRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function hideEmoticons(event: MouseEvent) {
+      if (!event.target) return;
+      const clickedElement = event.target as Element;
+      if (
+        clickedElement !== emoticonsContainerRef.current &&
+        clickedElement !== emoticonsButtonRef.current &&
+        clickedElement.parentNode !== emoticonsButtonRef.current &&
+        clickedElement.parentNode?.parentNode !== emoticonsButtonRef.current &&
+        showEmoticons
+      ) {
+        setShowEmoticons(false);
+      }
+    }
+    document.addEventListener('click', hideEmoticons);
+
+    return () => {
+      document.removeEventListener('click', hideEmoticons);
+    };
+  }, [showEmoticons]);
+
+  return {
+    showEmoticons,
+    setShowEmoticons,
+    emoticonsContainerRef,
+    emoticonsButtonRef,
+  };
 }
 
 // Change status icon when logged in user goes offline or online or changes tabs

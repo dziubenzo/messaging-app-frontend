@@ -2,11 +2,12 @@ import { StyledEmoticons } from '../styles/ChatPage.styled';
 
 type EmoticonProps = {
   insertEmoticon: (event: React.MouseEvent<HTMLImageElement>) => void;
+  emoticonsContainerRef: React.RefObject<HTMLDivElement>;
 };
 
-function Emoticons({ insertEmoticon }: EmoticonProps) {
+function Emoticons({ insertEmoticon, emoticonsContainerRef }: EmoticonProps) {
   return (
-    <StyledEmoticons>
+    <StyledEmoticons ref={emoticonsContainerRef}>
       <img
         src="http://emots.yetihehe.com/2/usmiech.gif"
         onClick={insertEmoticon}

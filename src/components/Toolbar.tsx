@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { FaBold, FaItalic } from 'react-icons/fa';
 import { FaUnderline } from 'react-icons/fa6';
 import { MdInsertEmoticon } from 'react-icons/md';
+import { useHideEmoticons } from '../helpers';
 import { StyledToolbar } from '../styles/ChatPage.styled';
 import Emoticons from './Emoticons';
 
@@ -10,8 +10,13 @@ type ToolbarProps = {
 };
 
 function Toolbar({ inputFieldRef }: ToolbarProps) {
-  // State for showing/hiding emoticons
-  const [showEmoticons, setShowEmoticons] = useState(false);
+  // Hide emoticons container on outside click if it is open
+  const {
+    showEmoticons,
+    setShowEmoticons,
+    emoticonsContainerRef,
+    emoticonsButtonRef,
+  } = useHideEmoticons();
 
   // Bold, italicise or underline selected text in input field
   function changeSelection(action: 'bold' | 'italic' | 'underline') {
@@ -27,7 +32,6 @@ function Toolbar({ inputFieldRef }: ToolbarProps) {
     selection.selectAllChildren(inputFieldRef.current);
     selection.collapseToEnd();
     document.execCommand('insertImage', false, event.currentTarget.src);
-    setShowEmoticons(false);
   }
 
   return (
@@ -44,12 +48,18 @@ function Toolbar({ inputFieldRef }: ToolbarProps) {
         title="Underline Selection"
         onMouseDown={() => changeSelection('underline')}
       />
-      <div className="emoticons-wrapper">
-        <MdInsertEmoticon
-          title="Emoticons"
-          onClick={() => setShowEmoticons(!showEmoticons)}
-        />
-        {showEmoticons && <Emoticons insertEmoticon={insertEmoticon} />}
+      <div
+        ref={emoticonsButtonRef}
+        className="emoticons-wrapper"
+        onClick={() => setShowEmoticons(true)}
+      >
+        <MdInsertEmoticon title="Emoticons" />
+        {showEmoticons && (
+          <Emoticons
+            emoticonsContainerRef={emoticonsContainerRef}
+            insertEmoticon={insertEmoticon}
+          />
+        )}
       </div>
     </StyledToolbar>
   );
