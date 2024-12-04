@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
@@ -22,6 +22,8 @@ function NewGroupChatTab() {
     return user.contacts.toSorted(sortByStatusIcon);
   }, [user]);
 
+  const [isCreating, setIsCreating] = useState(false);
+
   // Create new group chat if there are at least two members selected
   async function createGroupChat(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -30,10 +32,14 @@ function NewGroupChatTab() {
     if (members.length < 2) {
       return toast.error('Select at least two contacts');
     }
+    setIsCreating(true);
     const toastRef = toast.info('Creating group chat...');
     members.push(user._id);
     const newChatName = formData.get('name');
-    if (!newChatName) return;
+    if (!newChatName) {
+      setIsCreating(false);
+      return;
+    }
     const newChat = {
       name: newChatName,
       created_by: user._id,
@@ -48,6 +54,7 @@ function NewGroupChatTab() {
       credentials: 'include',
     });
     if (!res.ok) {
+      setIsCreating(false);
       toast.update(toastRef, {
         render: 'Creating group chat failed',
         type: 'error',
@@ -107,7 +114,7 @@ function NewGroupChatTab() {
           );
         })}
       </StyledContacts>
-      <button type="submit">Create</button>
+      <button type="submit">{isCreating ? 'Creating...' : 'Create'}</button>
     </StyledForm>
   );
 }
