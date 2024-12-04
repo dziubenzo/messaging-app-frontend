@@ -63,10 +63,13 @@ function GroupChatPage() {
         <p>
           {groupChat.name} ({groupChat.members.length} members)
         </p>
-        <LiaWindowCloseSolid
+        <button
+          className="close-chat-btn"
           title="Close Group Chat"
           onClick={() => navigate('/home/group-chats')}
-        />
+        >
+          <LiaWindowCloseSolid />
+        </button>
       </StyledTopBar>
       <Messages
         messages={messages}

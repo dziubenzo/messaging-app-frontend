@@ -2,7 +2,7 @@ import { EMOTICONS } from '../constants';
 import { StyledEmoticons } from '../styles/ChatPage.styled';
 
 type EmoticonProps = {
-  insertEmoticon: (event: React.MouseEvent<HTMLImageElement>) => void;
+  insertEmoticon: (event: React.MouseEvent<HTMLButtonElement>) => void;
   emoticonsContainerRef: React.RefObject<HTMLDivElement>;
 };
 
@@ -10,12 +10,13 @@ function Emoticons({ insertEmoticon, emoticonsContainerRef }: EmoticonProps) {
   return (
     <StyledEmoticons ref={emoticonsContainerRef}>
       {EMOTICONS.map((emoticon) => (
-        <img
+        <button
           key={emoticon.name}
           title={emoticon.name}
-          src={emoticon.url}
           onClick={insertEmoticon}
-        />
+        >
+          <img src={emoticon.url} />
+        </button>
       ))}
     </StyledEmoticons>
   );

@@ -65,10 +65,13 @@ function ChatPage() {
           {recipient.username}
           {recipient.status_text ? ` (${recipient.status_text})` : undefined}
         </p>
-        <LiaWindowCloseSolid
+        <button
+          className="close-chat-btn"
           title="Close Chat"
           onClick={() => navigate(previousPathname)}
-        />
+        >
+          <LiaWindowCloseSolid />
+        </button>
       </StyledTopBar>
       <Messages
         messages={messages}

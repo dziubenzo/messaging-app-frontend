@@ -12,7 +12,7 @@ import type {
   GroupChatUser,
   Message,
   StatusIcon,
-  User
+  User,
 } from './types';
 
 export const useUser = () => {
@@ -85,7 +85,7 @@ export function useHideEmoticons() {
   const [showEmoticons, setShowEmoticons] = useState(false);
 
   const emoticonsContainerRef = useRef<HTMLDivElement>(null);
-  const emoticonsButtonRef = useRef<HTMLDivElement>(null);
+  const emoticonsButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     function hideEmoticons(event: MouseEvent) {
@@ -93,6 +93,8 @@ export function useHideEmoticons() {
       const clickedElement = event.target as Element;
       if (
         clickedElement !== emoticonsContainerRef.current &&
+        clickedElement.parentElement?.parentElement !==
+          emoticonsContainerRef.current &&
         clickedElement !== emoticonsButtonRef.current &&
         clickedElement.parentNode !== emoticonsButtonRef.current &&
         clickedElement.parentNode?.parentNode !== emoticonsButtonRef.current &&

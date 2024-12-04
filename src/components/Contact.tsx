@@ -38,7 +38,7 @@ function Contact({ contact, isContact }: ContactProps) {
   // Add a contact to logged in user's contacts
   // Show updatable toast if operation successful or unsuccessful and update user state if the former is true
   // Sort contacts once the updated user is fetched
-  async function addContact(event: React.MouseEvent<SVGElement>) {
+  async function addContact(event: React.MouseEvent<HTMLButtonElement>) {
     if (inProgress) {
       return;
     }
@@ -79,7 +79,7 @@ function Contact({ contact, isContact }: ContactProps) {
   // Remove a contact from logged in user's contacts
   // Show toast if operation successful or unsuccessful and update user state if the former is true
   // Sort contacts once the updated user is fetched
-  async function removeContact(event: React.MouseEvent<SVGElement>) {
+  async function removeContact(event: React.MouseEvent<HTMLButtonElement>) {
     if (inProgress) {
       return;
     }
@@ -157,10 +157,22 @@ function Contact({ contact, isContact }: ContactProps) {
         <p className="text-status">{status_text}</p>
       </div>
       {isContact ? (
-        <IoPersonRemoveOutline title="Remove Contact" onClick={removeContact} />
+        <button
+          title="Remove Contact"
+          className="remove-contact-btn"
+          onClick={removeContact}
+        >
+          <IoPersonRemoveOutline />
+        </button>
       ) : (
         !isUserInContacts() && (
-          <IoPersonAddOutline title="Add Contact" onClick={addContact} />
+          <button
+            title="Add Contact"
+            className="add-contact-btn"
+            onClick={addContact}
+          >
+            <IoPersonAddOutline />
+          </button>
         )
       )}
     </StyledContact>

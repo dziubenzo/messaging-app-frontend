@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { StyledHomePage } from './HomePage.styled';
 
 type StyledMessageProps = {
-  sender: 'true' | undefined
-}
+  sender: 'true' | undefined;
+};
 
 export const StyledChatPage = styled(StyledHomePage)`
   svg {
@@ -56,26 +56,35 @@ export const StyledEditor = styled.div``;
 
 export const StyledToolbar = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 14px;
   background-color: ${(props) => props.theme.colours.bgPrimary};
   border-top: 2px solid ${(props) => props.theme.colours.primary};
   border-bottom: 2px solid ${(props) => props.theme.colours.primary};
-  padding: 0.4em 0.2em 0.2em 0.2em;
+  padding: 0.25em;
 
-  svg {
-    height: 16px;
-    width: 16px;
-    cursor: pointer;
+  .toolbar-btn {
+    background: transparent;
+    border: none;
+    width: 20px;
+    height: 20px;
+
+    svg {
+      height: 100%;
+      width: 100%;
+      cursor: pointer;
+    }
   }
 
-  .emoticons-wrapper {
+  .emoticon-btn-wrapper {
     position: relative;
+    width: 20px;
+    height: 20px;
   }
 `;
 
 export const StyledEmoticons = styled.div`
   position: absolute;
-  top: -125px;
+  top: -120px;
   left: 16px;
   width: 200px;
   background-color: ${(props) => props.theme.colours.bgPrimary};
@@ -85,9 +94,19 @@ export const StyledEmoticons = styled.div`
   flex-wrap: wrap;
   gap: 4px;
 
-  img {
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
     margin: 0.2em;
     cursor: pointer;
+
+    img {
+      height: 100%;
+      width: 100%;
+    }
   }
 
   @media (hover: hover) {

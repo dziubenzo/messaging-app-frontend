@@ -24,7 +24,7 @@ function GroupChat({ groupChat }: GroupChatProps) {
   const [inProgress, setInProgress] = useState(false);
 
   // Delete group chat
-  async function deleteGroupChat(event: React.MouseEvent<SVGElement>) {
+  async function deleteGroupChat(event: React.MouseEvent<HTMLButtonElement>) {
     if (inProgress) {
       return;
     }
@@ -65,7 +65,13 @@ function GroupChat({ groupChat }: GroupChatProps) {
         </p>
       </div>
       {created_by === user._id && (
-        <FaRegTrashAlt title="Delete Group Chat" onClick={deleteGroupChat} />
+        <button
+          title="Delete Group Chat"
+          className="delete-group-chat-btn"
+          onClick={deleteGroupChat}
+        >
+          <FaRegTrashAlt />
+        </button>
       )}
     </StyledGroupChat>
   );

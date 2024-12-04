@@ -24,7 +24,9 @@ export default function SkeletonHomePage() {
       <StyledTopBar>
         <img src={STATUS_ICONS.invisible} alt="Status Icon" />
         <p>Loading...</p>
-        <AiOutlineLogout title="Log Out" />
+        <button>
+          <AiOutlineLogout />
+        </button>
       </StyledTopBar>
       <StyledContactsBar>
         <a>
@@ -60,22 +62,22 @@ export default function SkeletonHomePage() {
         <p className="text-status">Loading...</p>
       </StyledBottomBar>
       <StyledStatusBar>
-        <div className="status" title="Change Your Status Icon">
+        <div className="status">
           <img src={STATUS_ICONS.invisible} alt="Status Icon" />
           <p>My status</p>
           <div className="statuses-drop-down">
-            <div>
+            <button>
               <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
               <p>Loading...</p>
-            </div>
-            <div>
+            </button>
+            <button>
               <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
               <p>Loading...</p>
-            </div>
-            <div>
+            </button>
+            <button>
               <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
               <p>Loading...</p>
-            </div>
+            </button>
           </div>
         </div>
         <NavLink to={'/'}>

@@ -36,12 +36,24 @@ export const StyledTopBar = styled.div`
     text-overflow: ellipsis;
   }
 
-  svg {
+  button {
+    background: transparent;
+    border: none;
     margin-left: auto;
-    fill: white;
-    height: 22px;
-    width: 22px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
+
+    svg {
+      fill: white;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .close-chat-btn {
+    width: 26px;
+    height: 26px;
   }
 `;
 
@@ -88,7 +100,7 @@ export const MiddleSection = styled.section`
   display: flex;
   flex-direction: column;
   height: 500px;
-  overflow-y: auto;
+  overflow-y: scroll;
 `;
 
 export const StyledContact = styled.div`
@@ -119,12 +131,22 @@ export const StyledContact = styled.div`
     }
   }
 
-  svg {
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
     margin-left: auto;
-    margin-right: 0.3em;
-    width: 20px;
-    height: 20px;
+    margin-right: 0.2em;
+    width: 23px;
+    height: 100%;
     cursor: pointer;
+
+    svg {
+      height: 100%;
+      width: 100%;
+    }
   }
 
   @media (hover: hover) {
@@ -179,19 +201,22 @@ export const StyledStatusBar = styled.div`
 
   .statuses-drop-down {
     position: absolute;
-    bottom: 0;
+    bottom: -4px;
     left: -4px;
     background-color: ${(props) => props.theme.colours.bgPrimary};
     border: 2px solid ${(props) => props.theme.colours.primary};
+    border-top: none;
     transform-origin: top;
     transform: translateY(100%) scaleY(0);
     transition: transform 0.2s ease-in;
 
-    div {
+    button {
       display: flex;
+      align-items: center;
+      background: transparent;
+      border: none;
       width: 125px;
       gap: 4px;
-      align-items: center;
       padding: 0.5em 0.2em;
       cursor: pointer;
 

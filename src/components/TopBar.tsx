@@ -20,7 +20,7 @@ function TopBar({ user, setUser }: TopBarProps) {
   // Logout user, show toast and redirect to the Login page
   // Change status icon to unavailable
   // Wait for status icon change to finish before logging out
-  async function logOut(event: React.MouseEvent<SVGElement, MouseEvent>) {
+  async function logOut(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     if (!user) return;
     const toastRef = toast.info('Logging out...');
@@ -49,7 +49,9 @@ function TopBar({ user, setUser }: TopBarProps) {
     <StyledTopBar>
       <img src={user.status_icon} alt="Status Icon" />
       <p>Me ({user.user_id})</p>
-      <AiOutlineLogout title="Log Out" onClick={logOut} />
+      <button title="Log Out" onClick={logOut}>
+        <AiOutlineLogout />
+      </button>
     </StyledTopBar>
   );
 }

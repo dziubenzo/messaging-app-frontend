@@ -65,18 +65,27 @@ function StatusBar({ user, setUser, previousPathname }: StatusBarProps) {
         <img src={user.status_icon} alt="Status Icon" />
         <p>My status</p>
         <div className="statuses-drop-down">
-          <div onClick={() => changeStatusIcon(STATUS_ICONS.available)}>
+          <button
+            title="Change Your Status Icon To Available"
+            onClick={() => changeStatusIcon(STATUS_ICONS.available)}
+          >
             <img src={STATUS_ICONS.available} alt="Status Icon - Available" />
             <p>Available</p>
-          </div>
-          <div onClick={() => changeStatusIcon(STATUS_ICONS.brb)}>
+          </button>
+          <button
+            title="Change Your Status Icon To Be Right Back"
+            onClick={() => changeStatusIcon(STATUS_ICONS.brb)}
+          >
             <img src={STATUS_ICONS.brb} alt="Status Icon - Be Right Back" />
             <p>Be Right Back</p>
-          </div>
-          <div onClick={() => changeStatusIcon(STATUS_ICONS.invisible)}>
+          </button>
+          <button
+            title="Change Your Status Icon To Invisible"
+            onClick={() => changeStatusIcon(STATUS_ICONS.invisible)}
+          >
             <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
             <p>Invisible</p>
-          </div>
+          </button>
         </div>
       </div>
       <NavLink

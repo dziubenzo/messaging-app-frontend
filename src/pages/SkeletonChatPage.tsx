@@ -1,4 +1,5 @@
-import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa';
+import { FaBold, FaItalic } from 'react-icons/fa';
+import { FaUnderline } from 'react-icons/fa6';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
 import { MdInsertEmoticon } from 'react-icons/md';
 import Loading from '../components/Loading';
@@ -19,19 +20,27 @@ export default function SkeletonChatPage() {
       <StyledTopBar>
         <img src={STATUS_ICONS.invisible} />
         <p>Loading...</p>
-        <LiaWindowCloseSolid />
+        <button className="close-chat-btn">
+          <LiaWindowCloseSolid />
+        </button>
       </StyledTopBar>
       <StyledMessages>
         <Loading />
       </StyledMessages>
       <StyledEditor>
         <StyledToolbar>
-          <FaBold />
-          <FaItalic />
-          <FaUnderline />
-          <div className="emoticons-wrapper">
+          <button className="toolbar-btn">
+            <FaBold />
+          </button>
+          <button className="toolbar-btn">
+            <FaItalic />
+          </button>
+          <button className="toolbar-btn">
+            <FaUnderline />
+          </button>
+          <button className="toolbar-btn">
             <MdInsertEmoticon />
-          </div>
+          </button>
         </StyledToolbar>
         <StyledInputField></StyledInputField>
         <StyledInputButtons>

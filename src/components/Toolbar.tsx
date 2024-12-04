@@ -25,35 +25,53 @@ function Toolbar({ inputFieldRef }: ToolbarProps) {
 
   // Add emoticon to the end of input field
   // Move caret to the end of input field
-  function insertEmoticon(event: React.MouseEvent<HTMLImageElement>) {
+  function insertEmoticon(event: React.MouseEvent<HTMLButtonElement>) {
     if (!inputFieldRef.current) return;
     const selection = window.getSelection();
     if (!selection) return;
     selection.selectAllChildren(inputFieldRef.current);
     selection.collapseToEnd();
-    document.execCommand('insertImage', false, event.currentTarget.src);
+    document.execCommand(
+      'insertImage',
+      false,
+      event.currentTarget.firstElementChild instanceof HTMLImageElement
+        ? event.currentTarget.firstElementChild.src
+        : undefined,
+    );
   }
 
   return (
     <StyledToolbar>
-      <FaBold
+      <button
+        className="toolbar-btn"
         title="Bold Selection"
         onMouseDown={() => changeSelection('bold')}
-      />
-      <FaItalic
+      >
+        <FaBold />
+      </button>
+      <button
+        className="toolbar-btn"
         title="Italicise Selection"
         onMouseDown={() => changeSelection('italic')}
-      />
-      <FaUnderline
+      >
+        <FaItalic />
+      </button>
+      <button
+        className="toolbar-btn"
         title="Underline Selection"
         onMouseDown={() => changeSelection('underline')}
-      />
-      <div
-        ref={emoticonsButtonRef}
-        className="emoticons-wrapper"
-        onClick={() => setShowEmoticons(true)}
       >
-        <MdInsertEmoticon title="Emoticons" />
+        <FaUnderline />
+      </button>
+      <div className="emoticon-btn-wrapper">
+        <button
+          ref={emoticonsButtonRef}
+          className="toolbar-btn"
+          title="Show Emoticons"
+          onClick={() => setShowEmoticons(true)}
+        >
+          <MdInsertEmoticon />
+        </button>
         {showEmoticons && (
           <Emoticons
             emoticonsContainerRef={emoticonsContainerRef}
