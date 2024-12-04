@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
 import API_URL from '../API';
-import { changeStatusIcon, statusIcons } from '../helpers';
+import { STATUS_ICONS } from '../constants';
+import { changeStatusIcon } from '../helpers';
 import { socket } from '../socket';
 import { StyledTopBar } from '../styles/HomePage.styled';
 import type { User } from '../types';
@@ -23,15 +24,15 @@ function TopBar({ user, setUser }: TopBarProps) {
     event.preventDefault();
     if (!user) return;
     const toastRef = toast.info('Logging out...');
-    socket.emit('change status icon', user.user_id, statusIcons.unavailable);
-    await changeStatusIcon(user, setUser, statusIcons.unavailable);
+    socket.emit('change status icon', user.user_id, STATUS_ICONS.unavailable);
+    await changeStatusIcon(user, setUser, STATUS_ICONS.unavailable);
     const res = await fetch(`${API_URL}/users/logout`, {
       method: 'POST',
       credentials: 'include',
     });
     if (!res.ok) {
-      socket.emit('change status icon', user.user_id, statusIcons.available);
-      changeStatusIcon(user, setUser, statusIcons.available);
+      socket.emit('change status icon', user.user_id, STATUS_ICONS.available);
+      changeStatusIcon(user, setUser, STATUS_ICONS.available);
       return toast.update(toastRef, {
         render: 'There was an error. Please try again',
         type: 'error',

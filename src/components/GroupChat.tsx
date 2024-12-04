@@ -4,7 +4,8 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import slugify from 'slugify';
 import API_URL from '../API';
-import { generateMembersList, statusIcons } from '../helpers';
+import { STATUS_ICONS } from '../constants';
+import { generateMembersList } from '../helpers';
 import { socket } from '../socket';
 import { StyledGroupChat } from '../styles/GroupChatsTab.styled';
 import type { GroupChat, OutletContext } from '../types';
@@ -54,7 +55,7 @@ function GroupChat({ groupChat }: GroupChatProps) {
       onClick={() => navigate(`/group-chats/${slugify(name, { lower: true })}`)}
       title={`Click to chat in ${name}`}
     >
-      <img src={statusIcons.availableMessage} alt={'Group Chat Icon'} />
+      <img src={STATUS_ICONS.availableMessage} alt={'Group Chat Icon'} />
       <div className="group-chat-info">
         <p className="group-chat-name">{name}</p>
         <p className="group-chat-members">

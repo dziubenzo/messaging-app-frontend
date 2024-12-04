@@ -4,7 +4,8 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
-import { statusIcons, useChangeStatusIcon, useCloseChatWithEsc, useUser } from '../helpers';
+import { STATUS_ICONS } from '../constants';
+import { useChangeStatusIcon, useCloseChatWithEsc, useUser } from '../helpers';
 import { socket, useEventsGroupChatPage } from '../socket';
 import { StyledGroupChatPage } from '../styles/GroupChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
@@ -58,7 +59,7 @@ function GroupChatPage() {
   return (
     <StyledGroupChatPage>
       <StyledTopBar>
-        <img src={statusIcons.availableMessage} alt="Group Chat Icon" />
+        <img src={STATUS_ICONS.availableMessage} alt="Group Chat Icon" />
         <p>
           {groupChat.name} ({groupChat.members.length} members)
         </p>

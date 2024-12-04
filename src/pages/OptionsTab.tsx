@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { clearTextStatus, updateUser } from '../fetchers';
-import { getPreviousPathname } from '../helpers.js';
-import { StyledOptionsTab } from '../styles/OptionsTab.styled.js';
-import { OutletContext } from '../types.js';
+import { getPreviousPathname } from '../helpers';
+import { StyledOptionsTab } from '../styles/OptionsTab.styled';
+import { OutletContext } from '../types';
 
 const STATUS_CHARACTER_LIMIT = 70;
 

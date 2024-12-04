@@ -4,7 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
 import API_URL from '../API';
-import { statusIcons } from '../helpers';
+import { STATUS_ICONS } from '../constants';
 import { socket } from '../socket';
 import { StyledStatusBar } from '../styles/HomePage.styled';
 import type { StatusIcon, User } from '../types';
@@ -65,16 +65,16 @@ function StatusBar({ user, setUser, previousPathname }: StatusBarProps) {
         <img src={user.status_icon} alt="Status Icon" />
         <p>My status</p>
         <div className="statuses-drop-down">
-          <div onClick={() => changeStatusIcon(statusIcons.available)}>
-            <img src={statusIcons.available} alt="Status Icon - Available" />
+          <div onClick={() => changeStatusIcon(STATUS_ICONS.available)}>
+            <img src={STATUS_ICONS.available} alt="Status Icon - Available" />
             <p>Available</p>
           </div>
-          <div onClick={() => changeStatusIcon(statusIcons.brb)}>
-            <img src={statusIcons.brb} alt="Status Icon - Be Right Back" />
+          <div onClick={() => changeStatusIcon(STATUS_ICONS.brb)}>
+            <img src={STATUS_ICONS.brb} alt="Status Icon - Be Right Back" />
             <p>Be Right Back</p>
           </div>
-          <div onClick={() => changeStatusIcon(statusIcons.invisible)}>
-            <img src={statusIcons.invisible} alt="Status Icon - Invisible" />
+          <div onClick={() => changeStatusIcon(STATUS_ICONS.invisible)}>
+            <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
             <p>Invisible</p>
           </div>
         </div>

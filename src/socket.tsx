@@ -5,13 +5,14 @@ import { io } from 'socket.io-client';
 import type { Updater } from 'use-immer';
 import API_URL from './API';
 import BoldToastMessage from './components/BoldToastMessage';
-import { sortByStatusIcon, statusIcons } from './helpers';
+import { STATUS_ICONS } from './constants';
+import { sortByStatusIcon } from './helpers';
 import type {
   GroupChat,
   GroupChatMessage,
   Message,
   StatusIcon,
-  User
+  User,
 } from './types';
 
 // Establish Socket.IO connection
@@ -90,7 +91,7 @@ export const useEventsHomePage = (
         toast(
           <BoldToastMessage bold={senderUsername} text={'messaged you!'} />,
           {
-            icon: <img className="toast-icon" src={statusIcons.message} />,
+            icon: <img className="toast-icon" src={STATUS_ICONS.message} />,
           },
         );
       }
@@ -215,7 +216,10 @@ export const useEventsGroupChatsTab = (
       });
     };
 
-    const addGroupChat = (newGroupChatMembers: User['_id'][], newGroupChat: GroupChat) => {
+    const addGroupChat = (
+      newGroupChatMembers: User['_id'][],
+      newGroupChat: GroupChat,
+    ) => {
       if (newGroupChatMembers.includes(user._id)) {
         setGroupChats((draft) => {
           draft.push(newGroupChat);

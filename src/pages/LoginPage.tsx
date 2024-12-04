@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
-import { logInAsGuest, statusIcons } from '../helpers';
+import { STATUS_ICONS } from '../constants';
+import { logInAsGuest } from '../helpers';
 import { socket } from '../socket';
 import { StyledLoginPage } from '../styles/LoginPage.styled';
 
@@ -42,7 +43,7 @@ function LoginPage() {
     socket.emit(
       'change status icon',
       loggedInUser.user_id,
-      statusIcons.unavailable,
+      STATUS_ICONS.unavailable,
     );
     toast.dismiss();
     return navigate('/home');

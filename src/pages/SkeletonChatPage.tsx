@@ -2,7 +2,7 @@ import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
 import { MdInsertEmoticon } from 'react-icons/md';
 import Loading from '../components/Loading';
-import { statusIcons } from '../helpers';
+import { STATUS_ICONS } from '../constants';
 import {
   StyledChatPage,
   StyledEditor,
@@ -17,7 +17,7 @@ export default function SkeletonChatPage() {
   return (
     <StyledChatPage>
       <StyledTopBar>
-        <img src={statusIcons.invisible} />
+        <img src={STATUS_ICONS.invisible} />
         <p>Loading...</p>
         <LiaWindowCloseSolid />
       </StyledTopBar>

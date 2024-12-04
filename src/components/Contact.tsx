@@ -3,7 +3,8 @@ import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
-import { sortByStatusIcon, statusIcons } from '../helpers';
+import { STATUS_ICONS } from '../constants';
+import { sortByStatusIcon } from '../helpers';
 import { StyledContact } from '../styles/HomePage.styled';
 import type { OutletContext, User } from '../types';
 import BoldToastMessage from './BoldToastMessage';
@@ -13,10 +14,7 @@ type ContactProps = {
   isContact: boolean;
 };
 
-function Contact({
-  contact,
-  isContact,
-}: ContactProps) {
+function Contact({ contact, isContact }: ContactProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { user, setUser, setBottomBarText } = useOutletContext<OutletContext>();
@@ -148,8 +146,8 @@ function Contact({
     >
       <img
         src={
-          status_icon === statusIcons.invisible
-            ? statusIcons.unavailable
+          status_icon === STATUS_ICONS.invisible
+            ? STATUS_ICONS.unavailable
             : status_icon
         }
         alt={`Status Icon - ${username}`}

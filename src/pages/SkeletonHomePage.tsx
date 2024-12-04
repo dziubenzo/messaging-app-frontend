@@ -8,7 +8,7 @@ import {
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { NavLink } from 'react-router-dom';
 import Loading from '../components/Loading';
-import { statusIcons } from '../helpers';
+import { STATUS_ICONS } from '../constants';
 import {
   MiddleSection,
   StyledBottomBar,
@@ -22,7 +22,7 @@ export default function SkeletonHomePage() {
   return (
     <StyledHomePage>
       <StyledTopBar>
-        <img src={statusIcons.invisible} alt="Status Icon" />
+        <img src={STATUS_ICONS.invisible} alt="Status Icon" />
         <p>Loading...</p>
         <AiOutlineLogout title="Log Out" />
       </StyledTopBar>
@@ -61,19 +61,19 @@ export default function SkeletonHomePage() {
       </StyledBottomBar>
       <StyledStatusBar>
         <div className="status" title="Change Your Status Icon">
-          <img src={statusIcons.invisible} alt="Status Icon" />
+          <img src={STATUS_ICONS.invisible} alt="Status Icon" />
           <p>My status</p>
           <div className="statuses-drop-down">
             <div>
-              <img src={statusIcons.invisible} alt="Status Icon - Invisible" />
+              <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
               <p>Loading...</p>
             </div>
             <div>
-              <img src={statusIcons.invisible} alt="Status Icon - Invisible" />
+              <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
               <p>Loading...</p>
             </div>
             <div>
-              <img src={statusIcons.invisible} alt="Status Icon - Invisible" />
+              <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
               <p>Loading...</p>
             </div>
           </div>

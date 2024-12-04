@@ -1,5 +1,5 @@
 import type { Updater } from 'use-immer';
-import { statusIcons } from './helpers';
+import { STATUS_ICONS } from './constants';
 
 export type User = {
   _id: string;
@@ -37,11 +37,16 @@ export type GroupChatMessage = {
 
 export type GroupChatUser = Pick<User, '_id' | 'user_id' | 'username'>;
 
-export type StatusIcon = (typeof statusIcons)[keyof typeof statusIcons];
+export type StatusIcon = (typeof STATUS_ICONS)[keyof typeof STATUS_ICONS];
 
 export type BottomBar = {
   id: User['user_id'];
   status: User['status_text'];
+};
+
+export type Emoticon = {
+  name: string;
+  url: string;
 };
 
 export type OutletContext = {

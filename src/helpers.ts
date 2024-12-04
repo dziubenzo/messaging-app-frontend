@@ -3,6 +3,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
 import API_URL from './API';
+import { STATUS_ICONS } from './constants';
 import { UserContext } from './pages/SuspenseWrapper';
 import { socket } from './socket';
 import type {
@@ -11,7 +12,7 @@ import type {
   GroupChatUser,
   Message,
   StatusIcon,
-  User,
+  User
 } from './types';
 
 export const useUser = () => {
@@ -33,21 +34,6 @@ export class ApiError extends Error {
     this.status = statusCode;
   }
 }
-
-// Status icons
-export const statusIcons = {
-  available:
-    'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/ryk3km39qhsbztiw6kmg.png',
-  brb: 'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/ow69aeyceffooc1prqsy.png',
-  invisible:
-    'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/nm9jy0qklrrsmabibu75.png',
-  unavailable:
-    'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/eegejkm8yz0f8qko0x1q.png',
-  message:
-    'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/u21cswfqngpmklkfr3uh.png',
-  availableMessage:
-    'https://res.cloudinary.com/dvhkp9wc6/image/upload/v1712917635/messaging_app/m9ucqz7totsstdus4vtb.png',
-} as const;
 
 // Log in as guest
 export async function logInAsGuest(
@@ -72,7 +58,7 @@ export async function logInAsGuest(
   socket.emit(
     'change status icon',
     loggedInUser.user_id,
-    statusIcons.unavailable,
+    STATUS_ICONS.unavailable,
   );
   toast.dismiss();
   return navigate('/home');
@@ -168,20 +154,20 @@ export const useChangeStatusIcon = (
         socket.emit(
           'change status icon',
           user.user_id,
-          statusIcons.unavailable,
+          STATUS_ICONS.unavailable,
         );
         setPreviousStatusIcon(user.status_icon);
-        changeStatusIcon(user, setUser, statusIcons.unavailable);
+        changeStatusIcon(user, setUser, STATUS_ICONS.unavailable);
       } else {
         if (
-          previousStatusIcon !== statusIcons.unavailable &&
+          previousStatusIcon !== STATUS_ICONS.unavailable &&
           previousStatusIcon
         ) {
           socket.emit('change status icon', user.user_id, previousStatusIcon);
           return changeStatusIcon(user, setUser, previousStatusIcon);
         }
-        socket.emit('change status icon', user.user_id, statusIcons.available);
-        changeStatusIcon(user, setUser, statusIcons.available);
+        socket.emit('change status icon', user.user_id, STATUS_ICONS.available);
+        changeStatusIcon(user, setUser, STATUS_ICONS.available);
       }
     }
     window.addEventListener('visibilitychange', changeIcon);
@@ -194,8 +180,8 @@ export const useChangeStatusIcon = (
 // Hook for changing logged in user's status icon to available on Home page load
 export const useChangeToAvailable = (user: User, setUser: Updater<User>) => {
   useEffect(() => {
-    changeStatusIcon(user, setUser, statusIcons.available);
-    socket.emit('change status icon', user.user_id, statusIcons.available);
+    changeStatusIcon(user, setUser, STATUS_ICONS.available);
+    socket.emit('change status icon', user.user_id, STATUS_ICONS.available);
   }, []);
 };
 
@@ -267,17 +253,17 @@ export const sortByStatusIcon = (a: User, b: User) => {
   let statusIconB;
 
   // Define comparison rules based on status icon
-  if (a.status_icon === statusIcons.available) {
+  if (a.status_icon === STATUS_ICONS.available) {
     statusIconA = 1;
-  } else if (a.status_icon === statusIcons.brb) {
+  } else if (a.status_icon === STATUS_ICONS.brb) {
     statusIconA = 2;
   } else {
     statusIconA = 3;
   }
 
-  if (b.status_icon === statusIcons.available) {
+  if (b.status_icon === STATUS_ICONS.available) {
     statusIconB = 1;
-  } else if (b.status_icon === statusIcons.brb) {
+  } else if (b.status_icon === STATUS_ICONS.brb) {
     statusIconB = 2;
   } else {
     statusIconB = 3;

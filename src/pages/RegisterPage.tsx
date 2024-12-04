@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { type Id, toast } from 'react-toastify';
-import API_URL from '../API.js';
-import { logInAsGuest, statusIcons } from '../helpers.js';
-import { socket } from '../socket.js';
+import API_URL from '../API';
+import { STATUS_ICONS } from '../constants';
+import { logInAsGuest } from '../helpers';
+import { socket } from '../socket';
 import { StyledRegisterPage } from '../styles/RegisterPage.styled';
 
 function RegisterPage() {
@@ -79,7 +80,7 @@ function RegisterPage() {
     socket.emit(
       'change status icon',
       loggedInUser.user_id,
-      statusIcons.unavailable,
+      STATUS_ICONS.unavailable,
     );
     toast.dismiss();
     return navigate('/home');

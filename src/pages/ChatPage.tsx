@@ -4,9 +4,9 @@ import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
+import { STATUS_ICONS } from '../constants';
 import {
   getPreviousPathname,
-  statusIcons,
   useChangeStatusIcon,
   useCloseChatWithEsc,
   useUser,
@@ -60,7 +60,7 @@ function ChatPage() {
   return (
     <StyledChatPage>
       <StyledTopBar>
-        <img src={statusIcons.message} alt="Message Icon" />
+        <img src={STATUS_ICONS.message} alt="Message Icon" />
         <p>
           {recipient.username}
           {recipient.status_text ? ` (${recipient.status_text})` : undefined}

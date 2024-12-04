@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { statusIcons } from '../helpers';
+import { STATUS_ICONS } from '../constants';
 import GlobalStyle from '../styles/GlobalStyle';
 import type { StatusIcon } from '../types';
 import Footer from './Footer';
@@ -17,7 +17,7 @@ function App({ children }: AppProps) {
 
   // State for storing user's previous status icon
   const [previousStatusIcon, setPreviousStatusIcon] = useState<StatusIcon>(
-    statusIcons.unavailable,
+    STATUS_ICONS.unavailable,
   );
 
   useEffect(() => {
