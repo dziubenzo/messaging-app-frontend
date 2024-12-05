@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { NavLink, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import type { Updater } from 'use-immer';
 import API_URL from '../API';
 import { STATUS_ICONS } from '../constants';
 import { socket } from '../socket';
 import { StyledStatusBar } from '../styles/HomePage.styled';
 import type { StatusIcon, User } from '../types';
+import DevInfo from './DevInfo';
 
 type StatusBarProps = {
   user: User;
@@ -88,6 +90,7 @@ function StatusBar({ user, setUser, previousPathname }: StatusBarProps) {
           </button>
         </div>
       </div>
+      <DevInfo />
       <NavLink
         to={pathname === '/home/options' ? previousPathname : '/home/options'}
         title="Options"

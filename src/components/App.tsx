@@ -1,9 +1,9 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { ToastContainer, Zoom } from 'react-toastify';
 import { STATUS_ICONS } from '../constants';
 import GlobalStyle from '../styles/GlobalStyle';
 import type { StatusIcon } from '../types';
-import Footer from './Footer';
 import Header from './Header';
 import Theme from './Theme';
 
@@ -30,7 +30,16 @@ function App({ children }: AppProps) {
       <Header />
       <Outlet context={{ previousStatusIcon, setPreviousStatusIcon }} />
       {children}
-      <Footer />
+      <ToastContainer
+        position="bottom-center"
+        autoClose={2000}
+        closeButton={false}
+        hideProgressBar={true}
+        newestOnTop={true}
+        theme="light"
+        closeOnClick
+        transition={Zoom}
+      />
     </Theme>
   );
 }

@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 export const StyledHeader = styled.header`
+  position: absolute;
+  top: 1em;
   transform: rotate(-4deg);
-  margin-bottom: 2em;
 
   .app-name {
     font-family: ${(props) => props.theme.fonts.secondary};
@@ -10,23 +11,8 @@ export const StyledHeader = styled.header`
     font-weight: 400;
     text-align: center;
   }
-`;
 
-export const StyledFooter = styled.footer`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  text-align: center;
-  margin-top: 2em;
-
-  .dev-name {
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
-
-  .github-logo {
-    height: 48px;
-    width: 48px;
+  @media (width <= ${(props) => props.theme.mobile}) {
+    display: none;
   }
 `;

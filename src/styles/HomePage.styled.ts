@@ -4,6 +4,7 @@ export const StyledHomePage = styled.main`
   width: 400px;
   background-color: ${(props) => props.theme.colours.bgSecondary};
   border: 2px solid ${(props) => props.theme.colours.primary};
+  z-index: 1;
 
   @media (width <= ${(props) => props.theme.mobile}) {
     width: 90vw;
@@ -243,5 +244,23 @@ export const StyledStatusBar = styled.div`
       height: 24px;
       cursor: pointer;
     }
+  }
+`;
+
+export const StyledDevInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .dev-name {
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  .github-logo {
+    height: 24px;
+    width: 24px;
   }
 `;

@@ -17,6 +17,7 @@ import {
   StyledStatusBar,
   StyledTopBar,
 } from '../styles/HomePage.styled';
+import DevInfo from '../components/DevInfo';
 
 export default function SkeletonHomePage() {
   return (
@@ -80,6 +81,7 @@ export default function SkeletonHomePage() {
             </button>
           </div>
         </div>
+        <DevInfo />
         <NavLink to={'/'}>
           <PiDotsThreeOutlineFill />
         </NavLink>

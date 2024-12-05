@@ -22,11 +22,10 @@ const GlobalStyle = createGlobalStyle`
 
   #root {
     display: grid;
-    grid-template-rows: min-content auto min-content;
+    grid-template-rows: 1fr;
     place-items: center;
     min-height: 100svh;
     max-width: 800px;
-    padding: 1em;
   }
 
   // Various user feedback wrappers across the app
@@ -64,6 +63,11 @@ const GlobalStyle = createGlobalStyle`
   // Toast utility class
   .bold {
     font-weight: 800;
+  }
+
+  // Place toast message right in the centre
+  .Toastify__toast {
+    text-align: center;
   }
 `;
 
