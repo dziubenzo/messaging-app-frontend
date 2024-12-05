@@ -231,12 +231,14 @@ export const useScrollToBottom = (
   someoneIsTyping: boolean,
 ) => {
   useEffect(() => {
-    if (!messagesRef.current) return;
-    messagesRef.current.scrollTo({
-      top: messagesRef.current.scrollHeight,
-      left: 0,
-      behavior: 'smooth',
-    });
+    // Wrap scrolling in setTimeout to ensure 100% reliable operation (no differences in scrollHeight value)
+    const timeoutId = setTimeout(() => {
+      if (!messagesRef.current) return;
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }, 0);
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [messagesRef, messages, someoneIsTyping]);
 };
 

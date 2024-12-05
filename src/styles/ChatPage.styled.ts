@@ -15,9 +15,14 @@ export const StyledChatPage = styled(StyledHomePage)`
 export const StyledMessages = styled.div`
   position: relative;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   height: 300px;
   overflow-y: scroll;
+  scroll-behavior: smooth;
+
+  div {
+    margin-top: auto;
+  }
 
   @media (width <= ${(props) => props.theme.mobile}) {
     height: 100svh;
