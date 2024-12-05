@@ -12,6 +12,21 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     color: ${(props) => props.theme.colours.primary};
     font-family: ${(props) => props.theme.fonts.primary};
+
+    @supports (scrollbar-width: auto) {
+      scrollbar-color: ${(props) => props.theme.colours.bgPrimary} ${(props) => props.theme.colours.bgSecondary};
+      scrollbar-width: auto;
+    }
+
+    @supports selector(::-webkit-scrollbar) {
+      &::-webkit-scrollbar-thumb {
+        background: ${(props) => props.theme.colours.bgPrimary}
+      }
+
+      &::-webkit-scrollbar-track {
+        background: ${(props) => props.theme.colours.bgSecondary};
+      }
+    }
   }
 
   body {
