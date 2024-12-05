@@ -69,4 +69,18 @@ export const StyledOptionsTab = styled.div`
       width: 25%;
     }
   }
+
+  @media (width <= ${(props) => props.theme.mobile}) {
+    .buttons {
+      justify-content: space-evenly;
+
+      button {
+        min-width: 25%;
+      }
+
+      button:nth-child(2) {
+        min-width: 30%;
+      }
+    }
+  }
 `;

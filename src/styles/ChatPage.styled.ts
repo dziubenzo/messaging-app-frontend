@@ -15,9 +15,13 @@ export const StyledChatPage = styled(StyledHomePage)`
 export const StyledMessages = styled.div`
   position: relative;
   display: flex;
+  flex-direction: column-reverse;
   height: 300px;
   overflow-y: scroll;
-  flex-direction: column-reverse;
+
+  @media (width <= ${(props) => props.theme.mobile}) {
+    height: 100svh;
+  }
 `;
 
 export const StyledIsTyping = styled.p`
@@ -49,6 +53,10 @@ export const StyledMessage = styled.div<StyledMessageProps>`
 
   .message {
     padding-top: 0.05em;
+  }
+
+  @media (width <= ${(props) => props.theme.mobile}) {
+    padding: 0.1em 0.2em;
   }
 `;
 

@@ -1,14 +1,17 @@
 import styled from 'styled-components';
 
 export const StyledHomePage = styled.main`
+  display: flex;
+  flex-direction: column;
   width: 400px;
   background-color: ${(props) => props.theme.colours.bgSecondary};
   border: 2px solid ${(props) => props.theme.colours.primary};
   z-index: 1;
 
   @media (width <= ${(props) => props.theme.mobile}) {
-    width: 90vw;
-    max-width: 400px;
+    max-height: 100svh;
+    width: 100vw;
+    border: none;
   }
 `;
 
@@ -102,6 +105,10 @@ export const MiddleSection = styled.section`
   flex-direction: column;
   height: 500px;
   overflow-y: scroll;
+
+  @media (width <= ${(props) => props.theme.mobile}) {
+    min-height: 100%;
+  }
 `;
 
 export const StyledContact = styled.div`
@@ -243,6 +250,40 @@ export const StyledStatusBar = styled.div`
       width: 24px;
       height: 24px;
       cursor: pointer;
+    }
+  }
+
+  @media (width <= ${(props) => props.theme.mobile}) {
+    .status {
+      &:hover {
+        .statuses-drop-down {
+          transform: translateY(-100%) scaleY(1);
+        }
+      }
+    }
+    .statuses-drop-down {
+      position: absolute;
+      top: -4px;
+      display: flex;
+      gap: 16px;
+      border: 2px solid ${(props) => props.theme.colours.primary};
+      border-bottom: none;
+      border-left: none;
+      transform-origin: bottom;
+      transform: translateY(-100%) scaleY(0);
+
+      button {
+        width: auto;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      p {
+        display: none;
+      }
     }
   }
 `;

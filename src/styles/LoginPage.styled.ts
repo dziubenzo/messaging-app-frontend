@@ -71,5 +71,9 @@ export const StyledLoginPage = styled.main`
     form {
       gap: 16px;
     }
+
+    .guest-account-btn {
+      min-width: 23ch;
+    }
   }
 `;
