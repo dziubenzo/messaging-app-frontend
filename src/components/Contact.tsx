@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { PulseLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
 import { STATUS_ICONS } from '../constants';
@@ -156,7 +157,9 @@ function Contact({ contact, isContact }: ContactProps) {
         <p className="username">{username}</p>
         <p className="text-status">{status_text}</p>
       </div>
-      {isContact ? (
+      {inProgress ? (
+        <PulseLoader className="in-progress-spinner" size={5} />
+      ) : isContact ? (
         <button
           title="Remove Contact"
           className="remove-contact-btn"

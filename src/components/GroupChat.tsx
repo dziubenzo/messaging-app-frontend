@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { PulseLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import slugify from 'slugify';
 import API_URL from '../API';
@@ -64,7 +65,9 @@ function GroupChat({ groupChat }: GroupChatProps) {
             : `(${members.length}) - Me, ${generateMembersList(members, user.username)}`}
         </p>
       </div>
-      {created_by === user._id && (
+      {inProgress && created_by === user._id ? (
+        <PulseLoader className="in-progress-spinner" size={5} />
+      ) : created_by === user._id ? (
         <button
           title="Delete Group Chat"
           className="delete-group-chat-btn"
@@ -72,7 +75,7 @@ function GroupChat({ groupChat }: GroupChatProps) {
         >
           <FaRegTrashAlt />
         </button>
-      )}
+      ) : undefined}
     </StyledGroupChat>
   );
 }

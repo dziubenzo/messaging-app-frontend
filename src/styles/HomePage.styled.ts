@@ -139,6 +139,10 @@ export const StyledContact = styled.div`
     }
   }
 
+  .in-progress-spinner {
+    margin-left: auto;
+  }
+
   button {
     display: flex;
     align-items: center;
@@ -168,6 +172,11 @@ export const StyledContact = styled.div`
       svg {
         stroke: white;
         fill: white;
+      }
+
+      .in-progress-spinner * {
+        background-color: white !important;
+        color: white !important;
       }
     }
   }
