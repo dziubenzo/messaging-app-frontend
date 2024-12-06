@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -22,8 +23,10 @@ function TopBar({ user, setUser }: TopBarProps) {
   // Wait for status icon change to finish before logging out
   async function logOut(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    if (!user) return;
-    const toastRef = toast.info('Logging out...');
+    if (!user) Cookies.remove('jwt');
+    Cookies.remove('jwt');
+    const toastRef = toast.success('You have been logged out successfully');
+    return navigate('/login');
     socket.emit('change status icon', user.user_id, STATUS_ICONS.unavailable);
     await changeStatusIcon(user, setUser, STATUS_ICONS.unavailable);
     const res = await fetch(`${API_URL}/users/logout`, {

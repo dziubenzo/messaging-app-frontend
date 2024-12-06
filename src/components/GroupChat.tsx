@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -34,7 +35,10 @@ function GroupChat({ groupChat }: GroupChatProps) {
     setInProgress(true);
     const res = await fetch(`${API_URL}/group-chats/${_id}`, {
       method: 'DELETE',
-      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
+      },
     });
     if (!res.ok) {
       const error = await res.json();

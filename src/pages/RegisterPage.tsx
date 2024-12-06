@@ -1,8 +1,8 @@
+import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { type Id, toast } from 'react-toastify';
 import API_URL from '../API';
-import { STATUS_ICONS } from '../constants';
 import { logInAsGuest } from '../helpers';
 import { socket } from '../socket';
 import { StyledRegisterPage } from '../styles/RegisterPage.styled';
@@ -73,15 +73,16 @@ function RegisterPage() {
       body: JSON.stringify(user),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
       },
-      credentials: 'include',
     });
-    const loggedInUser = await res.json();
-    socket.emit(
-      'change status icon',
-      loggedInUser.user_id,
-      STATUS_ICONS.unavailable,
-    );
+    // Create a cookie with API-signed JWT
+    const token = await res.json();
+    Cookies.set('jwt', token, {
+      expires: 3,
+      secure: location.protocol === 'https:',
+      sameSite: 'Lax',
+    });
     toast.dismiss();
     return navigate('/home');
   }

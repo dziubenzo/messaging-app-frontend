@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -40,8 +41,8 @@ function StatusBar({ user, setUser, previousPathname }: StatusBarProps) {
       }),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
       },
-      credentials: 'include',
     });
     if (!res.ok) {
       setInProgress(false);

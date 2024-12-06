@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
@@ -53,8 +54,8 @@ function Contact({ contact, isContact }: ContactProps) {
       }),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
       },
-      credentials: 'include',
     });
     if (!res.ok) {
       return toast.update(toastRef, {
@@ -94,8 +95,8 @@ function Contact({ contact, isContact }: ContactProps) {
       }),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
       },
-      credentials: 'include',
     });
     if (!res.ok) {
       return toast.update(toastRef, {

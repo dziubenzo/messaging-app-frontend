@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
@@ -37,8 +38,8 @@ export const clearTextStatus = async (
     body: JSON.stringify(updates),
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('jwt')}`,
     },
-    credentials: 'include',
   });
   if (!res.ok) {
     const error = await res.json();
@@ -100,8 +101,8 @@ export const updateUser = async (
     body: JSON.stringify(updates),
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('jwt')}`,
     },
-    credentials: 'include',
   });
   if (!res.ok) {
     const error = await res.json();
@@ -159,8 +160,8 @@ export const sendMessage = async (
         body: JSON.stringify(message),
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('jwt')}`,
         },
-        credentials: 'include',
       },
     );
     if (!res.ok) {
@@ -193,8 +194,8 @@ export const sendMessage = async (
       body: JSON.stringify(message),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
       },
-      credentials: 'include',
     });
     if (!res.ok) {
       setInProgress(false);

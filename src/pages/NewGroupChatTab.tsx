@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { useMemo, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -50,8 +51,8 @@ function NewGroupChatTab() {
       body: JSON.stringify(newChat),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
       },
-      credentials: 'include',
     });
     if (!res.ok) {
       setIsCreating(false);

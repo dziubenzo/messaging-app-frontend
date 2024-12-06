@@ -1,8 +1,9 @@
+import Cookies from 'js-cookie';
 import type { Params } from 'react-router-dom';
 import { defer } from 'react-router-dom';
 import API_URL from './API';
-import type { GroupChat, Message, User } from './types';
 import { ApiError } from './helpers';
+import type { GroupChat, Message, User } from './types';
 
 // Fetch data for the Home page (user, all users and user's group chats)
 export async function homePageLoader() {
@@ -10,20 +11,26 @@ export async function homePageLoader() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('jwt')}`,
     },
-    credentials: 'include',
   }).then((res) => {
     if (!res.ok) throw new ApiError('You are not logged in', 401);
     return res.json();
   });
 
   const allUsersRes = fetch(`${API_URL}/users`, {
-    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('jwt')}`,
+    },
   }).then((res) => res.json());
 
   const groupChatsRes = userRes.then((user) =>
     fetch(`${API_URL}/group-chats/?member=${user._id}`, {
-      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
+      },
     }).then((res) => res.json()),
   );
 
@@ -53,21 +60,27 @@ export async function chatPageLoader({ params }: { params: Params<'userId'> }) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('jwt')}`,
     },
-    credentials: 'include',
   }).then((res) => {
     if (!res.ok) throw new ApiError('You are not logged in', 401);
     return res.json();
   });
 
   const recipientRes = fetch(`${API_URL}/users/${recipientId}`, {
-    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('jwt')}`,
+    },
   }).then((res) => res.json());
 
   const messagesRes = Promise.all([userRes, recipientRes]).then(
     ([user, recipient]: [User, User]) =>
       fetch(`${API_URL}/messages/?from=${user._id}&to=${recipient._id}`, {
-        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('jwt')}`,
+        },
       }).then((res) => res.json()),
   );
 
@@ -90,15 +103,18 @@ export async function groupChatPageLoader({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('jwt')}`,
     },
-    credentials: 'include',
   }).then((res) => {
     if (!res.ok) throw new ApiError('You are not logged in', 401);
     return res.json();
   });
 
   const groupChatRes = fetch(`${API_URL}/group-chats/${groupChatName}`, {
-    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('jwt')}`,
+    },
   }).then((res) => res.json());
 
   return defer({

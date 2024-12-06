@@ -1,7 +1,8 @@
+import Cookies from 'js-cookie';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import type { Updater } from 'use-immer';
+import { type Updater } from 'use-immer';
 import API_URL from './API';
 import { STATUS_ICONS } from './constants';
 import { UserContext } from './pages/SuspenseWrapper';
@@ -52,14 +53,14 @@ export async function logInAsGuest(
     headers: {
       'Content-Type': 'application/json',
     },
-    credentials: 'include',
   });
-  const loggedInUser = await res.json();
-  socket.emit(
-    'change status icon',
-    loggedInUser.user_id,
-    STATUS_ICONS.unavailable,
-  );
+  // Create a cookie with API-signed JWT
+  const token = await res.json();
+  Cookies.set('jwt', token, {
+    expires: 3,
+    secure: location.protocol === 'https:',
+    sameSite: 'Lax',
+  });
   toast.dismiss();
   return navigate('/home');
 }
@@ -141,8 +142,8 @@ export const changeStatusIcon = async (
       }),
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('jwt')}`,
       },
-      credentials: 'include',
     },
   );
   const updatedUser: User = await res.json();
@@ -193,35 +194,6 @@ export const useChangeToAvailable = (user: User, setUser: Updater<User>) => {
     changeStatusIcon(user, setUser, STATUS_ICONS.available);
     socket.emit('change status icon', user.user_id, STATUS_ICONS.available);
   }, []);
-};
-
-// Hook for fetching data
-export const useFetch = <T>(endpoint: string) => {
-  const [data, setData] = useState<T>();
-  const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData(endpoint: string) {
-      try {
-        const res = await fetch(`${API_URL}${endpoint}`, {
-          credentials: 'include',
-        });
-        if (!res.ok) {
-          throw new Error('Server error');
-        }
-        const data: T = await res.json();
-        setData(data);
-      } catch (error) {
-        setError(error as string);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData(endpoint);
-  }, [endpoint]);
-
-  return { data, error, loading };
 };
 
 // Hook for scrolling to the bottom of messages if they change or someone is typing
