@@ -12,9 +12,10 @@ import Emoticons from './Emoticons';
 
 type ToolbarProps = {
   inputFieldRef: React.RefObject<HTMLDivElement>;
+  isGroupChat: boolean;
 };
 
-function Toolbar({ inputFieldRef }: ToolbarProps) {
+function Toolbar({ inputFieldRef, isGroupChat }: ToolbarProps) {
   const { state } = useLocation();
   const previousPathname = getPreviousPathname(state);
 
@@ -49,7 +50,12 @@ function Toolbar({ inputFieldRef }: ToolbarProps) {
   }
 
   // Close chat or emoticons container on Esc key press
-  useCloseChatOrEmoticons(previousPathname, showEmoticons, setShowEmoticons);
+  useCloseChatOrEmoticons(
+    previousPathname,
+    isGroupChat,
+    showEmoticons,
+    setShowEmoticons,
+  );
 
   return (
     <StyledToolbar>

@@ -70,7 +70,7 @@ function Editor({
 
   return (
     <StyledEditor>
-      <Toolbar inputFieldRef={inputFieldRef} />
+      <Toolbar inputFieldRef={inputFieldRef} isGroupChat={isGroupChat} />
       <StyledInputField
         ref={inputFieldRef}
         contentEditable

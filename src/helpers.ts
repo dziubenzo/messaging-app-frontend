@@ -68,6 +68,7 @@ export async function logInAsGuest(
 // Close chat or emoticons container on Esc key press
 export function useCloseChatOrEmoticons(
   navigateToURL: string,
+  isGroupChat: boolean,
   showEmoticons: boolean,
   setShowEmoticons: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
@@ -77,6 +78,8 @@ export function useCloseChatOrEmoticons(
     function closeChat(event: KeyboardEvent) {
       if (event.key === 'Escape' && showEmoticons) {
         setShowEmoticons(false);
+      } else if (event.key === 'Escape' && isGroupChat) {
+        navigate('/home/group-chats');
       } else if (event.key === 'Escape') {
         navigate(navigateToURL);
       }
@@ -86,7 +89,7 @@ export function useCloseChatOrEmoticons(
     return () => {
       document.removeEventListener('keydown', closeChat);
     };
-  }, [showEmoticons, navigateToURL]);
+  }, [navigateToURL, isGroupChat, showEmoticons]);
 }
 
 // Hide emoticons container on outside click if it is open
