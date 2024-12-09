@@ -1,6 +1,7 @@
 import {
   isRouteErrorResponse,
   Link,
+  Navigate,
   useAsyncError,
   useRouteError,
 } from 'react-router-dom';
@@ -21,12 +22,18 @@ function ErrorPage() {
         <Link to="/login">Back to Log In Page</Link>
       </StyledErrorPage>
     );
+  } else if (
+    asyncError &&
+    asyncError instanceof ApiError &&
+    asyncError.status === 401
+  ) {
+    return <Navigate to="/login" />;
   } else if (asyncError && asyncError instanceof ApiError) {
     return (
       <StyledErrorPage>
         <h2>{asyncError.status}</h2>
         <h1>{asyncError.message}</h1>
-        {asyncError.status !== 401 && <Link to="/">Back to Home Page</Link>}
+        <Link to="/">Back to Home Page</Link>
         <Link to="/login">Back to Log In Page</Link>
       </StyledErrorPage>
     );

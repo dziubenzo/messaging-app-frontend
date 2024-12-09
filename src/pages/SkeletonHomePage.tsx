@@ -7,6 +7,7 @@ import {
 } from 'react-icons/lia';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { NavLink } from 'react-router-dom';
+import DevInfo from '../components/DevInfo';
 import Loading from '../components/Loading';
 import { STATUS_ICONS } from '../constants';
 import {
@@ -17,7 +18,6 @@ import {
   StyledStatusBar,
   StyledTopBar,
 } from '../styles/HomePage.styled';
-import DevInfo from '../components/DevInfo';
 
 export default function SkeletonHomePage() {
   return (
