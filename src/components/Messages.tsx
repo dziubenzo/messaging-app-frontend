@@ -1,6 +1,6 @@
 import { isSameDay } from 'date-fns';
 import { Fragment, useRef } from 'react';
-import { useScrollToBottom } from '../helpers';
+import { useObserveMessagesDiv, useScrollToBottom } from '../helpers';
 import { StyledMessages } from '../styles/ChatPage.styled';
 import type { GroupChatMessage, Message as MessageType, User } from '../types';
 import Day from './Day';
@@ -23,8 +23,9 @@ function Messages({
 }: MessagesProps) {
   const messagesRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom when messages change or someone is typing
-  useScrollToBottom(messagesRef, messages, someoneIsTyping);
+  const messagesDivHeight = useObserveMessagesDiv(messagesRef, 200, 2000);
+
+  useScrollToBottom(messagesRef, messages, someoneIsTyping, messagesDivHeight);
 
   if (!messages.length) {
     return (

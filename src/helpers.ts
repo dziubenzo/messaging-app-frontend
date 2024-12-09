@@ -199,22 +199,45 @@ export const useChangeToAvailable = (user: User, setUser: Updater<User>) => {
   }, []);
 };
 
-// Hook for scrolling to the bottom of messages if they change or someone is typing
+// Observe changes to messages div height to make sure scrolling to bottom works irrespective of emoticons loading time
+// Stop observing after stopTime
+export const useObserveMessagesDiv = (
+  messagesDiv: React.RefObject<HTMLDivElement>,
+  updateFrequency: number,
+  stopTime: number,
+) => {
+  const [messagesDivHeight, setMessagesDivHeight] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (messagesDiv.current === null) return;
+      if (messagesDivHeight < messagesDiv.current.scrollHeight) {
+        setMessagesDivHeight(messagesDiv.current.scrollHeight);
+      }
+    }, updateFrequency);
+    const timeoutId = setTimeout(() => {
+      clearInterval(intervalId);
+    }, stopTime);
+    return () => {
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  return messagesDivHeight;
+};
+
+// Hook for scrolling to the bottom of messages on load, when new messages are sent or someone is typing
 export const useScrollToBottom = (
   messagesRef: React.RefObject<HTMLDivElement>,
   messages: GroupChatMessage[] | Message[],
   someoneIsTyping: boolean,
+  messagesDivHeight: number,
 ) => {
   useEffect(() => {
-    // Wrap scrolling in setTimeout to ensure 100% reliable operation (no differences in scrollHeight value)
-    const timeoutId = setTimeout(() => {
-      if (!messagesRef.current) return;
-      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-    }, 0);
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [messagesRef, messages, someoneIsTyping]);
+    if (!messagesRef.current) return;
+    messagesRef.current.scrollTop = messagesDivHeight;
+  }, [messagesRef, messages, someoneIsTyping, messagesDivHeight]);
 };
 
 // Generate a comma-separated list of group chat members exclusive of logged in user
