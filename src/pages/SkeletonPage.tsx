@@ -9,10 +9,10 @@ import {
 } from 'react-icons/lia';
 import { MdInsertEmoticon } from 'react-icons/md';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
-import { NavLink, useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import DevInfo from '../components/DevInfo';
 import Loading from '../components/Loading';
-import { STATUS_ICONS } from '../constants';
+import { DARK_THEME, STATUS_ICONS } from '../constants';
 import {
   StyledChatPage,
   StyledEditor,
@@ -24,6 +24,7 @@ import {
 import {
   MiddleSection,
   StyledBottomBar,
+  StyledContact,
   StyledContactsBar,
   StyledHomePage,
   StyledStatusBar,
@@ -51,8 +52,8 @@ function SkeletonHomePage() {
   return (
     <StyledHomePage>
       <StyledTopBar>
-        <img src={STATUS_ICONS.invisible} alt="Status Icon" />
-        <p>Loading...</p>
+        <SkeletonIcon colour={DARK_THEME.colours.bgSecondary} />
+        <p>Me (Loading...)</p>
         <button>
           <AiOutlineLogout />
         </button>
@@ -61,58 +62,44 @@ function SkeletonHomePage() {
         <a>
           <div>
             <LiaUsersSolid />
-            <p>Loading...</p>
+            <SkeletonLine text="All Users" />
           </div>
         </a>
         <a>
           <div>
             <LiaUser />
-            <p>Loading...</p>
+            <SkeletonLine text="Contacts" />
           </div>
         </a>
         <a>
           <div>
             <LiaUserFriendsSolid />
-            <p>Loading...</p>
+            <SkeletonLine text="Group Chats" />
           </div>
         </a>
         <a>
           <div>
             <LiaPlusCircleSolid />
-            <p>Loading..........</p>
+            <SkeletonLine text="New Group Chat" />
           </div>
         </a>
       </StyledContactsBar>
       <MiddleSection>
-        <Loading />
+        <SkeletonContact length={10} />
       </MiddleSection>
       <StyledBottomBar>
-        <p>Loading...</p>
-        <p className="text-status">Loading...</p>
+        <SkeletonLine text="0000000" marginBottom />
+        <SkeletonLine text="Loading a long text status..." />
       </StyledBottomBar>
       <StyledStatusBar>
         <div className="status">
-          <img src={STATUS_ICONS.invisible} alt="Status Icon" />
+          <SkeletonIcon colour={DARK_THEME.colours.bgSecondary} />
           <p>My status</p>
-          <div className="statuses-drop-down">
-            <button>
-              <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
-              <p>Loading...</p>
-            </button>
-            <button>
-              <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
-              <p>Loading...</p>
-            </button>
-            <button>
-              <img src={STATUS_ICONS.invisible} alt="Status Icon - Invisible" />
-              <p>Loading...</p>
-            </button>
-          </div>
         </div>
         <DevInfo />
-        <NavLink to={'/'}>
+        <a>
           <PiDotsThreeOutlineFill />
-        </NavLink>
+        </a>
       </StyledStatusBar>
     </StyledHomePage>
   );
@@ -155,4 +142,60 @@ function SkeletonChatPage() {
       </StyledEditor>
     </StyledChatPage>
   );
+}
+
+type SkeletonLineProps = {
+  text: string;
+  marginBottom?: boolean;
+};
+
+function SkeletonLine({ text = '', marginBottom }: SkeletonLineProps) {
+  return (
+    <p className={`skeleton-line ${marginBottom ? 'mg-b' : undefined}`}>
+      {text}
+    </p>
+  );
+}
+
+type SkeletonIconProps = {
+  size?: number;
+  colour?: string;
+  marginRight?: boolean;
+};
+
+function SkeletonIcon({
+  size = 18,
+  colour = DARK_THEME.colours.bgPrimary,
+  marginRight,
+}: SkeletonIconProps) {
+  return (
+    <div
+      style={{ width: size, height: size, backgroundColor: colour }}
+      className={`skeleton-icon ${marginRight ? 'mg-r' : undefined}`}
+    ></div>
+  );
+}
+
+type SkeletonContactProps = {
+  length: number;
+};
+
+function SkeletonContact({ length }: SkeletonContactProps) {
+  return Array(length)
+    .fill(null)
+    .map((_v, index) => {
+      return (
+        <StyledContact key={index}>
+          <SkeletonIcon size={20} marginRight />
+          <div className="user-info">
+            <p className="username">
+              <SkeletonLine text="Loading..." marginBottom />
+            </p>
+            <p className="text-status">
+              <SkeletonLine text="Loading some text status..." />
+            </p>
+          </div>
+        </StyledContact>
+      );
+    });
 }

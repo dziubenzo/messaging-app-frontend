@@ -1,4 +1,14 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, keyframes } from 'styled-components';
+
+const flicker = keyframes`
+  from {
+    opacity: 0.5;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -61,6 +71,28 @@ const GlobalStyle = createGlobalStyle`
     svg {
       height: 32px;
       width: 32px;
+    }
+  }
+
+  // Skeleton styling and animation
+  .skeleton-line {
+    width: max-content !important;
+    background-color: ${(props) => props.theme.colours.bgPrimary} !important;
+    color: ${(props) => props.theme.colours.bgPrimary} !important;
+    border-radius: 6px;
+    animation: ${flicker} 1s linear infinite alternate;
+
+    &.mg-b {
+      margin-bottom: 0.1em;
+    }
+  }
+
+  .skeleton-icon {
+    border-radius: 50%;
+    animation: ${flicker} 1s linear infinite alternate;
+
+    &.mg-r {
+      margin-right: 0.2em;
     }
   }
 

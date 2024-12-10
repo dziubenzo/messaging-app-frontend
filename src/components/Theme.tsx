@@ -1,37 +1,13 @@
 import { type ReactNode } from 'react';
 import { ThemeProvider } from 'styled-components';
+import { DARK_THEME } from '../constants';
 
-export type ThemeObject = typeof darkTheme;
+export type ThemeObject = typeof DARK_THEME;
 
 type ThemeProps = {
   children: ReactNode;
 };
 
-const darkTheme = {
-  colours: {
-    bgPrimary: '#ff7f3f',
-    bgSecondary: '#ffff9b',
-    bgTertiary: '#e7e783',
-    bgQuaternary: '#ffffe1',
-    bgSelected: '#0a246a',
-    primary: '#000000',
-    topBar: '#0153e4',
-  },
-  fontSizes: {
-    extraSmall: '0.7rem',
-    small: '0.8rem',
-    standard: '1.0rem',
-    medium: '1.2rem',
-    large: '1.5rem',
-    extraLarge: '2rem',
-  },
-  fonts: {
-    primary: '"Microsoft Sans Serif", sans-serif',
-    secondary: '"Fugaz One", sans-serif',
-  },
-  mobile: '768px',
-};
-
 export default function Theme({ children }: ThemeProps) {
-  return <ThemeProvider theme={darkTheme}>{children}</ThemeProvider>;
+  return <ThemeProvider theme={DARK_THEME}>{children}</ThemeProvider>;
 }
