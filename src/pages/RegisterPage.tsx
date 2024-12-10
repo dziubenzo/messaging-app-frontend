@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { type Id, toast } from 'react-toastify';
 import API_URL from '../API';
@@ -10,10 +10,15 @@ import { OutletContext } from '../types';
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { setIsAuth } = useOutletContext<OutletContext>();
+  const { isAuth, setIsAuth } = useOutletContext<OutletContext>();
 
   const [buttonText, setButtonText] = useState('Register');
   const [loggingInAsGuest, setLoggingInAsGuest] = useState(false);
+
+  // Prevent visiting this page by logged-in users
+  useEffect(() => {
+    if (isAuth) navigate('/home');
+  }, [isAuth]);
 
   // Register user
   async function register(event: React.FormEvent<HTMLFormElement>) {

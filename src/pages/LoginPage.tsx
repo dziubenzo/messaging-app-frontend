@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
@@ -9,10 +9,15 @@ import { OutletContext } from '../types';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setIsAuth } = useOutletContext<OutletContext>();
+  const { isAuth, setIsAuth } = useOutletContext<OutletContext>();
 
   const [loggingIn, setLoggingIn] = useState(false);
   const [loggingInAsGuest, setLoggingInAsGuest] = useState(false);
+
+  // Prevent visiting this page by logged-in users
+  useEffect(() => {
+    if (isAuth) navigate('/home');
+  }, [isAuth]);
 
   // Log in user, change their status icon to available and navigate to the Home page on successful login
   // Make sure icon is changed before navigating to the Home page
