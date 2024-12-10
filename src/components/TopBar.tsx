@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { AiOutlineLogout } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
 import API_URL from '../API';
@@ -8,7 +8,7 @@ import { STATUS_ICONS } from '../constants';
 import { changeStatusIcon } from '../helpers';
 import { socket } from '../socket';
 import { StyledTopBar } from '../styles/HomePage.styled';
-import type { User } from '../types';
+import type { OutletContext, User } from '../types';
 
 type TopBarProps = {
   user: User;
@@ -17,14 +17,15 @@ type TopBarProps = {
 
 function TopBar({ user, setUser }: TopBarProps) {
   const navigate = useNavigate();
+  const { setIsAuth } = useOutletContext<OutletContext>();
 
   // Logout user, show toast and redirect to the Login page
   // Change status icon to unavailable
   // Wait for status icon change to finish before logging out
   async function logOut(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    if (!user) Cookies.remove('jwt');
     Cookies.remove('jwt');
+    setIsAuth(false);
     const toastRef = toast.success('You have been logged out successfully');
     return navigate('/login');
     socket.emit('change status icon', user.user_id, STATUS_ICONS.unavailable);

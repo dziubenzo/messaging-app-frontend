@@ -2,6 +2,7 @@ import { FaBold, FaItalic } from 'react-icons/fa';
 import { FaUnderline } from 'react-icons/fa6';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
 import { MdInsertEmoticon } from 'react-icons/md';
+import { useOutletContext } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { STATUS_ICONS } from '../constants';
 import {
@@ -13,9 +14,15 @@ import {
   StyledToolbar,
 } from '../styles/ChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
+import { OutletContext } from '../types';
+import LoadingPage from './LoadingPage';
 
 export default function SkeletonChatPage() {
-  return (
+  const { isAuth } = useOutletContext<OutletContext>();
+
+  return !isAuth ? (
+    <LoadingPage />
+  ) : (
     <StyledChatPage>
       <StyledTopBar>
         <img src={STATUS_ICONS.invisible} />

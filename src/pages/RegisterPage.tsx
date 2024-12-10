@@ -1,14 +1,17 @@
 import Cookies from 'js-cookie';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { type Id, toast } from 'react-toastify';
 import API_URL from '../API';
 import { logInAsGuest } from '../helpers';
 import { socket } from '../socket';
 import { StyledRegisterPage } from '../styles/RegisterPage.styled';
+import { OutletContext } from '../types';
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const { setIsAuth } = useOutletContext<OutletContext>();
+
   const [buttonText, setButtonText] = useState('Register');
   const [loggingInAsGuest, setLoggingInAsGuest] = useState(false);
 
@@ -83,6 +86,7 @@ function RegisterPage() {
       secure: location.protocol === 'https:',
       sameSite: 'Lax',
     });
+    setIsAuth(true);
     toast.dismiss();
     return navigate('/home');
   }
@@ -125,7 +129,7 @@ function RegisterPage() {
       </Link>
       <button
         className="guest-account-btn"
-        onClick={() => logInAsGuest(setLoggingInAsGuest, navigate)}
+        onClick={() => logInAsGuest(setLoggingInAsGuest, setIsAuth, navigate)}
       >
         {loggingInAsGuest ? 'Logging In As Guest...' : 'Log In As Guest'}
       </button>

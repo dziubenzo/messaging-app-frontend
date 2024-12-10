@@ -58,4 +58,6 @@ export type OutletContext = {
   setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>;
   groupChats: GroupChat[];
   setGroupChats: Updater<GroupChat[]>;
+  isAuth: boolean;
+  setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
 };

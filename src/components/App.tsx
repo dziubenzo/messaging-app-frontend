@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, Zoom } from 'react-toastify';
 import { STATUS_ICONS } from '../constants';
+import { useCheckAuth } from '../helpers';
 import GlobalStyle from '../styles/GlobalStyle';
 import type { StatusIcon } from '../types';
 import Header from './Header';
@@ -14,6 +15,8 @@ type AppProps = {
 function App({ children }: AppProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const [isAuth, setIsAuth] = useCheckAuth();
 
   // State for storing user's previous status icon
   const [previousStatusIcon, setPreviousStatusIcon] = useState<StatusIcon>(
@@ -28,7 +31,14 @@ function App({ children }: AppProps) {
     <Theme>
       <GlobalStyle />
       <Header />
-      <Outlet context={{ previousStatusIcon, setPreviousStatusIcon }} />
+      <Outlet
+        context={{
+          previousStatusIcon,
+          setPreviousStatusIcon,
+          isAuth,
+          setIsAuth,
+        }}
+      />
       {children}
       <ToastContainer
         position="bottom-center"

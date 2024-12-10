@@ -36,11 +36,46 @@ export class ApiError extends Error {
   }
 }
 
+// Check authentication
+// This allows me to prevent showing fallback skeletons if the user navigates to the page they are not authenticated to visit
+export const useCheckAuth = () => {
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const res = await fetch(`${API_URL}/users/auth`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('jwt')}`,
+          },
+        });
+        if (!res.ok) {
+          setIsAuth(false);
+        } else {
+          setIsAuth(true);
+        }
+      } catch (error) {
+        if (error instanceof ApiError) {
+          setIsAuth(false);
+          return;
+        }
+        setIsAuth(false);
+      }
+    }
+    checkAuth();
+  }, []);
+
+  return [isAuth, setIsAuth] as const;
+};
+
 // Log in as guest
-export async function logInAsGuest(
+export const logInAsGuest = async (
   setLoggingInAsGuest: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsAuth: React.Dispatch<React.SetStateAction<boolean>>,
   navigate: NavigateFunction,
-) {
+) => {
   const user = {
     username: 'Guest',
     password: 'Guest',
@@ -61,17 +96,18 @@ export async function logInAsGuest(
     secure: location.protocol === 'https:',
     sameSite: 'Lax',
   });
+  setIsAuth(true);
   toast.dismiss();
   return navigate('/home');
-}
+};
 
 // Close chat or emoticons container on Esc key press
-export function useCloseChatOrEmoticons(
+export const useCloseChatOrEmoticons = (
   navigateToURL: string,
   isGroupChat: boolean,
   showEmoticons: boolean,
   setShowEmoticons: React.Dispatch<React.SetStateAction<boolean>>,
-) {
+) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -90,10 +126,10 @@ export function useCloseChatOrEmoticons(
       document.removeEventListener('keydown', closeChat);
     };
   }, [navigateToURL, isGroupChat, showEmoticons]);
-}
+};
 
 // Hide emoticons container on outside click if it is open
-export function useHideEmoticons() {
+export const useHideEmoticons = () => {
   const [showEmoticons, setShowEmoticons] = useState(false);
 
   const emoticonsContainerRef = useRef<HTMLDivElement>(null);
@@ -128,7 +164,7 @@ export function useHideEmoticons() {
     emoticonsContainerRef,
     emoticonsButtonRef,
   };
-}
+};
 
 // Change status icon when logged in user goes offline or online or changes tabs
 export const changeStatusIcon = async (
@@ -346,7 +382,7 @@ export const useEmitTypingEvents = (
 };
 
 // Determine the tab to go back to from a chat or the Options tab (either to the previous tab or the Home page if the previous tab cannot be established)
-export function getPreviousPathname(state: unknown) {
+export const getPreviousPathname = (state: unknown) => {
   if (
     state &&
     typeof state === 'object' &&
@@ -357,4 +393,4 @@ export function getPreviousPathname(state: unknown) {
   } else {
     return '/home';
   }
-}
+};

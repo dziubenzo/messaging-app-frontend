@@ -6,7 +6,7 @@ import {
   LiaUsersSolid,
 } from 'react-icons/lia';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useOutletContext } from 'react-router-dom';
 import DevInfo from '../components/DevInfo';
 import Loading from '../components/Loading';
 import { STATUS_ICONS } from '../constants';
@@ -18,9 +18,15 @@ import {
   StyledStatusBar,
   StyledTopBar,
 } from '../styles/HomePage.styled';
+import { OutletContext } from '../types';
+import LoadingPage from './LoadingPage';
 
 export default function SkeletonHomePage() {
-  return (
+  const { isAuth } = useOutletContext<OutletContext>();
+
+  return !isAuth ? (
+    <LoadingPage />
+  ) : (
     <StyledHomePage>
       <StyledTopBar>
         <img src={STATUS_ICONS.invisible} alt="Status Icon" />
