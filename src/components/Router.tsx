@@ -16,10 +16,9 @@ import LoginPage from '../pages/LoginPage';
 import NewGroupChatTab from '../pages/NewGroupChatTab';
 import OptionsTab from '../pages/OptionsTab';
 import RegisterPage from '../pages/RegisterPage';
-import SkeletonChatPage from '../pages/SkeletonChatPage';
-import SkeletonHomePage from '../pages/SkeletonHomePage';
 import SuspenseWrapper from '../pages/SuspenseWrapper';
 import App from './App';
+import SkeletonPage from '../pages/SkeletonPage';
 
 function Router() {
   const router = createBrowserRouter([
@@ -47,7 +46,10 @@ function Router() {
         {
           path: 'home',
           element: (
-            <SuspenseWrapper fallback={<SkeletonHomePage />} isHomePage>
+            <SuspenseWrapper
+              fallback={<SkeletonPage type={'home'} />}
+              isHomePage
+            >
               <HomePage />
             </SuspenseWrapper>
           ),
@@ -78,7 +80,10 @@ function Router() {
         {
           path: '/chats/:userId',
           element: (
-            <SuspenseWrapper fallback={<SkeletonChatPage />} isChatPage>
+            <SuspenseWrapper
+              fallback={<SkeletonPage type={'chat'} />}
+              isChatPage
+            >
               <ChatPage />
             </SuspenseWrapper>
           ),
@@ -87,7 +92,10 @@ function Router() {
         {
           path: '/group-chats/:groupChatName',
           element: (
-            <SuspenseWrapper fallback={<SkeletonChatPage />} isGroupChatPage>
+            <SuspenseWrapper
+              fallback={<SkeletonPage type={'chat'} />}
+              isGroupChatPage
+            >
               <GroupChatPage />
             </SuspenseWrapper>
           ),

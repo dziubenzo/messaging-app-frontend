@@ -1,15 +1,26 @@
 import { AiOutlineLogout } from 'react-icons/ai';
+import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa';
 import {
   LiaPlusCircleSolid,
   LiaUser,
   LiaUserFriendsSolid,
   LiaUsersSolid,
+  LiaWindowCloseSolid,
 } from 'react-icons/lia';
+import { MdInsertEmoticon } from 'react-icons/md';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { NavLink, useOutletContext } from 'react-router-dom';
 import DevInfo from '../components/DevInfo';
 import Loading from '../components/Loading';
 import { STATUS_ICONS } from '../constants';
+import {
+  StyledChatPage,
+  StyledEditor,
+  StyledInputButtons,
+  StyledInputField,
+  StyledMessages,
+  StyledToolbar,
+} from '../styles/ChatPage.styled';
 import {
   MiddleSection,
   StyledBottomBar,
@@ -21,12 +32,23 @@ import {
 import { OutletContext } from '../types';
 import LoadingPage from './LoadingPage';
 
-export default function SkeletonHomePage() {
-  const { isAuth } = useOutletContext<OutletContext>();
+type SkeletonPageProps = {
+  type: 'home' | 'chat';
+};
 
+export default function SkeletonPage({ type }: SkeletonPageProps) {
+  const { isAuth } = useOutletContext<OutletContext>();
   return !isAuth ? (
     <LoadingPage />
+  ) : type === 'home' ? (
+    <SkeletonHomePage />
   ) : (
+    <SkeletonChatPage />
+  );
+}
+
+function SkeletonHomePage() {
+  return (
     <StyledHomePage>
       <StyledTopBar>
         <img src={STATUS_ICONS.invisible} alt="Status Icon" />
@@ -93,5 +115,44 @@ export default function SkeletonHomePage() {
         </NavLink>
       </StyledStatusBar>
     </StyledHomePage>
+  );
+}
+
+function SkeletonChatPage() {
+  return (
+    <StyledChatPage>
+      <StyledTopBar>
+        <img src={STATUS_ICONS.invisible} />
+        <p>Loading...</p>
+        <button className="close-chat-btn">
+          <LiaWindowCloseSolid />
+        </button>
+      </StyledTopBar>
+      <StyledMessages>
+        <Loading />
+      </StyledMessages>
+      <StyledEditor>
+        <StyledToolbar>
+          <button className="toolbar-btn">
+            <FaBold />
+          </button>
+          <button className="toolbar-btn">
+            <FaItalic />
+          </button>
+          <button className="toolbar-btn">
+            <FaUnderline />
+          </button>
+          <button className="toolbar-btn">
+            <MdInsertEmoticon />
+          </button>
+        </StyledToolbar>
+        <StyledInputField></StyledInputField>
+        <StyledInputButtons>
+          <button>Send</button>
+          <button>Clear</button>
+          <button>Close</button>
+        </StyledInputButtons>
+      </StyledEditor>
+    </StyledChatPage>
   );
 }
