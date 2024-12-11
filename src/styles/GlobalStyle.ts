@@ -54,7 +54,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   // Various user feedback wrappers across the app
-  .loading-wrapper,
   .error-wrapper,
   .no-contacts-wrapper,
   .no-group-chats-wrapper,

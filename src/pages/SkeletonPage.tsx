@@ -1,5 +1,4 @@
 import { AiOutlineLogout } from 'react-icons/ai';
-import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa';
 import {
   LiaPlusCircleSolid,
   LiaUser,
@@ -7,17 +6,16 @@ import {
   LiaUsersSolid,
   LiaWindowCloseSolid,
 } from 'react-icons/lia';
-import { MdInsertEmoticon } from 'react-icons/md';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { useOutletContext } from 'react-router-dom';
 import DevInfo from '../components/DevInfo';
-import Loading from '../components/Loading';
-import { DARK_THEME, STATUS_ICONS } from '../constants';
+import { DARK_THEME } from '../constants';
 import {
   StyledChatPage,
   StyledEditor,
   StyledInputButtons,
   StyledInputField,
+  StyledMessage,
   StyledMessages,
   StyledToolbar,
 } from '../styles/ChatPage.styled';
@@ -85,7 +83,7 @@ function SkeletonHomePage() {
         </a>
       </StyledContactsBar>
       <MiddleSection>
-        <SkeletonContact length={10} />
+        <SkeletonContacts length={10} />
       </MiddleSection>
       <StyledBottomBar>
         <SkeletonLine text="0000000" marginBottom />
@@ -109,35 +107,43 @@ function SkeletonChatPage() {
   return (
     <StyledChatPage>
       <StyledTopBar>
-        <img src={STATUS_ICONS.invisible} />
+        <SkeletonIcon colour={DARK_THEME.colours.bgSecondary} />
         <p>Loading...</p>
         <button className="close-chat-btn">
           <LiaWindowCloseSolid />
         </button>
       </StyledTopBar>
       <StyledMessages>
-        <Loading />
+        <div>
+          <SkeletonMessages length={5} />
+        </div>
       </StyledMessages>
       <StyledEditor>
         <StyledToolbar>
           <button className="toolbar-btn">
-            <FaBold />
+            <SkeletonIcon colour={DARK_THEME.colours.bgSecondary} />
           </button>
           <button className="toolbar-btn">
-            <FaItalic />
+            <SkeletonIcon colour={DARK_THEME.colours.bgSecondary} />
           </button>
           <button className="toolbar-btn">
-            <FaUnderline />
+            <SkeletonIcon colour={DARK_THEME.colours.bgSecondary} />
           </button>
           <button className="toolbar-btn">
-            <MdInsertEmoticon />
+            <SkeletonIcon colour={DARK_THEME.colours.bgSecondary} />
           </button>
         </StyledToolbar>
         <StyledInputField></StyledInputField>
         <StyledInputButtons>
-          <button>Send</button>
-          <button>Clear</button>
-          <button>Close</button>
+          <button>
+            <SkeletonLine text="Send" />
+          </button>
+          <button>
+            <SkeletonLine text="Clear" />
+          </button>
+          <button>
+            <SkeletonLine text="Close" />
+          </button>
         </StyledInputButtons>
       </StyledEditor>
     </StyledChatPage>
@@ -176,11 +182,11 @@ function SkeletonIcon({
   );
 }
 
-type SkeletonContactProps = {
+type SkeletonContactsProps = {
   length: number;
 };
 
-function SkeletonContact({ length }: SkeletonContactProps) {
+function SkeletonContacts({ length }: SkeletonContactsProps) {
   return Array(length)
     .fill(null)
     .map((_v, index) => {
@@ -196,6 +202,29 @@ function SkeletonContact({ length }: SkeletonContactProps) {
             </p>
           </div>
         </StyledContact>
+      );
+    });
+}
+
+type SkeletonMessagesProps = {
+  length: number;
+};
+
+function SkeletonMessages({ length }: SkeletonMessagesProps) {
+  return Array(length)
+    .fill(null)
+    .map((_v, index) => {
+      return (
+        <StyledMessage
+          sender={index % 2 === 0 ? undefined : 'true'}
+          key={index}
+        >
+          <SkeletonLine text="Loading..." marginBottom />
+          <SkeletonLine
+            text="Loading a rather longish message, yay!"
+            marginBottom
+          />
+        </StyledMessage>
       );
     });
 }
