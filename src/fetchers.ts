@@ -129,7 +129,7 @@ export const updateUser = async (
   return navigate('/home');
 };
 
-// Send message (Editor component) if it is not empty and if it doesn't contain <br>, which gets created after using formatting options and then clearing input field manually
+// Send message if it is not empty
 // Clear input fields if operation successful
 // Support both DMs and group chats
 export const sendMessage = async (
@@ -142,6 +142,8 @@ export const sendMessage = async (
   setMessages: Updater<Message[]> | Updater<GroupChatMessage[]>,
   clearInputField: () => void,
 ) => {
+  // Remove non-breaking and trailing space
+  text = text.replace(/&nbsp;/g, '').trim();
   if (!text || inProgress) return;
   setInProgress(true);
   const toastRef = toast.info('Sending message...');
