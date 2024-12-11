@@ -153,11 +153,18 @@ function SkeletonChatPage() {
 type SkeletonLineProps = {
   text: string;
   marginBottom?: boolean;
+  className?: string;
 };
 
-function SkeletonLine({ text = '', marginBottom }: SkeletonLineProps) {
+function SkeletonLine({
+  text = '',
+  marginBottom,
+  className,
+}: SkeletonLineProps) {
   return (
-    <p className={`skeleton-line ${marginBottom ? 'mg-b' : undefined}`}>
+    <p
+      className={`${className} skeleton-line ${marginBottom ? 'mg-b' : undefined}`}
+    >
       {text}
     </p>
   );
@@ -194,12 +201,11 @@ function SkeletonContacts({ length }: SkeletonContactsProps) {
         <StyledContact key={index}>
           <SkeletonIcon size={20} marginRight />
           <div className="user-info">
-            <p className="username">
-              <SkeletonLine text="Loading..." marginBottom />
-            </p>
-            <p className="text-status">
-              <SkeletonLine text="Loading some text status..." />
-            </p>
+            <SkeletonLine text="Loading..." marginBottom />
+            <SkeletonLine
+              className="text-status"
+              text="Loading some text status..."
+            />
           </div>
         </StyledContact>
       );
