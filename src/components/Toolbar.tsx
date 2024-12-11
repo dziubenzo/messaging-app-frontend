@@ -32,14 +32,10 @@ function Toolbar({ inputFieldRef, isGroupChat }: ToolbarProps) {
     document.execCommand(action, false, undefined);
   }
 
-  // Add emoticon to the end of input field
-  // Move caret to the end of input field
+  // Insert emoticon at the end of the input field if it is empty or where the caret is if it is not
   function insertEmoticon(event: React.MouseEvent<HTMLButtonElement>) {
     if (!inputFieldRef.current) return;
-    const selection = window.getSelection();
-    if (!selection) return;
-    selection.selectAllChildren(inputFieldRef.current);
-    selection.collapseToEnd();
+    inputFieldRef.current.focus();
     document.execCommand(
       'insertImage',
       false,
@@ -58,7 +54,7 @@ function Toolbar({ inputFieldRef, isGroupChat }: ToolbarProps) {
   );
 
   return (
-    <StyledToolbar>
+    <StyledToolbar onMouseDown={(event) => event.preventDefault()}>
       <button
         className="toolbar-btn"
         title="Bold Selection"

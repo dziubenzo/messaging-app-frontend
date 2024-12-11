@@ -61,8 +61,18 @@ function Messages({
     });
   }
 
+  // Prevent losing input field focus if the first emoticon (or any, actually) can be selected with querySelector, i.e. the emoticons div is rendered
+  function handleMouseDown(event: React.MouseEvent<HTMLDivElement>) {
+    const firstEmoticon = document.querySelector(
+      'button[title="Smile Emoticon"]',
+    );
+    if (firstEmoticon) {
+      event.preventDefault();
+    }
+  }
+
   return (
-    <StyledMessages ref={messagesRef}>
+    <StyledMessages ref={messagesRef} onMouseDown={handleMouseDown}>
       <div>
         {renderMessages()}
         {someoneIsTyping && <IsTyping username={typingUsername} />}

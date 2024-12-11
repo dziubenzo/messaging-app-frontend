@@ -111,7 +111,7 @@ export const useCloseChatOrEmoticons = (
   const navigate = useNavigate();
 
   useEffect(() => {
-    function closeChat(event: KeyboardEvent) {
+    function closeChatOrEmoticons(event: KeyboardEvent) {
       if (event.key === 'Escape' && showEmoticons) {
         setShowEmoticons(false);
       } else if (event.key === 'Escape' && isGroupChat) {
@@ -120,10 +120,10 @@ export const useCloseChatOrEmoticons = (
         navigate(navigateToURL);
       }
     }
-    document.addEventListener('keydown', closeChat);
+    document.addEventListener('keydown', closeChatOrEmoticons);
 
     return () => {
-      document.removeEventListener('keydown', closeChat);
+      document.removeEventListener('keydown', closeChatOrEmoticons);
     };
   }, [navigateToURL, isGroupChat, showEmoticons]);
 };

@@ -8,7 +8,10 @@ type EmoticonProps = {
 
 function Emoticons({ insertEmoticon, emoticonsContainerRef }: EmoticonProps) {
   return (
-    <StyledEmoticons ref={emoticonsContainerRef}>
+    <StyledEmoticons
+      ref={emoticonsContainerRef}
+      onMouseDown={(event) => event.preventDefault()}
+    >
       {EMOTICONS.map((emoticon) => (
         <button
           key={emoticon.name}
