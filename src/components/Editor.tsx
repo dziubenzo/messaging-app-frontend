@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Updater } from 'use-immer';
 import { sendMessage } from '../fetchers';
@@ -83,6 +83,12 @@ function Editor({
       clearInputField,
     );
   }
+
+  // Focus on input field on chat load
+  useEffect(() => {
+    if (inputFieldRef.current === null) return;
+    inputFieldRef.current.focus();
+  }, [inputFieldRef]);
 
   // Emit events when a user is typing or cleared their input field
   useEmitTypingEvents(text, isGroupChat, recipient, loggedInUser);
