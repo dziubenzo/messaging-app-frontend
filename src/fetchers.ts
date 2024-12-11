@@ -142,9 +142,7 @@ export const sendMessage = async (
   setMessages: Updater<Message[]> | Updater<GroupChatMessage[]>,
   clearInputField: () => void,
 ) => {
-  if (text === '<br>' || !text || inProgress) {
-    return;
-  }
+  if (!text || inProgress) return;
   setInProgress(true);
   const toastRef = toast.info('Sending message...');
   // Group chat case

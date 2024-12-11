@@ -51,6 +51,25 @@ function Editor({
     }
   }
 
+  function handleInput(event: React.FormEvent<HTMLDivElement>) {
+    // Remove br tags that are inserted after clearing the input field
+    if (event.currentTarget.innerHTML === '<br>') {
+      event.currentTarget.innerHTML = '';
+    }
+    setText(event.currentTarget.innerHTML);
+  }
+
+  function handlePaste(event: React.ClipboardEvent<HTMLDivElement>) {
+    event.preventDefault();
+
+    // Transform pasted content into plaintext without line breaks and double spaces
+    const pastedContent = event.clipboardData
+      .getData('text/plain')
+      .replace(/(\r\n|\n|\r)/gm, ' ')
+      .replace(/\s+/g, ' ');
+    document.execCommand('insertText', false, pastedContent);
+  }
+
   // Send message (DMs and group chats)
   function handleSendButtonClick() {
     sendMessage(
@@ -74,7 +93,8 @@ function Editor({
       <StyledInputField
         ref={inputFieldRef}
         contentEditable
-        onInput={(event) => setText(event.currentTarget.innerHTML)}
+        onInput={handleInput}
+        onPaste={handlePaste}
         onKeyDown={sendMessageOnEnter}
       ></StyledInputField>
       <StyledInputButtons>
