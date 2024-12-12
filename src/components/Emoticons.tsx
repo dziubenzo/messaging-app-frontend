@@ -12,10 +12,10 @@ function Emoticons({ insertEmoticon, emoticonsContainerRef }: EmoticonProps) {
       ref={emoticonsContainerRef}
       onMouseDown={(event) => event.preventDefault()}
     >
-      {EMOTICONS.map((emoticon) => (
+      {Object.values(EMOTICONS).map((emoticon) => (
         <button
-          key={emoticon.name}
-          title={emoticon.name}
+          key={emoticon.title}
+          title={emoticon.title}
           onClick={insertEmoticon}
         >
           <img src={emoticon.url} />

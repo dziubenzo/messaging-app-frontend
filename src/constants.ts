@@ -42,66 +42,85 @@ export const STATUS_ICONS = {
 } as const;
 
 // Emoticons
-export const EMOTICONS: Emoticon[] = [
-  { name: 'Smile Emoticon', url: 'http://emots.yetihehe.com/2/usmiech.gif' },
-  { name: 'Wink Emoticon', url: 'http://emots.yetihehe.com/3/oczko2.gif' },
-  { name: 'OK Emoticon', url: 'http://emots.yetihehe.com/3/ok2.gif' },
-  { name: 'Grin Emoticon', url: 'http://emots.yetihehe.com/2/zeby.gif' },
-  { name: 'Tongue Emoticon', url: 'http://emots.yetihehe.com/2/jezyk1.gif' },
-  { name: 'Cunning Emoticon', url: 'http://emots.yetihehe.com/2/chytry.gif' },
-  {
-    name: 'Cunning Smile Emoticon',
+export const EMOTICONS = {
+  smile: {
+    title: 'Smile Emoticon',
+    url: 'http://emots.yetihehe.com/2/usmiech.gif',
+  },
+  wink: {
+    title: 'Wink Emoticon',
+    url: 'http://emots.yetihehe.com/3/oczko2.gif',
+  },
+  ok: { title: 'OK Emoticon', url: 'http://emots.yetihehe.com/3/ok2.gif' },
+  grin: { title: 'Grin Emoticon', url: 'http://emots.yetihehe.com/2/zeby.gif' },
+  tongue: {
+    title: 'Tongue Emoticon',
+    url: 'http://emots.yetihehe.com/2/jezyk1.gif',
+  },
+  cunning: {
+    title: 'Cunning Emoticon',
+    url: 'http://emots.yetihehe.com/2/chytry.gif',
+  },
+  cunningSmile: {
+    title: 'Cunning Smile Emoticon',
     url: 'http://emots.yetihehe.com/3/krzywy.gif',
   },
-  { name: 'Grimace Emoticon', url: 'http://emots.yetihehe.com/3/kwasny.gif' },
-  { name: 'LOL Emoticon', url: 'http://emots.yetihehe.com/3/lol.gif' },
-  { name: 'ROTFL Emoticon', url: 'http://emots.yetihehe.com/3/rotfl.gif' },
-  {
-    name: 'Loving Smile Emoticon',
+  grimace: {
+    title: 'Grimace Emoticon',
+    url: 'http://emots.yetihehe.com/3/kwasny.gif',
+  },
+  lol: { title: 'LOL Emoticon', url: 'http://emots.yetihehe.com/3/lol.gif' },
+  rotfl: {
+    title: 'ROTFL Emoticon',
+    url: 'http://emots.yetihehe.com/3/rotfl.gif',
+  },
+
+  lovingSmile: {
+    title: 'Loving Smile Emoticon',
     url: 'http://emots.yetihehe.com/3/serduszka.gif',
   },
-  {
-    name: 'Keep Tight Emoticon',
+  keepTight: {
+    title: 'Keep Tight Emoticon',
     url: 'http://emots.yetihehe.com/2/3m_sie.gif',
   },
-  {
-    name: 'Yay Emoticon',
+  yay: {
+    title: 'Yay Emoticon',
     url: 'http://emots.yetihehe.com/2/jupi.gif',
   },
-  {
-    name: 'WOW Emoticon',
+  wow: {
+    title: 'WOW Emoticon',
     url: 'http://emots.yetihehe.com/3/wow.gif',
   },
-  {
-    name: 'Question Mark Emoticon',
+  questionMark: {
+    title: 'Question Mark Emoticon',
     url: 'http://emots.yetihehe.com/2/pytajnik.gif',
   },
-  {
-    name: 'Exclamation Mark Emoticon',
+  exclamationMark: {
+    title: 'Exclamation Mark Emoticon',
     url: 'http://emots.yetihehe.com/2/wykrzyknik.gif',
   },
-  {
-    name: 'Bang Your Head Against A Wall Emoticon',
+  bangYourHead: {
+    title: 'Bang Your Head Against A Wall Emoticon',
     url: 'http://emots.yetihehe.com/2/sciana.gif',
   },
-  {
-    name: 'Typing Emoticon',
+  typing: {
+    title: 'Typing Emoticon',
     url: 'http://emots.yetihehe.com/2/pisze.gif',
   },
-  {
-    name: 'Give Me A Hug Emoticon',
+  giveMeHug: {
+    title: 'Give Me A Hug Emoticon',
     url: 'http://emots.yetihehe.com/2/przytul.gif',
   },
-  {
-    name: 'Stamp Your Feet Emoticon',
+  stampYourFeet: {
+    title: 'Stamp Your Feet Emoticon',
     url: 'http://emots.yetihehe.com/3/tuptup.gif',
   },
-  {
-    name: 'Dance Emoticon',
+  dance: {
+    title: 'Dance Emoticon',
     url: 'http://emots.yetihehe.com/2/tancze.gif',
   },
-  {
-    name: 'Beer Cheers Emoticon',
+  beerCheers: {
+    title: 'Beer Cheers Emoticon',
     url: 'http://emots.yetihehe.com/2/piwo.gif',
   },
-] as const;
+} as const satisfies Record<string, Emoticon>;

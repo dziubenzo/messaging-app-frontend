@@ -45,7 +45,7 @@ export type BottomBar = {
 };
 
 export type Emoticon = {
-  name: string;
+  title: string;
   url: string;
 };
 
