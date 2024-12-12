@@ -4,7 +4,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { type Updater } from 'use-immer';
 import API_URL from './API';
-import { STATUS_ICONS } from './constants';
+import { EMOTICONS, STATUS_ICONS } from './constants';
 import { UserContext } from './pages/SuspenseWrapper';
 import { socket } from './socket';
 import type {
@@ -393,4 +393,77 @@ export const getPreviousPathname = (state: unknown) => {
   } else {
     return '/home';
   }
+};
+
+// Determine whether the last two characters of the input field match either of the emoticons regexes
+// Return input field text without the last two characters along with the emoticon URL if they do
+export const convertTextEndToEmoticon = (text: string) => {
+  const smile = /:\)/;
+  const wink = /;\)/;
+  const grin = /[:;x]d/i;
+  const tongue = /[:;]p/i;
+  const cunningSmile = /[:;]]/;
+  const grimaceSmile = /[:;]\//;
+
+  // Get the last two characters and the third to last character
+  const lastTwoChars = text.slice(text.length - 2);
+  const thirdToLastChar = text[text.length - 3];
+
+  let modifiedText = '';
+  let emoticonURL = '';
+  let isEmoticon = true;
+
+  function endsWith(regExp: RegExp) {
+    let result = false;
+
+    if (regExp.test(lastTwoChars)) {
+      result = true;
+      // Replace normal space with non-breaking space to maintain space after emoticon insertion
+      if (thirdToLastChar === ' ') {
+        modifiedText = text.slice(0, text.length - 3) + '&nbsp;';
+      } else {
+        modifiedText = text.slice(0, text.length - 2);
+      }
+    }
+
+    return result;
+  }
+
+  switch (true) {
+    case endsWith(smile):
+      emoticonURL = EMOTICONS.smile.url;
+      break;
+    case endsWith(wink):
+      emoticonURL = EMOTICONS.wink.url;
+      break;
+    case endsWith(grin):
+      emoticonURL = EMOTICONS.grin.url;
+      break;
+    case endsWith(tongue):
+      emoticonURL = EMOTICONS.tongue.url;
+      break;
+    case endsWith(cunningSmile):
+      emoticonURL = EMOTICONS.cunningSmile.url;
+      break;
+    case endsWith(grimaceSmile):
+      emoticonURL = EMOTICONS.grimace.url;
+      break;
+    default:
+      isEmoticon = false;
+      break;
+  }
+
+  return {
+    modifiedText,
+    isEmoticon,
+    emoticonURL,
+  };
+};
+
+// Move caret to the end of the input field
+export const moveCaretToEnd = (inputField: HTMLDivElement) => {
+  const selection = window.getSelection();
+  if (selection === null) return;
+  selection.selectAllChildren(inputField);
+  selection.collapseToEnd();
 };

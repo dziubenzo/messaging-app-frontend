@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Updater } from 'use-immer';
 import { sendMessage } from '../fetchers';
-import { getPreviousPathname, useEmitTypingEvents } from '../helpers';
+import {
+  convertTextEndToEmoticon,
+  getPreviousPathname,
+  moveCaretToEnd,
+  useEmitTypingEvents,
+} from '../helpers';
 import {
   StyledEditor,
   StyledInputButtons,
@@ -52,9 +57,19 @@ function Editor({
   }
 
   function handleInput(event: React.FormEvent<HTMLDivElement>) {
+    if (inputFieldRef.current === null) return;
     // Remove br tags that are inserted after clearing the input field
     if (event.currentTarget.innerHTML === '<br>') {
       event.currentTarget.innerHTML = '';
+    }
+    const { isEmoticon, modifiedText, emoticonURL } = convertTextEndToEmoticon(
+      event.currentTarget.innerHTML,
+    );
+    // Insert an emoticon
+    if (isEmoticon) {
+      event.currentTarget.innerHTML = modifiedText;
+      moveCaretToEnd(inputFieldRef.current);
+      document.execCommand('insertImage', false, emoticonURL);
     }
     setText(event.currentTarget.innerHTML);
   }
