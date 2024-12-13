@@ -1,9 +1,33 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { StyledHomePage } from './HomePage.styled';
 
 type StyledMessageProps = {
   sender: 'true' | undefined;
 };
+
+const showEmoticons = keyframes`
+  from {
+    opacity: 0;
+    scale: 0;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+`;
+
+const hideEmoticons = keyframes`
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+
+  to {
+    opacity: 0;
+    scale: 0;
+  }
+`;
 
 export const StyledChatPage = styled(StyledHomePage)`
   svg {
@@ -118,6 +142,12 @@ export const StyledEmoticons = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 4px;
+  transform-origin: bottom left;
+  animation: ${showEmoticons} 0.2s linear forwards;
+
+  &.closing {
+    animation: ${hideEmoticons} 0.2s linear forwards;
+  }
 
   button {
     display: flex;

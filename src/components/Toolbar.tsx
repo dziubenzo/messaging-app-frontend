@@ -23,6 +23,8 @@ function Toolbar({ inputFieldRef, isGroupChat }: ToolbarProps) {
   const {
     showEmoticons,
     setShowEmoticons,
+    isClosing,
+    setIsClosing,
     emoticonsContainerRef,
     emoticonsButtonRef,
   } = useHideEmoticons();
@@ -45,12 +47,20 @@ function Toolbar({ inputFieldRef, isGroupChat }: ToolbarProps) {
     );
   }
 
+  // Close the emoticons div after the animation has ended
+  function handleEmoticonsAnimationEnd() {
+    // Prevent the code from running on opening animation
+    if (!isClosing) return;
+    setShowEmoticons(false);
+    setIsClosing(false);
+  }
+
   // Close chat or emoticons container on Esc key press
   useCloseChatOrEmoticons(
     previousPathname,
     isGroupChat,
     showEmoticons,
-    setShowEmoticons,
+    setIsClosing,
   );
 
   return (
@@ -89,6 +99,8 @@ function Toolbar({ inputFieldRef, isGroupChat }: ToolbarProps) {
           <Emoticons
             emoticonsContainerRef={emoticonsContainerRef}
             insertEmoticon={insertEmoticon}
+            isClosing={isClosing}
+            handleEmoticonsAnimationEnd={handleEmoticonsAnimationEnd}
           />
         )}
       </div>

@@ -106,14 +106,14 @@ export const useCloseChatOrEmoticons = (
   navigateToURL: string,
   isGroupChat: boolean,
   showEmoticons: boolean,
-  setShowEmoticons: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsClosing: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   const navigate = useNavigate();
 
   useEffect(() => {
     function closeChatOrEmoticons(event: KeyboardEvent) {
       if (event.key === 'Escape' && showEmoticons) {
-        setShowEmoticons(false);
+        setIsClosing(true);
       } else if (event.key === 'Escape' && isGroupChat) {
         navigate('/home/group-chats');
       } else if (event.key === 'Escape') {
@@ -131,6 +131,7 @@ export const useCloseChatOrEmoticons = (
 // Hide emoticons container on outside click if it is open
 export const useHideEmoticons = () => {
   const [showEmoticons, setShowEmoticons] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   const emoticonsContainerRef = useRef<HTMLDivElement>(null);
   const emoticonsButtonRef = useRef<HTMLButtonElement>(null);
@@ -148,7 +149,7 @@ export const useHideEmoticons = () => {
         clickedElement.parentNode?.parentNode !== emoticonsButtonRef.current &&
         showEmoticons
       ) {
-        setShowEmoticons(false);
+        setIsClosing(true);
       }
     }
     document.addEventListener('click', hideEmoticons);
@@ -161,6 +162,8 @@ export const useHideEmoticons = () => {
   return {
     showEmoticons,
     setShowEmoticons,
+    isClosing,
+    setIsClosing,
     emoticonsContainerRef,
     emoticonsButtonRef,
   };
