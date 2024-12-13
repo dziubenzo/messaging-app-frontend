@@ -413,6 +413,17 @@ export const convertTextEndToEmoticon = (text: string) => {
   let emoticonURL = '';
   let isEmoticon = true;
 
+  const verificationRegex = /[:;x]/i;
+  // Do not proceed if the second to last character is 'x', ':', or ';'
+  if (!verificationRegex.test(lastTwoChars[0])) {
+    isEmoticon = false;
+    return {
+      modifiedText,
+      isEmoticon,
+      emoticonURL,
+    };
+  }
+
   function endsWith(regExp: RegExp) {
     let result = false;
 

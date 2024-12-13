@@ -142,8 +142,8 @@ export const sendMessage = async (
   setMessages: Updater<Message[]> | Updater<GroupChatMessage[]>,
   clearInputField: () => void,
 ) => {
-  // Remove non-breaking and trailing space
-  text = text.replace(/&nbsp;/g, '').trim();
+  // Remove non-breaking and trailing space and add a normal space instead
+  text = text.replace(/&nbsp;/g, ' ').trim();
   if (!text || inProgress) return;
   setInProgress(true);
   const toastRef = toast.info('Sending message...');
