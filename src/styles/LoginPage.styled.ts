@@ -29,6 +29,7 @@ export const StyledLoginPage = styled.main`
 
     label {
       justify-self: left;
+      max-width: 8ch;
       cursor: pointer;
     }
 

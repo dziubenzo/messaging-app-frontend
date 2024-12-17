@@ -25,7 +25,7 @@ const GlobalStyle = createGlobalStyle`
 
     @supports (scrollbar-width: auto) {
       scrollbar-color: ${(props) => props.theme.colours.bgPrimary} ${(props) => props.theme.colours.bgSecondary};
-      scrollbar-width: auto;
+      scrollbar-width: thin;
     }
 
     @supports selector(::-webkit-scrollbar) {
