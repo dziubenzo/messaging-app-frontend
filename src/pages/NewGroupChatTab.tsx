@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import API_URL from '../API';
 import BoldToastMessage from '../components/BoldToastMessage';
 import NoContacts from '../components/NoContacts';
-import { buildHeader, sortByStatusIcon } from '../helpers';
+import { buildHeader, sortByUsername } from '../helpers';
 import { socket } from '../socket';
 import {
   StyledContactCheckbox,
@@ -19,7 +19,7 @@ function NewGroupChatTab() {
   const { user, setGroupChats } = useOutletContext<OutletContext>();
 
   const sortedContacts = useMemo(() => {
-    return user.contacts.toSorted(sortByStatusIcon);
+    return user.contacts.toSorted(sortByUsername);
   }, [user]);
 
   const [isCreating, setIsCreating] = useState(false);

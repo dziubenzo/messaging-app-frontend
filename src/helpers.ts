@@ -276,7 +276,7 @@ export const generateMembersList = (
   return usernamesArray.join(', ');
 };
 
-// Sort by status icon (compare function)
+// Sort by status icon
 export const sortByStatusIcon = (a: User, b: User) => {
   let statusIconA;
   let statusIconB;
@@ -306,7 +306,12 @@ export const sortByStatusIcon = (a: User, b: User) => {
   }
 
   // Sort by username if status icons are the same
-  // Ignore case
+  return sortByUsername(a, b);
+};
+
+// Sort by username
+// Ignore case
+export const sortByUsername = (a: User, b: User) => {
   const usernameA = a.username.toUpperCase();
   const usernameB = b.username.toUpperCase();
 
