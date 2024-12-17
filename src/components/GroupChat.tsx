@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -7,7 +6,7 @@ import { toast } from 'react-toastify';
 import slugify from 'slugify';
 import API_URL from '../API';
 import { STATUS_ICONS } from '../constants';
-import { generateMembersList } from '../helpers';
+import { buildHeader, generateMembersList } from '../helpers';
 import { socket } from '../socket';
 import { StyledGroupChat } from '../styles/GroupChatsTab.styled';
 import type { GroupChat, OutletContext } from '../types';
@@ -33,13 +32,10 @@ function GroupChat({ groupChat }: GroupChatProps) {
     const toastRef = toast.info('Deleting group chat...');
     event.stopPropagation();
     setInProgress(true);
-    const res = await fetch(`${API_URL}/group-chats/${_id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('jwt')}`,
-      },
-    });
+    const res = await fetch(
+      `${API_URL}/group-chats/${_id}`,
+      buildHeader('DELETE'),
+    );
     if (!res.ok) {
       const error = await res.json();
       return toast.update(toastRef, { render: error, type: 'error' });

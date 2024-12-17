@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { type Id, toast } from 'react-toastify';
 import API_URL from '../API';
-import { logInAsGuest } from '../helpers';
+import { buildHeader, logInAsGuest } from '../helpers';
 import { socket } from '../socket';
 import { StyledRegisterPage } from '../styles/RegisterPage.styled';
 import { OutletContext } from '../types';
@@ -39,13 +39,7 @@ function RegisterPage() {
       confirm_password: confirmPassword.trim(),
     };
     try {
-      const res = await fetch(`${API_URL}/users`, {
-        method: 'POST',
-        body: JSON.stringify(newUser),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const res = await fetch(`${API_URL}/users`, buildHeader('POST', newUser));
       const result = await res.json();
       if (!res.ok) {
         setButtonText('Register');
@@ -76,14 +70,10 @@ function RegisterPage() {
     };
     setButtonText('Logging In...');
     toast.update(toastRef, { render: 'Logging in...' });
-    const res = await fetch(`${API_URL}/users/login`, {
-      method: 'POST',
-      body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('jwt')}`,
-      },
-    });
+    const res = await fetch(
+      `${API_URL}/users/login`,
+      buildHeader('POST', user),
+    );
     // Create a cookie with API-signed JWT
     const token = await res.json();
     Cookies.set('jwt', token, {

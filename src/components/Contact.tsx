@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { IoPersonAddOutline, IoPersonRemoveOutline } from 'react-icons/io5';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
@@ -6,7 +5,7 @@ import { PulseLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
 import { STATUS_ICONS } from '../constants';
-import { sortByStatusIcon } from '../helpers';
+import { buildHeader, sortByStatusIcon } from '../helpers';
 import { StyledContact } from '../styles/HomePage.styled';
 import type { OutletContext, User } from '../types';
 import BoldToastMessage from './BoldToastMessage';
@@ -47,16 +46,10 @@ function Contact({ contact, isContact }: ContactProps) {
     const toastRef = toast.info('Adding contact...');
     event.stopPropagation();
     setInProgress(true);
-    const res = await fetch(`${API_URL}/users/${user_id}/add-contact`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        contact_id: _id,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('jwt')}`,
-      },
-    });
+    const res = await fetch(
+      `${API_URL}/users/${user_id}/add-contact`,
+      buildHeader('PUT', { contact_id: _id }),
+    );
     if (!res.ok) {
       return toast.update(toastRef, {
         render: 'There was an error. Please try again',
@@ -88,16 +81,10 @@ function Contact({ contact, isContact }: ContactProps) {
     const toastRef = toast.info('Removing contact...');
     event.stopPropagation();
     setInProgress(true);
-    const res = await fetch(`${API_URL}/users/${user_id}/remove-contact`, {
-      method: 'DELETE',
-      body: JSON.stringify({
-        contact_id: _id,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('jwt')}`,
-      },
-    });
+    const res = await fetch(
+      `${API_URL}/users/${user_id}/remove-contact`,
+      buildHeader('DELETE', { contact_id: _id }),
+    );
     if (!res.ok) {
       return toast.update(toastRef, {
         render: 'There was an error. Please try again',

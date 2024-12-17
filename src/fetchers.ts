@@ -1,13 +1,15 @@
-import Cookies from 'js-cookie';
 import { NavigateFunction } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { Updater } from 'use-immer';
 import API_URL from './API';
+import { buildHeader } from './helpers';
 import { socket } from './socket';
 import type {
   BottomBar,
   GroupChat,
+
   GroupChatMessage,
+
   Message,
   User,
 } from './types';
@@ -33,14 +35,10 @@ export const clearTextStatus = async (
     username: user.username,
     status_text: '',
   };
-  const res = await fetch(`${API_URL}/users/${user.user_id}/update`, {
-    method: 'PUT',
-    body: JSON.stringify(updates),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('jwt')}`,
-    },
-  });
+  const res = await fetch(
+    `${API_URL}/users/${user.user_id}/update`,
+    buildHeader('PUT', updates),
+  );
   if (!res.ok) {
     const error = await res.json();
     setInProgress(false);
@@ -93,17 +91,16 @@ export const updateUser = async (
   const formData = new FormData(event.currentTarget);
   const updates = {
     current_username: user.username,
-    username: user.username === 'Guest' ? 'Guest' : formData.get('username'),
-    status_text: formData.get('status_text'),
+    username:
+      user.username === 'Guest'
+        ? 'Guest'
+        : (formData.get('username') as string),
+    status_text: formData.get('status_text') as string,
   };
-  const res = await fetch(`${API_URL}/users/${user.user_id}/update`, {
-    method: 'PUT',
-    body: JSON.stringify(updates),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('jwt')}`,
-    },
-  });
+  const res = await fetch(
+    `${API_URL}/users/${user.user_id}/update`,
+    buildHeader('PUT', updates),
+  );
   if (!res.ok) {
     const error = await res.json();
     setInProgress(false);
@@ -155,14 +152,7 @@ export const sendMessage = async (
     };
     const res = await fetch(
       `${API_URL}/group-chats/${recipient._id}/messages`,
-      {
-        method: 'POST',
-        body: JSON.stringify(message),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Cookies.get('jwt')}`,
-        },
-      },
+      buildHeader('POST', message),
     );
     if (!res.ok) {
       setInProgress(false);
@@ -189,14 +179,10 @@ export const sendMessage = async (
       recipient: recipient._id,
       text,
     };
-    const res = await fetch(`${API_URL}/messages`, {
-      method: 'POST',
-      body: JSON.stringify(message),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('jwt')}`,
-      },
-    });
+    const res = await fetch(
+      `${API_URL}/messages`,
+      buildHeader('POST', message),
+    );
     if (!res.ok) {
       setInProgress(false);
       return toast.update(toastRef, {

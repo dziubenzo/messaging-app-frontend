@@ -61,3 +61,51 @@ export type OutletContext = {
   isAuth: boolean;
   setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+export type HeaderBody =
+  | UpdateOptionsBody
+  | MessageBody
+  | GroupChatMessageBody
+  | LogInBody
+  | RegisterUserBody
+  | UpdateIconBody
+  | UpdateContactBody
+  | NewChatBody;
+
+type UpdateOptionsBody = {
+  current_username: User['username'];
+  username: User['username'];
+  status_text: User['status_text'];
+};
+
+type MessageBody = {
+  sender: User['_id'];
+  text: Message['text'];
+};
+
+type GroupChatMessageBody = {
+  sender: User['_id'];
+  recipient: User['_id'];
+  text: Message['text'];
+};
+
+type LogInBody = {
+  username: User['username'];
+  password: string;
+};
+
+type RegisterUserBody = LogInBody & { confirm_password: string };
+
+type UpdateIconBody = {
+  image_url: StatusIcon;
+};
+
+type UpdateContactBody = {
+  contact_id: User['_id'];
+};
+
+type NewChatBody = {
+  name: GroupChat['name'];
+  created_by: GroupChat['created_by'];
+  members: User['_id'][];
+};

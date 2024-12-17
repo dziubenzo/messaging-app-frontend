@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
-import { logInAsGuest } from '../helpers';
+import { buildHeader, logInAsGuest } from '../helpers';
 import { StyledLoginPage } from '../styles/LoginPage.styled';
 import { OutletContext } from '../types';
 
@@ -26,18 +26,15 @@ function LoginPage() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const user = {
-      username: formData.get('username'),
-      password: formData.get('password'),
+      username: formData.get('username') as string,
+      password: formData.get('password') as string,
     };
     setLoggingIn(true);
     const toastRef = toast.info('Logging in...');
-    const res = await fetch(`${API_URL}/users/login`, {
-      method: 'POST',
-      body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const res = await fetch(
+      `${API_URL}/users/login`,
+      buildHeader('POST', user),
+    );
     if (!res.ok) {
       setLoggingIn(false);
       return toast.update(toastRef, {

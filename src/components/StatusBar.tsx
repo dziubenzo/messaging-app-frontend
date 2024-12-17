@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { PiDotsThreeOutlineFill } from 'react-icons/pi';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -7,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import type { Updater } from 'use-immer';
 import API_URL from '../API';
 import { STATUS_ICONS } from '../constants';
+import { buildHeader } from '../helpers';
 import { socket } from '../socket';
 import { StyledStatusBar } from '../styles/HomePage.styled';
 import type { StatusIcon, User } from '../types';
@@ -34,16 +34,10 @@ function StatusBar({ user, setUser, previousPathname }: StatusBarProps) {
     }
     const toastRef = toast.info('Changing status icon...');
     setInProgress(true);
-    const res = await fetch(`${API_URL}/users/${user_id}/change-status-icon`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        image_url: imageURL,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('jwt')}`,
-      },
-    });
+    const res = await fetch(
+      `${API_URL}/users/${user_id}/change-status-icon`,
+      buildHeader('PUT', { image_url: imageURL }),
+    );
     if (!res.ok) {
       setInProgress(false);
       return toast.update(toastRef, {

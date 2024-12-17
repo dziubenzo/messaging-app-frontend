@@ -11,6 +11,7 @@ import type {
   GroupChat,
   GroupChatMessage,
   GroupChatUser,
+  HeaderBody,
   Message,
   StatusIcon,
   User,
@@ -44,13 +45,7 @@ export const useCheckAuth = () => {
   useEffect(() => {
     async function checkAuth() {
       try {
-        const res = await fetch(`${API_URL}/users/auth`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('jwt')}`,
-          },
-        });
+        const res = await fetch(`${API_URL}/users/auth`, buildHeader('POST'));
         if (!res.ok) {
           setIsAuth(false);
         } else {
@@ -82,13 +77,7 @@ export const logInAsGuest = async (
   };
   setLoggingInAsGuest(true);
   toast.info('Logging in as Guest...');
-  const res = await fetch(`${API_URL}/users/login`, {
-    method: 'POST',
-    body: JSON.stringify(user),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const res = await fetch(`${API_URL}/users/login`, buildHeader('POST', user));
   // Create a cookie with API-signed JWT
   const token = await res.json();
   Cookies.set('jwt', token, {
@@ -177,16 +166,7 @@ export const changeStatusIcon = async (
 ) => {
   const res = await fetch(
     `${API_URL}/users/${user.user_id}/change-status-icon`,
-    {
-      method: 'PUT',
-      body: JSON.stringify({
-        image_url: imageURL,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('jwt')}`,
-      },
-    },
+    buildHeader('PUT', { image_url: imageURL }),
   );
   const updatedUser: User = await res.json();
   return setUser(updatedUser);
@@ -480,4 +460,19 @@ export const moveCaretToEnd = (inputField: HTMLDivElement) => {
   if (selection === null) return;
   selection.selectAllChildren(inputField);
   selection.collapseToEnd();
+};
+
+// Create header for the fetch request
+export const buildHeader = (
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  body?: HeaderBody,
+) => {
+  return {
+    method,
+    body: body ? JSON.stringify(body) : undefined,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('jwt')}`,
+    },
+  };
 };

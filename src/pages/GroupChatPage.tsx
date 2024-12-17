@@ -5,10 +5,7 @@ import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
 import { STATUS_ICONS } from '../constants';
-import {
-  useChangeStatusIcon,
-  useUser
-} from '../helpers';
+import { useChangeStatusIcon, useUser } from '../helpers';
 import { socket, useEventsGroupChatPage } from '../socket';
 import { StyledGroupChatPage } from '../styles/GroupChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';

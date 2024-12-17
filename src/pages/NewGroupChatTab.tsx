@@ -1,11 +1,10 @@
-import Cookies from 'js-cookie';
 import { useMemo, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API_URL from '../API';
 import BoldToastMessage from '../components/BoldToastMessage';
 import NoContacts from '../components/NoContacts';
-import { sortByStatusIcon } from '../helpers';
+import { buildHeader, sortByStatusIcon } from '../helpers';
 import { socket } from '../socket';
 import {
   StyledContactCheckbox,
@@ -13,7 +12,7 @@ import {
   StyledForm,
   StyledNameInputField,
 } from '../styles/NewGroupChatTab.styled';
-import type { GroupChat, OutletContext } from '../types';
+import type { GroupChat, OutletContext, User } from '../types';
 
 function NewGroupChatTab() {
   const navigate = useNavigate();
@@ -29,14 +28,14 @@ function NewGroupChatTab() {
   async function createGroupChat(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const members = formData.getAll('contact');
+    const members = formData.getAll('contact') as User['_id'][];
     if (members.length < 2) {
       return toast.error('Select at least two contacts');
     }
     setIsCreating(true);
     const toastRef = toast.info('Creating group chat...');
     members.push(user._id);
-    const newChatName = formData.get('name');
+    const newChatName = formData.get('name') as string;
     if (!newChatName) {
       setIsCreating(false);
       return;
@@ -46,14 +45,10 @@ function NewGroupChatTab() {
       created_by: user._id,
       members,
     };
-    const res = await fetch(`${API_URL}/group-chats/`, {
-      method: 'POST',
-      body: JSON.stringify(newChat),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Cookies.get('jwt')}`,
-      },
-    });
+    const res = await fetch(
+      `${API_URL}/group-chats/`,
+      buildHeader('POST', newChat),
+    );
     if (!res.ok) {
       setIsCreating(false);
       toast.update(toastRef, {

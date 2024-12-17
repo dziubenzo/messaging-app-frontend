@@ -2,14 +2,18 @@ import { isSameDay } from 'date-fns';
 import { Fragment, useRef } from 'react';
 import { useObserveMessagesDiv, useScrollToBottom } from '../helpers';
 import { StyledMessages } from '../styles/ChatPage.styled';
-import type { GroupChatMessage, Message as MessageType, User } from '../types';
+import type {
+  GroupChatMessage as GroupChatMessageType,
+  Message as MessageType,
+  User,
+} from '../types';
 import Day from './Day';
 import IsTyping from './IsTyping';
 import Message from './Message';
 import NoMessages from './NoMessages';
 
 type MessagesProps = {
-  messages: MessageType[] | GroupChatMessage[];
+  messages: MessageType[] | GroupChatMessageType[];
   loggedInUser: User;
   someoneIsTyping: boolean;
   typingUsername: User['username'];

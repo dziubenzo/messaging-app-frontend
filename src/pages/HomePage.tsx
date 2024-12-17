@@ -58,7 +58,7 @@ export default function HomePage() {
 
   return (
     <StyledHomePage>
-      <TopBar user={user} setUser={setUser} />
+      <TopBar user={user} />
       <ContactsBar />
       <MiddleSection>
         <Outlet
