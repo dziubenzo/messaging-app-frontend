@@ -37,18 +37,22 @@ export class ApiError extends Error {
   }
 }
 
-// Check authentication
-// This allows me to prevent showing fallback skeletons if the user navigates to the page they are not authenticated to visit
+// Check authentication and return user's MongoDB id for use on the server side
+// This also prevents showing fallback skeletons if the user navigates to the page they are not authenticated to visit
 export const useCheckAuth = () => {
   const [isAuth, setIsAuth] = useState(false);
+  const [userId, setUserId] = useState<User['_id']>('');
 
   useEffect(() => {
     async function checkAuth() {
       try {
         const res = await fetch(`${API_URL}/users/auth`, buildHeader('POST'));
         if (!res.ok) {
+          setUserId('');
           setIsAuth(false);
         } else {
+          const user = (await res.json()) as User;
+          setUserId(user._id);
           setIsAuth(true);
         }
       } catch (error) {
@@ -60,9 +64,9 @@ export const useCheckAuth = () => {
       }
     }
     checkAuth();
-  }, []);
+  }, [isAuth]);
 
-  return [isAuth, setIsAuth] as const;
+  return [isAuth, setIsAuth, userId] as const;
 };
 
 // Log in as guest
@@ -170,52 +174,6 @@ export const changeStatusIcon = async (
   );
   const updatedUser: User = await res.json();
   return setUser(updatedUser);
-};
-
-// Hook for changing logged in user's status icon during the use of the app
-// Change the icon to unavailable if the user triggers the "hidden" state
-// Change the icon to either their previous one or available if the user triggers the "visible" state
-export const useChangeStatusIcon = (
-  user: User,
-  setUser: Updater<User>,
-  previousStatusIcon: StatusIcon,
-  setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>,
-) => {
-  useEffect(() => {
-    function changeIcon() {
-      if (document.visibilityState === 'hidden') {
-        socket.emit(
-          'change status icon',
-          user.user_id,
-          STATUS_ICONS.unavailable,
-        );
-        setPreviousStatusIcon(user.status_icon);
-        changeStatusIcon(user, setUser, STATUS_ICONS.unavailable);
-      } else {
-        if (
-          previousStatusIcon !== STATUS_ICONS.unavailable &&
-          previousStatusIcon
-        ) {
-          socket.emit('change status icon', user.user_id, previousStatusIcon);
-          return changeStatusIcon(user, setUser, previousStatusIcon);
-        }
-        socket.emit('change status icon', user.user_id, STATUS_ICONS.available);
-        changeStatusIcon(user, setUser, STATUS_ICONS.available);
-      }
-    }
-    window.addEventListener('visibilitychange', changeIcon);
-    return () => {
-      window.removeEventListener('visibilitychange', changeIcon);
-    };
-  }, [user]);
-};
-
-// Hook for changing logged in user's status icon to available on Home page load
-export const useChangeToAvailable = (user: User, setUser: Updater<User>) => {
-  useEffect(() => {
-    changeStatusIcon(user, setUser, STATUS_ICONS.available);
-    socket.emit('change status icon', user.user_id, STATUS_ICONS.available);
-  }, []);
 };
 
 // Observe changes to messages div height to make sure scrolling to bottom works irrespective of emoticons loading time

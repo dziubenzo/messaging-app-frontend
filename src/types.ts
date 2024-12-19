@@ -54,8 +54,6 @@ export type OutletContext = {
   setUser: Updater<User>;
   allUsersFiltered: User[];
   setBottomBarText: React.Dispatch<React.SetStateAction<BottomBar>>;
-  previousStatusIcon: StatusIcon;
-  setPreviousStatusIcon: React.Dispatch<React.SetStateAction<StatusIcon>>;
   groupChats: GroupChat[];
   setGroupChats: Updater<GroupChat[]>;
   isAuth: boolean;

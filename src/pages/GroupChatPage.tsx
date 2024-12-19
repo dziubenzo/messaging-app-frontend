@@ -1,28 +1,23 @@
 import { useEffect, useState } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
 import { STATUS_ICONS } from '../constants';
-import { useChangeStatusIcon, useUser } from '../helpers';
+import { useUser } from '../helpers';
 import { socket, useEventsGroupChatPage } from '../socket';
 import { StyledGroupChatPage } from '../styles/GroupChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
 import type {
   GroupChat,
-  GroupChatMessage,
-  OutletContext,
-  User,
+  GroupChatMessage
 } from '../types';
 
 function GroupChatPage() {
   const navigate = useNavigate();
-  const { previousStatusIcon, setPreviousStatusIcon } =
-    useOutletContext<OutletContext>();
 
-  const { user: fetchedUser, groupChat: fetchedGroupChat } = useUser();
-  const [user, setUser] = useImmer<User>(fetchedUser);
+  const { user, groupChat: fetchedGroupChat } = useUser();
 
   // States for messages
   const [messages, setMessages] = useImmer<GroupChatMessage[]>(
@@ -49,9 +44,6 @@ function GroupChatPage() {
     setSomeoneIsTyping,
     setTypingUsername,
   );
-
-  // Change logged in user's status icon during the use of the app
-  useChangeStatusIcon(user, setUser, previousStatusIcon, setPreviousStatusIcon);
 
   return (
     <StyledGroupChatPage>

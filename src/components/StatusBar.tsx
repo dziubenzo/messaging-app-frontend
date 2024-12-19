@@ -23,7 +23,7 @@ function StatusBar({ user, setUser, previousPathname }: StatusBarProps) {
 
   // State for preventing multiple fetches from being executed
   const [inProgress, setInProgress] = useState(false);
-  const { user_id, status_icon } = user;
+  const { _id, user_id, status_icon } = user;
 
   // Change logged in user's status icon
   // Show toast if operation successful or unsuccessful and update user state if the former is true
@@ -48,7 +48,7 @@ function StatusBar({ user, setUser, previousPathname }: StatusBarProps) {
     const updatedUser: User = await res.json();
     setUser(updatedUser);
     setInProgress(false);
-    socket.emit('change status icon', user_id, imageURL);
+    socket.emit('change status icon', _id, imageURL);
     return toast.update(toastRef, {
       render: `Status icon changed successfully`,
       type: 'success',

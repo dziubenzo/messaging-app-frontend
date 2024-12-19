@@ -1,10 +1,9 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, Zoom } from 'react-toastify';
-import { STATUS_ICONS } from '../constants';
 import { useCheckAuth } from '../helpers';
+import { socket } from '../socket';
 import GlobalStyle from '../styles/GlobalStyle';
-import type { StatusIcon } from '../types';
 import Header from './Header';
 import Theme from './Theme';
 
@@ -16,16 +15,19 @@ function App({ children }: AppProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const [isAuth, setIsAuth] = useCheckAuth();
-
-  // State for storing user's previous status icon
-  const [previousStatusIcon, setPreviousStatusIcon] = useState<StatusIcon>(
-    STATUS_ICONS.unavailable,
-  );
+  const [isAuth, setIsAuth, userId] = useCheckAuth();
 
   useEffect(() => {
     if (pathname === '/') navigate('/home');
   }, [pathname, navigate]);
+
+  useEffect(() => {
+    if (isAuth && userId) {
+      socket.emit('user is authenticated', userId);
+    } else if (!isAuth && userId) {
+      socket.emit('user is not authenticated');
+    }
+  }, [isAuth, userId]);
 
   return (
     <Theme>
@@ -33,8 +35,6 @@ function App({ children }: AppProps) {
       <Header />
       <Outlet
         context={{
-          previousStatusIcon,
-          setPreviousStatusIcon,
           isAuth,
           setIsAuth,
         }}

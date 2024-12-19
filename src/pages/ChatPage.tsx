@@ -1,35 +1,29 @@
 import { useState } from 'react';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
-import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import Editor from '../components/Editor';
 import Messages from '../components/Messages';
 import { STATUS_ICONS } from '../constants';
 import {
   getPreviousPathname,
-  useChangeStatusIcon,
   useUser
 } from '../helpers';
 import { useEventsChatPage } from '../socket';
 import { StyledChatPage } from '../styles/ChatPage.styled';
 import { StyledTopBar } from '../styles/HomePage.styled';
-import type { Message, OutletContext, User } from '../types';
+import type { Message, User } from '../types';
 
 function ChatPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const previousPathname = getPreviousPathname(state);
 
-  const { previousStatusIcon, setPreviousStatusIcon } =
-    useOutletContext<OutletContext>();
-
   const {
-    user: fetchedUser,
+    user,
     recipient: fetchedRecipient,
     messages: fetchedMessages,
   } = useUser();
-
-  const [user, setUser] = useImmer<User>(fetchedUser);
 
   // States for messages
   const [messages, setMessages] = useImmer<Message[]>(fetchedMessages!);
@@ -49,9 +43,6 @@ function ChatPage() {
     setSomeoneIsTyping,
     setTypingUsername,
   );
-
-  // Change logged in user's status icon during the use of the app
-  useChangeStatusIcon(user, setUser, previousStatusIcon, setPreviousStatusIcon);
 
   return (
     <StyledChatPage>

@@ -1,29 +1,17 @@
 import { useState } from 'react';
-import { Outlet, useLocation, useOutletContext } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import BottomBar from '../components/BottomBar';
 import ContactsBar from '../components/ContactsBar';
 import StatusBar from '../components/StatusBar';
 import TopBar from '../components/TopBar';
-import {
-  getPreviousPathname,
-  sortByStatusIcon,
-  useChangeStatusIcon,
-  useChangeToAvailable,
-  useUser,
-} from '../helpers';
+import { STATUS_ICONS } from '../constants';
+import { getPreviousPathname, sortByStatusIcon, useUser } from '../helpers';
 import { useEventsHomePage } from '../socket';
 import { MiddleSection, StyledHomePage } from '../styles/HomePage.styled';
-import type {
-  BottomBar as BottomBarType,
-  GroupChat,
-  OutletContext,
-  User,
-} from '../types';
+import type { BottomBar as BottomBarType, GroupChat, User } from '../types';
 
 export default function HomePage() {
-  const { previousStatusIcon, setPreviousStatusIcon } =
-    useOutletContext<OutletContext>();
   const { state } = useLocation();
   const previousPathname = getPreviousPathname(state);
 
@@ -32,7 +20,14 @@ export default function HomePage() {
     allUsers,
     groupChats: fetchedGroupChats,
   } = useUser();
-  const [user, setUser] = useImmer<User>(fetchedUser);
+  const [user, setUser] = useImmer<User>(() => {
+    // Change the status icon from unavailable to available to sync with the DB change on the server side
+    if (fetchedUser.status_icon === STATUS_ICONS.unavailable) {
+      fetchedUser.status_icon = STATUS_ICONS.available;
+      return fetchedUser;
+    }
+    return fetchedUser;
+  });
   // Sort all users and filter out the logged in user
   const [allUsersFiltered, setAllUsersFiltered] = useImmer<User[]>(() => {
     return allUsers!
@@ -46,12 +41,6 @@ export default function HomePage() {
     id: user.user_id,
     status: user.status_text,
   });
-
-  // Change logged in user's status icon to available on component load
-  useChangeToAvailable(user, setUser);
-
-  // Change logged in user's status icon during the use of the app
-  useChangeStatusIcon(user, setUser, previousStatusIcon, setPreviousStatusIcon);
 
   // Manage events emitted by the server
   useEventsHomePage(setAllUsersFiltered, setUser, user);

@@ -27,12 +27,9 @@ export const useEventsHomePage = (
   useEffect(() => {
     // Update status icon in both tabs
     // Sort both tabs if justified to do so
-    const updateStatusIcon = (
-      userId: User['user_id'],
-      imageURL: StatusIcon,
-    ) => {
+    const updateStatusIcon = (userId: User['_id'], imageURL: StatusIcon) => {
       setAllUsersFiltered((draft) => {
-        const user = draft.find((user) => user.user_id === userId);
+        const user = draft.find((user) => user._id === userId);
         if (user) {
           user.status_icon = imageURL;
           draft.sort(sortByStatusIcon);
@@ -40,9 +37,7 @@ export const useEventsHomePage = (
       });
       setUser((draft) => {
         if (!draft) return;
-        const user = draft.contacts.find(
-          (contact) => contact.user_id === userId,
-        );
+        const user = draft.contacts.find((contact) => contact._id === userId);
         if (user) {
           user.status_icon = imageURL;
           draft.contacts.sort(sortByStatusIcon);
@@ -104,16 +99,30 @@ export const useEventsHomePage = (
       );
     };
 
+    // Refresh the browser on disconnection to change the status icon back to available and re-establish authenticated connection
+    // This is aimed at disconnections that happen when the app is still open, e.g. on mobile with the app being on but the screen being off for a longer time
+    const refreshBrowser = (reason: string) => {
+      if (
+        reason === 'transport close' ||
+        reason === 'ping timeout' ||
+        reason === 'transport error'
+      ) {
+        window.location.reload();
+      }
+    };
+
     socket.on('update status icon', updateStatusIcon);
     socket.on('update username/text status', updateUsernameOrTextStatus);
     socket.on('show new message toast', showNewMessageToast);
     socket.on('show new user toast', showNewUserToast);
+    socket.on('disconnect', refreshBrowser);
 
     return () => {
       socket.off('update status icon', updateStatusIcon);
       socket.off('update username/text status', updateUsernameOrTextStatus);
       socket.off('show new message toast', showNewMessageToast);
       socket.off('show new user toast', showNewUserToast);
+      socket.off('disconnect', refreshBrowser);
     };
   }, []);
 };
