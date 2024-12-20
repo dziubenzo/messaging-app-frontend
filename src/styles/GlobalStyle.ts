@@ -76,6 +76,7 @@ const GlobalStyle = createGlobalStyle`
   // Skeleton styling and animation
   .skeleton-line {
     width: max-content !important;
+    height: 100% !important;
     background-color: ${(props) => props.theme.colours.bgPrimary} !important;
     color: ${(props) => props.theme.colours.bgPrimary} !important;
     border-radius: 6px;
@@ -83,6 +84,10 @@ const GlobalStyle = createGlobalStyle`
 
     &.mg-b {
       margin-bottom: 0.1em;
+    }
+
+    &.height-auto {
+      height: auto !important;
     }
   }
 

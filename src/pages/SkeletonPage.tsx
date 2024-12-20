@@ -86,8 +86,11 @@ function SkeletonHomePage() {
         <SkeletonContacts length={10} />
       </MiddleSection>
       <StyledBottomBar>
-        <SkeletonLine text="0000000" marginBottom />
-        <SkeletonLine text="Loading a long text status..." />
+        <SkeletonLine className="height-auto" text="0000000" marginBottom />
+        <SkeletonLine
+          className="height-auto text-status"
+          text="Loading a long text status..."
+        />
       </StyledBottomBar>
       <StyledStatusBar>
         <div className="status">
@@ -159,7 +162,7 @@ type SkeletonLineProps = {
 function SkeletonLine({
   text = '',
   marginBottom,
-  className,
+  className = '',
 }: SkeletonLineProps) {
   return (
     <p
@@ -184,7 +187,7 @@ function SkeletonIcon({
   return (
     <div
       style={{ width: size, height: size, backgroundColor: colour }}
-      className={`skeleton-icon ${marginRight ? 'mg-r' : undefined}`}
+      className={`skeleton-icon ${marginRight ? 'mg-r' : ''}`}
     ></div>
   );
 }
