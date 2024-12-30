@@ -1,8 +1,8 @@
-import { ReactNode, useEffect } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { ReactNode } from 'react';
+import { Outlet } from 'react-router-dom';
 import { ToastContainer, Zoom } from 'react-toastify';
-import { useCheckAuth } from '../helpers';
-import { socket } from '../socket';
+import { useCheckAuth, useRedirectToHome } from '../helpers';
+import { useGoOnlineOrOffline, useReconnect } from '../socket';
 import GlobalStyle from '../styles/GlobalStyle';
 import Header from './Header';
 import Theme from './Theme';
@@ -12,22 +12,14 @@ type AppProps = {
 };
 
 function App({ children }: AppProps) {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-
   const [isAuth, setIsAuth, userId] = useCheckAuth();
 
-  useEffect(() => {
-    if (pathname === '/') navigate('/home');
-  }, [pathname, navigate]);
-
-  useEffect(() => {
-    if (isAuth && userId) {
-      socket.emit('user is authenticated', userId);
-    } else if (!isAuth && userId) {
-      socket.emit('user is not authenticated');
-    }
-  }, [isAuth, userId]);
+  // Manage redirections at root address
+  useRedirectToHome();
+  // Manage user going online/offline
+  useGoOnlineOrOffline(isAuth, userId);
+  // Manage user reconnections
+  useReconnect(isAuth, userId);
 
   return (
     <Theme>

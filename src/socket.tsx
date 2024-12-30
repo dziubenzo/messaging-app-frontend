@@ -18,6 +18,35 @@ import type {
 // Establish Socket.IO connection
 export const socket = io(API_URL);
 
+// Manage events related to the user going online and offline (changing status icon on the server side)
+export const useGoOnlineOrOffline = (
+  isAuth: boolean,
+  userMongoId: User['_id'],
+) => {
+  useEffect(() => {
+    if (isAuth && userMongoId) {
+      socket.emit('user is authenticated', userMongoId);
+    } else if (!isAuth && userMongoId) {
+      socket.emit('user is not authenticated');
+    }
+  }, [isAuth, userMongoId]);
+};
+
+// Manage user reconnections
+export const useReconnect = (isAuth: boolean, userMongoId: User['_id']) => {
+  useEffect(() => {
+    const handleReconnection = () => {
+      if (isAuth && userMongoId) socket.emit('user reconnects', userMongoId);
+    };
+
+    socket.on('connect', handleReconnection);
+
+    return () => {
+      socket.off('connect', handleReconnection);
+    };
+  }, [isAuth, userMongoId]);
+};
+
 // Manage events emitted by the server (Home page)
 export const useEventsHomePage = (
   setAllUsersFiltered: Updater<User[]>,
@@ -99,30 +128,16 @@ export const useEventsHomePage = (
       );
     };
 
-    // Refresh the browser on disconnection to change the status icon back to available and re-establish authenticated connection
-    // This is aimed at disconnections that happen when the app is still open, e.g. on mobile with the app being on but the screen being off for a longer time
-    const refreshBrowser = (reason: string) => {
-      if (
-        reason === 'transport close' ||
-        reason === 'ping timeout' ||
-        reason === 'transport error'
-      ) {
-        window.location.reload();
-      }
-    };
-
     socket.on('update status icon', updateStatusIcon);
     socket.on('update username/text status', updateUsernameOrTextStatus);
     socket.on('show new message toast', showNewMessageToast);
     socket.on('show new user toast', showNewUserToast);
-    socket.on('disconnect', refreshBrowser);
 
     return () => {
       socket.off('update status icon', updateStatusIcon);
       socket.off('update username/text status', updateUsernameOrTextStatus);
       socket.off('show new message toast', showNewMessageToast);
       socket.off('show new user toast', showNewUserToast);
-      socket.off('disconnect', refreshBrowser);
     };
   }, []);
 };
