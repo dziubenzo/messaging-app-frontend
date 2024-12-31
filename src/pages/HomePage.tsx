@@ -43,7 +43,7 @@ export default function HomePage() {
   });
 
   // Manage events emitted by the server
-  useEventsHomePage(setAllUsersFiltered, setUser, user);
+  useEventsHomePage(setAllUsersFiltered, setUser, user, groupChats);
 
   return (
     <StyledHomePage>

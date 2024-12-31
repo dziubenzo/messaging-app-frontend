@@ -52,6 +52,7 @@ export const useEventsHomePage = (
   setAllUsersFiltered: Updater<User[]>,
   setUser: Updater<User>,
   user: User,
+  groupChats: GroupChat[],
 ) => {
   useEffect(() => {
     // Update status icon in both tabs
@@ -121,6 +122,27 @@ export const useEventsHomePage = (
       }
     };
 
+    // Show new group chat message toast with message icon
+    const showNewGroupChatMessageToast = (
+      groupChatId: GroupChat['_id'],
+      senderUsername: User['username'],
+    ) => {
+      const groupChat = groupChats.find(
+        (groupChat: GroupChat) => groupChat._id === groupChatId,
+      );
+      if (groupChat && senderUsername !== user.username) {
+        toast(
+          <BoldToastMessage
+            bold={senderUsername}
+            text={`wrote in the ${groupChat.name} chat!`}
+          />,
+          {
+            icon: <img className="toast-icon" src={STATUS_ICONS.message} />,
+          },
+        );
+      }
+    };
+
     // Show toast when a new user registers
     const showNewUserToast = (username: User['username']) => {
       toast.info(
@@ -131,12 +153,20 @@ export const useEventsHomePage = (
     socket.on('update status icon', updateStatusIcon);
     socket.on('update username/text status', updateUsernameOrTextStatus);
     socket.on('show new message toast', showNewMessageToast);
+    socket.on(
+      'show new group chat message toast',
+      showNewGroupChatMessageToast,
+    );
     socket.on('show new user toast', showNewUserToast);
 
     return () => {
       socket.off('update status icon', updateStatusIcon);
       socket.off('update username/text status', updateUsernameOrTextStatus);
       socket.off('show new message toast', showNewMessageToast);
+      socket.off(
+        'show new group chat message toast',
+        showNewGroupChatMessageToast,
+      );
       socket.off('show new user toast', showNewUserToast);
     };
   }, []);
