@@ -10,6 +10,7 @@ import { sortByStatusIcon } from './helpers';
 import type {
   GroupChat,
   GroupChatMessage,
+  GroupChatUser,
   Message,
   StatusIcon,
   User,
@@ -51,6 +52,7 @@ export const useReconnect = (isAuth: boolean, userMongoId: User['_id']) => {
 export const useEventsHomePage = (
   setAllUsersFiltered: Updater<User[]>,
   setUser: Updater<User>,
+  setGroupChats: Updater<GroupChat[]>,
   user: User,
   groupChats: GroupChat[],
 ) => {
@@ -107,6 +109,21 @@ export const useEventsHomePage = (
       });
     };
 
+    // Add a new user to the allUsersFiltered array
+    // Add a new user to the General group chat
+    const addNewUserToLists = (newUser: User) => {
+      if (newUser.username === user.username) return;
+      setAllUsersFiltered((draft) => {
+        draft.push(newUser);
+        draft.sort(sortByStatusIcon);
+      });
+      const { _id, user_id, username } = newUser;
+      const newGroupChatMember: GroupChatUser = { _id, user_id, username };
+      setGroupChats((draft) => {
+        draft[0].members.push(newGroupChatMember);
+      });
+    };
+
     // Show new message toast with message icon if the message recipient is the logged in user
     const showNewMessageToast = (
       toId: User['user_id'],
@@ -152,6 +169,7 @@ export const useEventsHomePage = (
 
     socket.on('update status icon', updateStatusIcon);
     socket.on('update username/text status', updateUsernameOrTextStatus);
+    socket.on('add new user to lists', addNewUserToLists);
     socket.on('show new message toast', showNewMessageToast);
     socket.on(
       'show new group chat message toast',
@@ -162,6 +180,7 @@ export const useEventsHomePage = (
     return () => {
       socket.off('update status icon', updateStatusIcon);
       socket.off('update username/text status', updateUsernameOrTextStatus);
+      socket.off('add new user to lists', addNewUserToLists);
       socket.off('show new message toast', showNewMessageToast);
       socket.off(
         'show new group chat message toast',
