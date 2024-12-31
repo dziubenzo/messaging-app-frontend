@@ -78,7 +78,8 @@ const GlobalStyle = createGlobalStyle`
     width: max-content !important;
     height: 100% !important;
     background-color: ${(props) => props.theme.colours.bgPrimary} !important;
-    color: ${(props) => props.theme.colours.bgPrimary} !important;
+    color: transparent !important;
+    user-select: none;
     border-radius: 6px;
     animation: ${flicker} 1s linear infinite alternate;
 
@@ -88,6 +89,10 @@ const GlobalStyle = createGlobalStyle`
 
     &.height-auto {
       height: auto !important;
+    }
+
+    &:hover {
+      color: transparent !important;
     }
   }
 
