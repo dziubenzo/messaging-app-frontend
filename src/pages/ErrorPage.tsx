@@ -13,6 +13,7 @@ function ErrorPage() {
 
   const asyncError = useAsyncError();
 
+  // Handle 404 errors
   if (isRouteErrorResponse(error)) {
     return (
       <StyledErrorPage>
@@ -27,7 +28,7 @@ function ErrorPage() {
     asyncError instanceof ApiError &&
     asyncError.status === 401
   ) {
-    return <Navigate to="/login" />;
+    return <Navigate replace to="/login" />;
   } else if (asyncError && asyncError instanceof ApiError) {
     return (
       <StyledErrorPage>
@@ -37,19 +38,10 @@ function ErrorPage() {
         <Link to="/login">Back to Log In Page</Link>
       </StyledErrorPage>
     );
-  } else if (error instanceof ApiError) {
+  } else if (error && error instanceof ApiError) {
     return (
       <StyledErrorPage>
         <h2>{error.status}</h2>
-        <h1>{error.message}</h1>
-        <Link to="/">Back to Home Page</Link>
-        <Link to="/login">Back to Log In Page</Link>
-      </StyledErrorPage>
-    );
-  } else if (error instanceof Error) {
-    return (
-      <StyledErrorPage>
-        <h2>Something went wrong.</h2>
         <h1>{error.message}</h1>
         <Link to="/">Back to Home Page</Link>
         <Link to="/login">Back to Log In Page</Link>

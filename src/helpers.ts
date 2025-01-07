@@ -439,3 +439,10 @@ export const buildHeader = (
     },
   };
 };
+
+// Throw an error if the user tries to request a resource from a protected route but is not authenticated
+export const throwIfNoAuth = (response: Response) => {
+  if (!response.ok && response.status === 401) {
+    throw new ApiError('You are not logged in', 401);
+  }
+};
