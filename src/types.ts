@@ -23,6 +23,7 @@ export type Message = {
 export type GroupChat = {
   _id: string;
   name: string;
+  slug: string;
   created_by: User['_id'];
   members: GroupChatUser[];
   messages: GroupChatMessage[];

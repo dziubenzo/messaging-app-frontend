@@ -3,7 +3,6 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PulseLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
-import slugify from 'slugify';
 import API_URL from '../API';
 import { STATUS_ICONS } from '../constants';
 import { buildHeader, generateMembersList } from '../helpers';
@@ -19,7 +18,7 @@ type GroupChatProps = {
 function GroupChat({ groupChat }: GroupChatProps) {
   const navigate = useNavigate();
   const { user, setGroupChats } = useOutletContext<OutletContext>();
-  const { _id, name, created_by, members } = groupChat;
+  const { _id, name, slug, created_by, members } = groupChat;
 
   // State for preventing multiple fetches from being executed
   const [inProgress, setInProgress] = useState(false);
@@ -53,7 +52,7 @@ function GroupChat({ groupChat }: GroupChatProps) {
 
   return (
     <StyledGroupChat
-      onClick={() => navigate(`/group-chats/${slugify(name, { lower: true })}`)}
+      onClick={() => navigate(`/group-chats/${slug}`)}
       title={`Click to chat in ${name}`}
     >
       <img src={STATUS_ICONS.availableMessage} alt={'Group Chat Icon'} />

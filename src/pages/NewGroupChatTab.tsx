@@ -22,7 +22,7 @@ function NewGroupChatTab() {
     return user.contacts.toSorted(sortByUsername);
   }, [user]);
 
-  const [isCreating, setIsCreating] = useState(false);
+  const [inProgress, setInProgress] = useState(false);
 
   // Create new group chat if there are at least two members selected
   async function createGroupChat(event: React.FormEvent<HTMLFormElement>) {
@@ -32,12 +32,12 @@ function NewGroupChatTab() {
     if (members.length < 2) {
       return toast.error('Select at least two contacts');
     }
-    setIsCreating(true);
+    setInProgress(true);
     const toastRef = toast.info('Creating group chat...');
     members.push(user._id);
     const newChatName = formData.get('name') as string;
     if (!newChatName) {
-      setIsCreating(false);
+      setInProgress(false);
       return;
     }
     const newChat = {
@@ -50,12 +50,12 @@ function NewGroupChatTab() {
       buildHeader('POST', newChat),
     );
     if (!res.ok) {
-      setIsCreating(false);
-      toast.update(toastRef, {
-        render: 'Creating group chat failed',
+      const error = await res.json();
+      setInProgress(false);
+      return toast.update(toastRef, {
+        render: error,
         type: 'error',
       });
-      return;
     }
     const newGroupChat: GroupChat = await res.json();
     setGroupChats((draft) => {
@@ -110,7 +110,7 @@ function NewGroupChatTab() {
           );
         })}
       </StyledContacts>
-      <button type="submit">{isCreating ? 'Creating...' : 'Create'}</button>
+      <button type="submit">{inProgress ? 'Creating...' : 'Create'}</button>
     </StyledForm>
   );
 }
