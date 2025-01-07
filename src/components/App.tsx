@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer, Zoom } from 'react-toastify';
-import { useCheckAuth, useRedirectToHome } from '../helpers';
+import { useCheckAuth } from '../helpers';
 import { useGoOnlineOrOffline, useReconnect } from '../socket';
 import GlobalStyle from '../styles/GlobalStyle';
 import Header from './Header';
@@ -14,8 +14,6 @@ type AppProps = {
 function App({ children }: AppProps) {
   const [isAuth, setIsAuth, userId] = useCheckAuth();
 
-  // Manage redirections at root address
-  useRedirectToHome();
   // Manage user going online/offline
   useGoOnlineOrOffline(isAuth, userId);
   // Manage user reconnections

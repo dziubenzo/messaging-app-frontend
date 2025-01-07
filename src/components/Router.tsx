@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from 'react-router-dom';
 import {
   chatPageLoader,
   groupChatPageLoader,
@@ -16,9 +20,9 @@ import LoginPage from '../pages/LoginPage';
 import NewGroupChatTab from '../pages/NewGroupChatTab';
 import OptionsTab from '../pages/OptionsTab';
 import RegisterPage from '../pages/RegisterPage';
+import SkeletonPage from '../pages/SkeletonPage';
 import SuspenseWrapper from '../pages/SuspenseWrapper';
 import App from './App';
-import SkeletonPage from '../pages/SkeletonPage';
 
 function Router() {
   const router = createBrowserRouter([
@@ -31,6 +35,10 @@ function Router() {
         </App>
       ),
       children: [
+        {
+          index: true,
+          element: <Navigate replace to="/home" />,
+        },
         {
           path: '',
           element: <LoadingPage />,

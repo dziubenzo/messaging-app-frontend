@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { type Updater } from 'use-immer';
 import API_URL from './API';
@@ -36,16 +36,6 @@ export class ApiError extends Error {
     this.status = statusCode;
   }
 }
-
-// Redirect user to '/home' at root address
-export const useRedirectToHome = () => {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    if (pathname === '/') navigate('/home');
-  }, [pathname, navigate]);
-};
 
 // Check authentication and return user's MongoDB id for use on the server side
 // This also prevents showing fallback skeletons if the user navigates to the page they are not authenticated to visit
