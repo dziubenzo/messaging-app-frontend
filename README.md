@@ -1,8 +1,8 @@
 # Odin Project - Messaging App (Frontend)
 
 <p align="center">
-  <img src="https://res.cloudinary.com/dvhkp9wc6/image/upload/v1714057805/messaging_app/TT_GitHub_1.png" height="500" title="App - Home Page">
-  <img src="https://res.cloudinary.com/dvhkp9wc6/image/upload/v1714057805/messaging_app/TT_GitHub_2.png" height="500" title="App - Group Chat Page">
+  <img src="https://res.cloudinary.com/dvhkp9wc6/image/upload/v1714057805/messaging_app/TT_GitHub_1.png" height="500" title="App - All Users Tab">
+  <img src="https://res.cloudinary.com/dvhkp9wc6/image/upload/v1714057805/messaging_app/TT_GitHub_2.png" height="500" title="App - Group Chats Tab">
   <img src="https://res.cloudinary.com/dvhkp9wc6/image/upload/v1714057805/messaging_app/TT_GitHub_3.png" height="500" title="App - Chat Page">
 </p>
 
@@ -76,7 +76,7 @@ The full changelog can be found on [Pastebin](https://pastebin.com/8x5RDK9T).
 - MongoDB (Mongoose)
 - Socket.IO
 - slugify
-- Authentication with JWT and a cookie set on the frontend (🆕)
+- Authentication with JWT and a cookie set on the frontend 🆕
 
 ### Acknowledgements
 
