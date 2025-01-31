@@ -72,6 +72,7 @@ The full changelog can be found on [Pastebin](https://pastebin.com/8x5RDK9T).
 
 #### Backend
 
+- TypeScript 🆕
 - Node.js (Express)
 - MongoDB (Mongoose)
 - Socket.IO

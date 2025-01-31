@@ -5,7 +5,7 @@ type DayProps = {
   day: Date;
 };
 
-export default function Day({ day }: DayProps) {
+function Day({ day }: DayProps) {
   function renderDate() {
     if (isToday(day)) return 'Today';
     if (isYesterday(day)) return 'Yesterday';
@@ -18,3 +18,5 @@ export default function Day({ day }: DayProps) {
     </StyledDay>
   );
 }
+
+export default Day;
